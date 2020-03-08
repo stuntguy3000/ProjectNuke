@@ -19,9 +19,9 @@
 
 -- Maps components to source locations
 local ComponentsMap = {
-  ["EncryptionUtil"] = "ProjectNukeCore-EncryptionUtil.lua", 
-  ["GUIUtil"] = "ProjectNukeCore-GUIUtil.lua",
-  ["FileUtil"] = "ProjectNukeCore-FileUtil.lua"
+  ["EncryptionUtil"] = "ProjectNukeCoreEncryptionUtil.lua", 
+  ["GUIUtil"] = "ProjectNukeCoreGUIUtil.lua",
+  ["FileUtil"] = "ProjectNukeCoreFileUtil.lua"
 }
 
 -- Core settings
