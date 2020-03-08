@@ -13,7 +13,11 @@
 
 function SaveTable(table, fileName)
   local file = fs.open(fileName, "w")
-  file.write(textutils.serialize(table))
+  data = textutils.serialize(table)
+  
+  print("Saving "..data.." to "..fileName)
+  
+  file.write(data)
   file.close()
 end
 
