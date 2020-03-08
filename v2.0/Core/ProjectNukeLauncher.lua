@@ -11,7 +11,8 @@
 
 --]]
 function DownloadAndExecuteCore()
-  shell.run("https://raw.githubusercontent.com/stuntguy3000/ProjectNuke/master/v2.0/Core/ProjectNukeCore.lua")
+  print("Downloading core...")
+  shell.run("wget run https://raw.githubusercontent.com/stuntguy3000/ProjectNuke/master/v2.0/Core/ProjectNukeCore.lua")
 end
 
 DownloadAndExecuteCore()

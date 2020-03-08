@@ -44,6 +44,7 @@ function ExecuteApplication()
 end
 
 -- Executes ProjectNukeCore
+shell.run("clear")
 print("Starting ProjectNuke Core...")
 DownloadCoreComponents()
 ExecuteApplication()
