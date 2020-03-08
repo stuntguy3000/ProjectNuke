@@ -61,4 +61,4 @@ print(" ...done!")
 
 print("Executing application...")
 ExecuteApplication()
-shell.run("clear")
+-- shell.run("clear")
