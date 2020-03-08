@@ -21,7 +21,7 @@
 local ComponentsMap = {
   ["EncryptionUtil"] = "ProjectNukeCore-EncryptionUtil.lua", 
   ["GUIUtil"] = "ProjectNukeCore-GUIUtil.lua",
-  ["FileUtil"] = "ProjectNukeCore-FileUtilFAIL.lua"
+  ["FileUtil"] = "ProjectNukeCore-FileUtil.lua"
 }
 
 -- Core settings
@@ -44,7 +44,7 @@ end
 function LoadCoreComponents()
   for component, fileName in pairs(ComponentsMap) do
     if (fs.exists(CoreFolderPath..fileName) == false) then
-      error("Component "..component" could not be found!")
+      error("Component "..component.." could not be found!")
     end
     
     os.loadAPI(CoreFolderPath..fileName)
