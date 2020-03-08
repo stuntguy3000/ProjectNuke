@@ -69,7 +69,7 @@ function SaveConfiguration()
 end
 
 -- Attempt to load the configuration, but if one is not detected, run the installer GUI
-if (LoadConfiguration() == false) do
+if (LoadConfiguration() == false) then
   print("New configuration detected, launching installer.")
   
   -- Create GUI
