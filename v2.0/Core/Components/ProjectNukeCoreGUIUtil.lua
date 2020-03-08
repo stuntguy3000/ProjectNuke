@@ -11,6 +11,12 @@
 
 --]]
 
+function DrawBlackSquares(xStart, y) 
+  for x=0, 50, 4 do
+    paintutils.drawFilledBox(xStart + x, y, xStart + x + 1, y, colors.black)
+  end
+end
+
 function DrawBaseGUI(Title, SubHeading)
   -- Draw Title/Subheading Backgrounds
   paintutils.drawFilledBox(1, 1, 51, 3, colors.yellow)
@@ -20,12 +26,17 @@ function DrawBaseGUI(Title, SubHeading)
   DrawBlackSquares(2, 1)
   DrawBlackSquares(1, 2)
   DrawBlackSquares(0, 3)
-end
-
-local function DrawBlackSquares(xStart, y) 
-  for x=0, 50, 4 do
-    paintutils.drawFilledBox(xStart + x, y, xStart + x + 1, y, colors.black)
-  end
+  
+	term.setBackgroundColor(colors.red)
+	term.setTextColor(colors.white)
+	DrawCenteredText(Title, 5)
+	term.setBackgroundColor(colors.orange)
+	
+	-- Subheading Text
+	paintutils.drawFilledBox(1, 7, 51, 9, colors.orange)
+	term.setTextColor(colors.black)
+	DrawCenteredText(SubHeading, 8)
+	paintutils.drawFilledBox(1, 10, 51, 19, colors.lightGray)
 end
 
 function DrawCenteredText(text, yVal) 
