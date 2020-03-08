@@ -21,7 +21,8 @@
 local ComponentsMap = {
   ["EncryptionUtil"] = "ProjectNukeCoreEncryptionUtil.lua", 
   ["GUIUtil"] = "ProjectNukeCoreGUIUtil.lua",
-  ["FileUtil"] = "ProjectNukeCoreFileUtil.lua"
+  ["FileUtil"] = "ProjectNukeCoreFileUtil.lua",
+  ["ApplicationHandler"] = "ProjectNukeCoreApplicationHandler.lua",
 }
 
 -- Core settings
@@ -61,16 +62,17 @@ shell.run("clear")
 print("==================================================")
 print("Starting ProjectNuke Core...")
 
-
 print("==================================================")
 print("Downloading components...")
 DownloadCoreComponents()
 print(" ...done!")
 
+print("==================================================")
 print("Loading components...")
 LoadCoreComponents()
 print(" ...done!")
 
+print("==================================================")
 print("Executing application...")
 ExecuteApplication()
--- shell.run("clear")
+shell.run("clear")
