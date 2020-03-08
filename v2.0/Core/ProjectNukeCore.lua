@@ -19,9 +19,9 @@
 
 -- Maps components to source locations
 local ComponentsMap = {
-  ["EncryptionUtil"] = "http://google.com", 
-  ["GUIUtil"] = "http://google.com",
-  ["FileUtil"] = "http://google.com"
+  ["EncryptionUtil"] = "ProjectNukeCore-EncryptionUtil.lua", 
+  ["GUIUtil"] = "ProjectNukeCore-GUIUtil.lua",
+  ["FileUtil"] = "ProjectNukeCore-FileUtil.lua"
 }
 
 -- Core settings
@@ -33,9 +33,10 @@ function DownloadCoreComponents()
   fs.delete(CoreFolderPath)
   
   -- Download the core components to disk
-  for component, path in pairs(ComponentsMap) do
-    -- download = wget path CoreFolderPath
-    shell.run("wget "..path.." "..CoreFolderPath)
+  for component, fileName in pairs(ComponentsMap) do
+    fullURL = "https://raw.githubusercontent.com/stuntguy3000/ProjectNuke/master/v2.0/Core/Components/" .. fileName
+    
+    shell.run("wget "..fullURL.." "..CoreFolderPath..fileName)
   end
 end
 
