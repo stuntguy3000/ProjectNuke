@@ -44,7 +44,6 @@ function DrawBaseGUI(title, subHeading)
 end
 
 function DrawCenteredText(text, yVal) 
-  print("TEXT: "..text)
   length = string.len(text) 
   width = term.getSize()
   minus = math.floor(width-length) 
@@ -54,7 +53,7 @@ function DrawCenteredText(text, yVal)
   term.write(text)
 end
 
-function DrawStatus(StatusText)
+function DrawStatus(message)
   term.setTextColor(colors.gray)
   DrawCenteredText("                                                                                                                  ", 19)
   DrawCenteredText(message, 19)
