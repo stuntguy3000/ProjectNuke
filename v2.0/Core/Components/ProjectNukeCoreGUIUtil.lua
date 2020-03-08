@@ -44,13 +44,13 @@ function DrawBaseGUI(title, subHeading)
 end
 
 function DrawCenteredText(text, yVal) 
-	local width = term.getSize()
-	local length = string.len(text) 
-	local minus = math.floor(width-length) 
-	local x = math.floor(minus/2) 
-	
-	term.setCursorPos(x+1,yVal) 
-	term.write(text)
+  local width = term.getSize()
+  local length = string.len(text) 
+  local minus = math.floor(width-length) 
+  local x = math.floor(minus/2) 
+
+  term.setCursorPos(x+1,yVal) 
+  term.write(text)
 end
 
 function DrawStatus(StatusText)
