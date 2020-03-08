@@ -102,6 +102,6 @@ function DrawErrorMessages(lines, timeout)
 end
 
 function FillScreen(colour)
-  local w, h = term.getSize()
+  local width, height = term.getSize()
   paintutils.drawFilledBox(0,0,width,height,colour)
 end
