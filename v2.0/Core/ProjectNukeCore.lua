@@ -72,7 +72,6 @@ print("==================================================")
 print("Loading components...")
 LoadCoreComponents()
 print(" ...done!")
-sleep(10)
 
 print("==================================================")
 print("Running ProjectNuke Applications...")
