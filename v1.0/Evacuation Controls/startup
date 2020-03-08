@@ -1,0 +1,23 @@
+if fs.isDir("/script") then
+  fs.delete("/script")
+end
+
+fileList = fs.find("/disk/*")
+
+for i, value in ipairs(fileList) do 
+  fileName = value:match("/(.-)$")
+  fs.copy("/disk/" .. fileName, "/script/" .. fileName)
+end
+
+-- Convert .lua files to have no extension
+for i, value in ipairs(fs.find("/script/*.lua")) do 
+  fileName = value:match("/(.-)$")
+  fs.move("/script/" .. fileName, "/script/" .. fileName:sub(1, -4))
+end
+
+for i, value in ipairs(fs.find("/script/util/*.lua")) do 
+  fileName = value:match("/(.-)$")
+  fs.move("/script/" .. fileName, "/script/" .. fileName:sub(1, -4))
+end
+
+shell.run("monitor","left", "/script/run-client")
