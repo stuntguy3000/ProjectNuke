@@ -19,9 +19,9 @@
 
 -- Maps components to source locations
 local ComponentsMap = {
+  ["FileUtil"] = "ProjectNukeCoreFileUtil.lua",
   ["EncryptionUtil"] = "ProjectNukeCoreEncryptionUtil.lua", 
   ["GUIUtil"] = "ProjectNukeCoreGUIUtil.lua",
-  ["FileUtil"] = "ProjectNukeCoreFileUtil.lua",
   ["ApplicationHandler"] = "ProjectNukeCoreApplicationHandler.lua",
   ["ConfigurationHandler"] = "ProjectNukeCoreConfigurationHandler.lua",
 }
@@ -49,6 +49,7 @@ function LoadCoreComponents()
       error("Component "..component.." could not be found!")
     end
     
+    print("Loading component "..fileName
     os.loadAPI(CoreFolderPath..fileName)
   end
 end
