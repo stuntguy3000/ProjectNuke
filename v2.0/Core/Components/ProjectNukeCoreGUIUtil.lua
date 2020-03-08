@@ -84,7 +84,7 @@ end
 -- Used to draw a error messages
 -- Message is assumed to be a table
 --  Table: yValue messageText
-function DrawErrorMessages(lines, timeout)
+function DrawErrorMessages(messageLines, timeout)
   term.clear()
   
   FillScreen(colors.red)
