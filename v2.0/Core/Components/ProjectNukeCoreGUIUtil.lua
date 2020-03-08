@@ -30,7 +30,6 @@ function DrawBaseGUI(Title, SubHeading)
   term.setBackgroundColor(colors.red)
   term.setTextColor(colors.white)
   DrawCenteredText(Title, 5)
-  term.setBackgroundColor(colors.orange)
 
   -- Subheading Text
   paintutils.drawFilledBox(1, 7, 51, 9, colors.orange)
@@ -40,11 +39,13 @@ function DrawBaseGUI(Title, SubHeading)
 end
 
 function DrawCenteredText(text, yVal) 
-  length = string.len(text) 
-  minus = math.floor(w-length) 
-  x = math.floor(minus/2) 
-  term.setCursorPos(x+1,yVal) 
-  term.write(text)
+	local width = term.getSize()
+	local length = string.len(text) 
+	local minus = math.floor(width-length) 
+	local x = math.floor(minus/2) 
+	
+	term.setCursorPos(x+1,yVal) 
+	term.write(text)
 end
 
 function DrawStatus(StatusText)
