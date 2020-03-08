@@ -49,7 +49,7 @@ function LoadCoreComponents()
       error("Component "..component.." could not be found!")
     end
     
-    print("Loading component "..fileName
+    print("Loading component "..fileName)
     os.loadAPI(CoreFolderPath..fileName)
   end
 end
