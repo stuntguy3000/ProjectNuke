@@ -36,11 +36,7 @@ function DownloadCoreComponents()
   for component, fileName in pairs(ComponentsMap) do
     fullURL = "https://raw.githubusercontent.com/stuntguy3000/ProjectNuke/master/v2.0/Core/Components/" .. fileName
     
-    result = shell.run("wget "..fullURL.." "..CoreFolderPath..fileName)
-    print(result)
-    if (result == false) then
-      error("Unable to download "..fileName..", unable to proceed.")
-    end
+    shell.run("wget "..fullURL.." "..CoreFolderPath..fileName)
   end
 end
 
