@@ -25,7 +25,10 @@ fs.delete("/startup.old")
 shell.run("wget https://raw.githubusercontent.com/stuntguy3000/ProjectNuke/master/v2.0/Core/ProjectNukeLauncher.lua /projectnuke.startup")
 
 if fs.exists("/projectnuke.startup") == true then
-  fs.move("/startup", "/startup.old")
+  if fs.exists("/startup") == true then
+    fs.move("/startup", "/startup.old")
+  end
+
   fs.move("/projectnuke.startup", "/startup")
   
   print("Running launcher...")
