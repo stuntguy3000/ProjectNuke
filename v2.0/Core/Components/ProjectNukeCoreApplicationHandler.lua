@@ -73,8 +73,10 @@ function DownloadApplications()
     print("Downloading "..application:getName().."("..application:getFileName()..")")
     
     fullURL = "https://raw.githubusercontent.com/stuntguy3000/ProjectNuke/master/v2.0/Applications/"..fileName
+    fullPath = ApplicationBasePath..fileName
+    print(fullPath)
     
-    shell.run("wget "..fullURL.." "..ApplicationBasePath..fileName)
+    shell.run("wget "..fullURL.." "..fullPath)
   end
 end
 
