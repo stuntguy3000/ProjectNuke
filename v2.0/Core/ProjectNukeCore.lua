@@ -21,7 +21,7 @@
 local ComponentsMap = {
   ["EncryptionUtil"] = "ProjectNukeCore-EncryptionUtil.lua", 
   ["GUIUtil"] = "ProjectNukeCore-GUIUtil.lua",
-  ["FileUtil"] = "ProjectNukeCore-FileUtil.lua"
+  ["FileUtil"] = "ProjectNukeCore-FileUtilFAIL.lua"
 }
 
 -- Core settings
@@ -37,7 +37,7 @@ function DownloadCoreComponents()
     fullURL = "https://raw.githubusercontent.com/stuntguy3000/ProjectNuke/master/v2.0/Core/Components/" .. fileName
     
     result = shell.run("wget "..fullURL.." "..CoreFolderPath..fileName)
-    if (result == false) do
+    if (result == false) then
       error("Unable to download "..fileName..", unable to proceed.")
     end
   end
