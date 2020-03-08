@@ -12,8 +12,9 @@
 
 --]]
 
-local ApplicationBasePath = "/ProjectNuke/Applications/"
+_G["shell"] = shell
 
+local ApplicationBasePath = "/ProjectNuke/Applications/"
 local RegisteredApplications = {}
 local LoadedApplications = {}
 
