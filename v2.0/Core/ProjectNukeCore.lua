@@ -55,7 +55,7 @@ function LoadCoreComponents()
   end
   
   for i, component in ipairs(ComponentsLoadOrder) do
-    print("Loading component "..key)
+    print("Loading component "..component)
     os.loadAPI(CoreFolderPath..ComponentsMap[component])  
   end
 end
