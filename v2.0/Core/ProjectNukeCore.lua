@@ -43,8 +43,9 @@ end
 -- Loads the components
 function LoadCoreComponents()
   for component, fileName in pairs(ComponentsMap) do
-    if (fs.exists(CoreFolderPath..fileName) == false) do
+    if (fs.exists(CoreFolderPath..fileName) == false) then
       error("Component "..component" could not be found!")
+    end
     
     os.loadAPI(CoreFolderPath..fileName)
   end
