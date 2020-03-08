@@ -17,6 +17,8 @@
 
 --]]
 
+local _G["shell"] = shell 
+
 -- Maps components to source locations
 local ComponentsMap = {
   ["FileUtil"] = "ProjectNukeCoreFileUtil.lua",

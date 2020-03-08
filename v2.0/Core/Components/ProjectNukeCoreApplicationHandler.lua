@@ -13,9 +13,6 @@
 --]]
 
 -- http://www.computercraft.info/forums2/index.php?/topic/29696-apifunction-failing/
-_G["shell"] = shell 
-
-
 local ApplicationBasePath = "/ProjectNuke/Applications/"
 local RegisteredApplications = {}
 local LoadedApplications = {}
