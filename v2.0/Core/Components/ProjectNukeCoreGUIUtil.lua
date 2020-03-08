@@ -18,6 +18,8 @@ function DrawBlackSquares(xStart, y)
 end
 
 function DrawBaseGUI(title, subHeading)
+  term.clear()
+  
   -- nil santiy check
   title = title or ""
   subHeading = subHeading or ""
@@ -63,6 +65,8 @@ end
 -- Message is assumed to be a table
 --  Table: yValue messageText
 function DrawSuccessMessages(messageLines, timeout)
+  term.clear()
+  
   paintutils.drawFilledBox(1, 7, 51, 19, colors.green)
   
   term.setBackgroundColor(colors.green)
@@ -81,6 +85,8 @@ end
 -- Message is assumed to be a table
 --  Table: yValue messageText
 function DrawErrorMessages(lines, timeout)
+  term.clear()
+  
   paintutils.drawFilledBox(1, 7, 51, 19, colors.red)
   
   term.setBackgroundColor(colors.red)
