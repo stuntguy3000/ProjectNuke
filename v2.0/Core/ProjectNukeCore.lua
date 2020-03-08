@@ -34,7 +34,7 @@ function DownloadCoreComponents()
   
   -- Download the core components to disk
   for component, path in pairs(ComponentsMap) do
-    download = wget path CoreFolderPath
+    -- download = wget path CoreFolderPath
   end
 end
 
@@ -44,5 +44,6 @@ function ExecuteApplication()
 end
 
 -- Executes ProjectNukeCore
+print("Starting ProjectNuke Core...")
 DownloadCoreComponents()
 ExecuteApplication()
