@@ -12,14 +12,14 @@
 --]]
 
 function SaveTable(table, fileName)
-	local file = fs.open(fileName, "w")
-	file.write(textutils.serialize(table))
-	file.close()
+  local file = fs.open(fileName, "w")
+  file.write(textutils.serialize(table))
+  file.close()
 end
 
 function LoadTable(fileName)
-	local file = fs.open(fileName, "r")
-	local data = file.readAll()
-	file.close()
-	return textutils.unserialize(data)
+  local file = fs.open(fileName, "r")
+  local data = file.readAll()
+  file.close()
+  return textutils.unserialize(data)
 end
