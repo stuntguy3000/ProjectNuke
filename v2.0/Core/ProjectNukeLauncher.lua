@@ -11,7 +11,7 @@
 
 --]]
 function DownloadAndExecuteCore()
-  wget run "https://raw.githubusercontent.com/stuntguy3000/ProjectNuke/master/v2.0/Core/ProjectNukeCore.lua"
+  shell.run("https://raw.githubusercontent.com/stuntguy3000/ProjectNuke/master/v2.0/Core/ProjectNukeCore.lua")
 end
 
 DownloadAndExecuteCore()
