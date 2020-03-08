@@ -25,7 +25,7 @@ local ComponentsMap = {
 }
 
 -- Core settings
-local CoreFolderPath = "/ProjectNuke/Core/Components"
+local CoreFolderPath = "/ProjectNuke/Core/Components/"
 
 -- Used to download the components
 function DownloadCoreComponents()
@@ -35,6 +35,7 @@ function DownloadCoreComponents()
   -- Download the core components to disk
   for component, path in pairs(ComponentsMap) do
     -- download = wget path CoreFolderPath
+    shell.run("wget "..path.." "..CoreFolderPath)
   end
 end
 
