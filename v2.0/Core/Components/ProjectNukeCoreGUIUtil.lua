@@ -43,11 +43,6 @@ function DrawBaseGUI(title, subHeading)
   paintutils.drawFilledBox(1, 10, 51, 19, colors.lightGray)
 end
 
-function DrawCenteredText2(input, yVal) 
-  length = string.len(input) 
-end
-
-
 function DrawCenteredText(text, yVal) 
   print("TEXT: "..text)
   length = string.len(text) 
