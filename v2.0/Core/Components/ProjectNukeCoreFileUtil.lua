@@ -3,7 +3,7 @@
 ================================================================================
 
   ProjectNukeCore-FileUtil
-    Provides common file utilities
+    Provides common file utilities & table encoding/decoding
 
 ================================================================================
 
