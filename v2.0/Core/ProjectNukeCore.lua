@@ -21,7 +21,7 @@
 local ComponentsMap = {
   ["EncryptionUtil"] = "ProjectNukeCore-EncryptionUtil.lua", 
   ["GUIUtil"] = "ProjectNukeCore-GUIUtil.lua",
-  ["FileUtil"] = "ProjectNukeCore-FileUtilFAIL.lua"
+  ["FileUtil"] = "ProjectNukeCore-FileUtil.lua"
 }
 
 -- Core settings
