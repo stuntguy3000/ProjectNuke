@@ -28,6 +28,8 @@ local ComponentsMap = {
   ["ConfigurationHandler"] = "ProjectNukeCoreConfigurationHandler.lua",
 }
 
+local ComponentsLoadOrder = {"FileUtil", "EncryptionUtil", "ConfigurationHandler", "GUIUtil", "ApplicationHandler"}
+
 -- Core settings
 local CoreFolderPath = "/ProjectNuke/Core/Components/"
 
@@ -50,9 +52,11 @@ function LoadCoreComponents()
     if (fs.exists(CoreFolderPath..fileName) == false) then
       error("Component "..component.." could not be found!")
     end
-    
-    print("Loading component "..fileName)
-    os.loadAPI(CoreFolderPath..fileName)
+  end
+  
+  for i, component in ipairs(ComponentsLoadOrder) do
+    print("Loading component "..key)
+    os.loadAPI(CoreFolderPath..ComponentsMap[component])  
   end
 end
 
