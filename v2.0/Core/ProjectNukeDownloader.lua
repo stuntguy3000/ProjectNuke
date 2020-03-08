@@ -31,7 +31,7 @@ if fs.exists("/projectnuke.startup") == true then
 
   fs.move("/projectnuke.startup", "/startup")
   
-  print("Running launcher...")
+  print(" > Running launcher...")
   shell.run("/startup")
 else
   error("Unable to download and execute ProjectNukeLauncher.")
