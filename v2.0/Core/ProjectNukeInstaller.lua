@@ -16,5 +16,11 @@
 
 --]]
 
--- Downloads the ProjectNuke Launcher
+-- Downloads and executes the ProjectNuke Launcher
 wget "https://raw.githubusercontent.com/stuntguy3000/ProjectNuke/master/v2.0/Core/ProjectNukeLauncher.lua" "/startup"
+
+if fs.exists("/startup") == true then
+	/startup
+else
+  print("Unable to download and execute ProjectNukeLauncher, please investigate...")
+end
