@@ -65,7 +65,7 @@ end
 
 function SaveConfiguration()
   fs.delete(ConfigurationPath)
-  ProjectNukeCoreFileUtil:SaveTable(Config, ConfigurationPath)
+  ProjectNukeCoreFileUtil.SaveTable(Config, ConfigurationPath)
 end
 
 LoadConfiguration()
