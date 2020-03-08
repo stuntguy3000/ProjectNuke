@@ -17,10 +17,10 @@ function DrawBlackSquares(xStart, y)
   end
 end
 
-function DrawBaseGUI(Title, SubHeading)
+function DrawBaseGUI(title, subHeading)
   -- nil santiy check
-  Title = Title or ""
-  SubHeading = SubHeading or ""
+  title = title or ""
+  subHeading = subHeading or ""
   
   -- Draw Title/Subheading Backgrounds
   paintutils.drawFilledBox(1, 1, 51, 3, colors.yellow)
@@ -34,12 +34,12 @@ function DrawBaseGUI(Title, SubHeading)
   -- Title text
   term.setBackgroundColor(colors.red)
   term.setTextColor(colors.white)
-  DrawCenteredText(Title, 5)
+  DrawCenteredText(title, 5)
 
   -- Subheading Text
   paintutils.drawFilledBox(1, 7, 51, 9, colors.orange)
   term.setTextColor(colors.black)
-  DrawCenteredText(SubHeading, 8)
+  DrawCenteredText(subHeading, 8)
   paintutils.drawFilledBox(1, 10, 51, 19, colors.lightGray)
 end
 
