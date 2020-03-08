@@ -23,6 +23,7 @@ local ComponentsMap = {
   ["GUIUtil"] = "ProjectNukeCoreGUIUtil.lua",
   ["FileUtil"] = "ProjectNukeCoreFileUtil.lua",
   ["ApplicationHandler"] = "ProjectNukeCoreApplicationHandler.lua",
+  ["ConfigurationHandler"] = "ProjectNukeCoreConfigurationHandler.lua",
 }
 
 -- Core settings
@@ -52,8 +53,7 @@ function LoadCoreComponents()
   end
 end
 
--- Executes the installed Project Nuke application
-function ExecuteApplication()
+function RunApplications()
   
 end
 
@@ -73,6 +73,6 @@ LoadCoreComponents()
 print(" ...done!")
 
 print("==================================================")
-print("Executing application...")
-ExecuteApplication()
+print("Running ProjectNuke Applications...")
+RunApplications()
 shell.run("clear")

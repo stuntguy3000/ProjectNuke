@@ -18,26 +18,26 @@ local RegisteredApplications = {}
 local LoadedApplications = {}
 
 -- Application Class
-ProjectNukeApplication = {}
-ProjectNukeApplication.__index = ProjectNukeApplication
+ProjectNukeApplicationClass = {}
+ProjectNukeApplicationClass.__index = ProjectNukeApplicationClass
 
-function ProjectNukeApplication.new(applicationName, applicationID, applicationFileName)
-  local self = setmetatable({}, ProjectNukeApplication)
+function ProjectNukeApplicationClass.new(applicationName, applicationID, applicationFileName)
+  local self = setmetatable({}, ProjectNukeApplicationClass)
   self.applicationName = applicationName
   self.applicationID = applicationID
   self.applicationFileName = applicationFileName
   return self
 end
 
-function ProjectNukeApplication.getName(self)
+function ProjectNukeApplicationClass.getName(self)
   return self.applicationName
 end
 
-function ProjectNukeApplication.getID(self)
+function ProjectNukeApplicationClass.getID(self)
   return self.applicationID
 end
 
-function ProjectNukeApplication.getFileName(self)
+function ProjectNukeApplicationClass.getFileName(self)
   return self.applicationFileName
 end
 -- Application Class End
@@ -48,7 +48,7 @@ function RegisterApplication(applicationName, applicationID, applicationFileName
     error("Error: Application "..applicationID.." is already registered.")
   end
   
-  newApplication = ProjectNukeApplication.new(applicationName,applicationID,applicationFileName)
+  newApplication = ProjectNukeApplicationClass.new(applicationName,applicationID,applicationFileName)
   table.insert(RegisteredApplications, newApplication)
   
   print("Registered application "..applicationName.." ("..applicationID..").")
@@ -66,11 +66,18 @@ end
 
 function DownloadApplications()
   fs.delete("/ProjectNuke/Applications/")
-  
+
+  -- Download Applications
   for i,application in pairs(RegisteredApplications) do
     print("Downloading "..application:getName())
+    
+    fullUrl = "https://raw.githubusercontent.com/stuntguy3000/ProjectNuke/master/v2.0/Applications/"..fileName
     shell.run("wget "..fullURL.." "..CoreFolderPath..fileName)
   end
+end
+
+function GetRegisteredApplications()
+  return RegisteredApplications
 end
 
 RegisterApplication("Access Control Client", "ACC", "ProjectNukeApplicationACC.lua")
