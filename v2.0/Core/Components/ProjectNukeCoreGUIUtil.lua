@@ -46,10 +46,10 @@ function DrawBaseGUI(title, subHeading)
 end
 
 function DrawCenteredText(text, yVal) 
-  length = string.len(text) 
-  width = term.getSize()
-  minus = math.floor(width-length) 
-  x = math.floor(minus/2) 
+  local length = string.len(text) 
+  local width = term.getSize()
+  local minus = math.floor(width-length) 
+  local x = math.floor(minus/2) 
 
   term.setCursorPos(x+1,yVal) 
   term.write(text)
@@ -67,7 +67,7 @@ end
 function DrawSuccessMessages(messageLines, timeout)
   term.clear()
   
-  paintutils.drawFilledBox(1, 7, 51, 19, colors.green)
+  FillScreen(colors.green)
   
   term.setBackgroundColor(colors.green)
   term.setTextColor(colors.black)
@@ -87,7 +87,7 @@ end
 function DrawErrorMessages(lines, timeout)
   term.clear()
   
-  paintutils.drawFilledBox(1, 7, 51, 19, colors.red)
+  FillScreen(colors.red)
   
   term.setBackgroundColor(colors.red)
   term.setTextColor(colors.black)
@@ -99,4 +99,9 @@ function DrawErrorMessages(lines, timeout)
   DrawStatus("")
   
   sleep(timeout)
+end
+
+function FillScreen(colour)
+  local w, h = term.getSize()
+  paintutils.drawFilledBox(0,0,width,height,colour)
 end
