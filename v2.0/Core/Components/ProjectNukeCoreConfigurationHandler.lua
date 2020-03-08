@@ -28,8 +28,8 @@ function Config.new(encryptionKey, enabledApplications)
   return self
 end
 
-function Config.getName(self)
-  return self.applicationName
+function Config.getEncryptionKey(self)
+  return self.encryptionKey
 end
 
 function Config.getEnabledApplications(self)
@@ -37,7 +37,7 @@ function Config.getEnabledApplications(self)
 end
 
 function Config.isValid(self)
-  return self.enabledApplications
+  return (self.encryptionKey ~= null and self.enabledApplications ~= null)
 end
 -- Config Class End
 
@@ -50,7 +50,7 @@ function LoadConfiguration()
     Config = ProjectNukeCoreFileUtil.LoadTable(ConfigurationPath)
   end
   
-  if (Config ~= null and Config:IsValid()) then
+  if (Config ~= null and Config:isValid()) then
     return true;
   end
   
