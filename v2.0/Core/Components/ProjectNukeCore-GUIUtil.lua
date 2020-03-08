@@ -38,7 +38,7 @@ end
 
 function DrawStatus(StatusText)
 	term.setTextColor(colors.gray)
-	DrawCenteredText"                                                                                                                  ", 19)
+	DrawCenteredText("                                                                                                                  ", 19)
 	DrawCenteredText(message, 19)
 end
 
