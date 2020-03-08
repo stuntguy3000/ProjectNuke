@@ -50,6 +50,15 @@ end
 
 -- Executes ProjectNukeCore
 shell.run("clear")
+print("==================================================")
 print("Starting ProjectNuke Core...")
+
+
+print("==================================================")
+print("Downloading components...")
 DownloadCoreComponents()
+print(" ...done!")
+
+print("Executing application...")
 ExecuteApplication()
+shell.run("clear")
