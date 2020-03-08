@@ -17,7 +17,7 @@
 
 --]]
 
-local _G["shell"] = shell 
+_G["shell"] = shell 
 
 -- Maps components to source locations
 local ComponentsMap = {
