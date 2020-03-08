@@ -36,10 +36,21 @@ function DownloadCoreComponents()
   for component, fileName in pairs(ComponentsMap) do
     fullURL = "https://raw.githubusercontent.com/stuntguy3000/ProjectNuke/master/v2.0/Core/Components/" .. fileName
     
-    result = shell.run("wget "..fullURL.." "..CoreFolderPath..fileName)
+    result = shell.run("wget "..fullURL.." "..CoreFolderPath..fileName))
+    print(result)
     if (result == false) then
       error("Unable to download "..fileName..", unable to proceed.")
     end
+  end
+end
+
+-- Loads the components
+function LoadCoreComponents()
+  for component, fileName in pairs(ComponentsMap) do
+    if (fs.exists(CoreFolderPath..fileName) == false) do
+      error("Component "..component" could not be found!")
+    
+    os.loadAPI(CoreFolderPath..fileName)
   end
 end
 
@@ -57,6 +68,10 @@ print("Starting ProjectNuke Core...")
 print("==================================================")
 print("Downloading components...")
 DownloadCoreComponents()
+print(" ...done!")
+
+print("Loading components...")
+LoadCoreComponents()
 print(" ...done!")
 
 print("Executing application...")
