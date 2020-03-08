@@ -13,5 +13,5 @@ Client:
 How to install:
 
 ```
-wget run https://raw.githubusercontent.com/stuntguy3000/ProjectNuke/master/v2.0/Core/ProjectNukeInstaller.lua
+wget run https://raw.githubusercontent.com/stuntguy3000/ProjectNuke/master/v2.0/Core/ProjectNukeDownloader.lua
 ```

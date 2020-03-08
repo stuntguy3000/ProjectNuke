@@ -2,8 +2,8 @@
 
 ================================================================================
 
-  ProjectNukeInstaller
-    Used on a computer to install a ProjectNuke application.
+  ProjectNukeDownloader
+    Used on a computer to download ProjectNuke.
     
     Install process is as follows:
       1) ProjectNukeCore is downloaded
@@ -34,5 +34,5 @@ if fs.exists("/projectnuke.startup") == true then
   print("Running launcher...")
   shell.run("/startup")
 else
-  print("Unable to download and execute ProjectNukeLauncher, please investigate...")
+  error("Unable to download and execute ProjectNukeLauncher.")
 end
