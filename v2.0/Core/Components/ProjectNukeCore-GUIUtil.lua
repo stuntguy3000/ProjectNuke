@@ -53,6 +53,7 @@ function DrawSuccessMessages(messageLines, timeout)
   
   for yValue, message in pairs(messageLines) do
     DrawCenteredText(message, yValue)
+  end
   
 	DrawStatus("")
   
