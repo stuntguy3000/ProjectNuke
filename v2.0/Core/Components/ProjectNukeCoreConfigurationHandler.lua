@@ -68,4 +68,11 @@ function SaveConfiguration()
   ProjectNukeCoreFileUtil.SaveTable(Config, ConfigurationPath)
 end
 
-LoadConfiguration()
+-- Attempt to load the configuration, but if one is not detected, run the installer GUI
+if (LoadConfiguration() == false) do
+  print("New configuration detected, launching installer.")
+  
+  -- Create GUI
+  ProjectNukeCoreGUIUtil.DrawBaseGUI("Project Nuke Installer", "Welcome to Project Nuke!")
+  sleep(10)
+end
