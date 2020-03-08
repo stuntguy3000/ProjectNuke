@@ -69,9 +69,9 @@ function DownloadApplications()
 
   -- Download Applications
   for i,application in pairs(RegisteredApplications) do
-    print("Downloading "..application:getFileName())
-    
     fileName = application:getFileName()
+    print("Downloading "..application:getName().."("..application:getFileName()..")")
+    
     fullUrl = "https://raw.githubusercontent.com/stuntguy3000/ProjectNuke/master/v2.0/Applications/"..fileName
     shell.run("wget "..fullURL.." "..CoreFolderPath..fileName)
   end
