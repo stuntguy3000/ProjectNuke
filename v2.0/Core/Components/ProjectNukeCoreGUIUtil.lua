@@ -43,11 +43,16 @@ function DrawBaseGUI(title, subHeading)
   paintutils.drawFilledBox(1, 10, 51, 19, colors.lightGray)
 end
 
+function DrawCenteredText2(text, yVal) 
+  length = string.len(text) 
+end
+
+
 function DrawCenteredText(text, yVal) 
-  local width = term.getSize()
-  local length = string.len(text) 
-  local minus = math.floor(width-length) 
-  local x = math.floor(minus/2) 
+  length = string.len(text) 
+  width = term.getSize()
+  minus = math.floor(width-length) 
+  x = math.floor(minus/2) 
 
   term.setCursorPos(x+1,yVal) 
   term.write(text)
