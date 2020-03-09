@@ -72,11 +72,7 @@ function LaunchConfigurationMenu(pageNumber)
     ProjectNukeCoreGUIUtil.AddButton("EASS", "TRUE", "Yes", colours.white, colours.green, 2, 14, 5, 1)
     ProjectNukeCoreGUIUtil.AddButton("RM", "FALSE", "No", colours.white, colours.red, 2, 15, 5, 1)
     ProjectNukeCoreGUIUtil.AddButton("RC", "FALSE", "No", colours.white, colours.red, 2, 16, 5, 1)
-	
-	
     ProjectNukeCoreGUIUtil.AddButton("Continue", nil, "Continue", colours.white, colours.blue, 41, 17, 10, 1)
-	
-    sleep(5)
   elseif (pageNumber == 2) then
   
   end

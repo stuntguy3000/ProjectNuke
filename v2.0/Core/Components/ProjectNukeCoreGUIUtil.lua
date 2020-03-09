@@ -127,12 +127,10 @@ function StartEventListener()
     clickableItem = GetClickableItem(x, y)
     
     if (clickableItem ~= nil) then
-      print(textutils.serialize(clickableItem))
 	  
       actionFunction = clickableItem:getActionFunction()
-      
       if (actionFunction ~= nil) then
-        actionFunction()
+        actionFunction(clickableItem)
         return nil
       end
     end
@@ -145,16 +143,61 @@ end
 
 function GetClickableItem(x, y)
   for i,clickableItem in pairs(ClickableItems) do
-    if (clickableItem ~= nil) then
+    if (clickableItem ~= nil and clickableItem:isEnabled() == true) then
       xStart, yStart, width, height = clickableItem:getSize()
       
       if (x >= xStart and x <= (xStart + width)) then
         if (y >= yStart and y <= (yStart + height)) then
-          return clickableItem
+		  return clickableItem
         end
       end
     end
   end
   
   return nil
+end
+
+function AddToggleButton(buttonID, toggleStatus, xStart, yStart, width, height)
+	if (toggleStatus == "YES") then
+		AddButton(buttonID, toggleStatus, "Yes", colors.white, colors.green, xStart, yStart, width, height, ToggleButtonHandler)
+	else
+		AddButton(buttonID, toggleStatus, "No", colors.white, colors.red, xStart, yStart, width, height, ToggleButtonHandler)
+	end
+end
+
+-- https://gist.github.com/walterlua/978150/2742d9479cd5bfb3d08d90cfcb014da94021e271
+function table.indexOf(t, object)
+    if type(t) ~= "table" then error("table expected, got " .. type(t), 2) end
+
+    for i, v in pairs(t) do
+        if object == v then
+            return i
+        end
+    end
+end
+
+function RemoveToggleButton(clickableItem)
+  index = table.indexOf(ClickableItems, clickableItem)
+  table.remove(ClickableItems, index)
+end
+ 
+function ToggleButtonHandler(clickableItem)
+  id = clickableItem:getID()
+  xStart, yStart, width, height = clickableItem:getSize()
+  
+  toggleStatus = nil
+  
+  if (clickableItem:getValue() == "YES") then
+	toggleStatus = "NO "
+  else
+	toggleStatus = "YES"
+  end
+  
+  -- Remove the old button from existance
+  RemoveToggleButton(clickableItem)
+  
+  -- Add a new one!
+  AddToggleButton(id, toggleStatus, xStart, yStart, width + 1, height + 1)
+  
+  StartEventListener()
 end
