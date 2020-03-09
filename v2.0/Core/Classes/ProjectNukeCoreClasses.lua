@@ -84,6 +84,10 @@ function ClickableItem.getID(self)
   return self.id
 end
 
+function ClickableItem.getValue(self)
+  return self.value
+end
+
 function ClickableItem.getActionFunction(self)
   return self.actionFunction
 end
