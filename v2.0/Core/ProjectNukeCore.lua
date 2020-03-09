@@ -28,7 +28,7 @@ local ComponentsMap = {
   ["ConfigurationHandler"] = "ProjectNukeCoreConfigurationHandler.lua",
 }
 
-local ComponentsLoadOrder = {"FileUtil", "EncryptionUtil", "GUIUtil", "ConfigurationHandler", "ApplicationHandler"}
+local ComponentsLoadOrder = {"FileUtil", "EncryptionUtil", "GUIUtil", "ApplicationHandler", "ConfigurationHandler"}
 
 -- Core settings
 local CoreFolderPath = "/ProjectNuke/Core/Components/"
