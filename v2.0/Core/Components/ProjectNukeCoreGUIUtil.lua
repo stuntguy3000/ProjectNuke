@@ -120,10 +120,13 @@ end
 function GetClickableItem(x, y)
   for i,clickableItem in pairs(ClickableItems) do
     if (clickableItem ~= nil) then
-      xStart = clickableItem:getXStart()
-      yStart
-      xEnd
-      yEnd =
+      xStart, yStart, width, height = clickableItem:getSize()
+      
+      if (x >= xStart and x <= (xStart + width)) then
+        if (y >= yStart and y <= (yStart + height)) then
+          return clickableItem
+        end
+      end
     end
   end
   
