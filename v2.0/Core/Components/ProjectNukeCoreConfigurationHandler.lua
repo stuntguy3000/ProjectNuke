@@ -14,6 +14,7 @@
 local ConfigurationPath = "/ProjectNuke/config.json"
 
 local LoadedConfiguration = nil
+local CurrentMenuPageNumber = 0
 
 -- Returns true if a valid configuration was found, false if one was created.
 function LoadConfiguration()
@@ -40,13 +41,14 @@ function SaveConfiguration()
   ProjectNukeCoreFileUtil.SaveTable(LoadedConfiguration, ConfigurationPath)
 end
 
-function LaunchConfigurationMenu(pageNumber)
+function LaunchConfigurationMenu(nextPageNumber)
   term.clear()
-  if (pageNumber == 1) then
-  
+  if (nextPageNumber == 1) then
+    CurrentMenuPageNumber = 1
+    
     -- Create GUI
     ProjectNukeCoreGUIUtil.DrawBaseGUI("Project Nuke Installer", "Welcome to Project Nuke!")
-	ProjectNukeCoreGUIUtil.DrawStatus("Please select which applications to install.")
+	  ProjectNukeCoreGUIUtil.DrawStatus("Please select which applications to install.")
   
     -- Labels
     term.setTextColor(colors.gray)
@@ -73,12 +75,47 @@ function LaunchConfigurationMenu(pageNumber)
     ProjectNukeCoreGUIUtil.AddToggleButton("RM", "NO", 2, 15, 5, 1)
     ProjectNukeCoreGUIUtil.AddToggleButton("RC", "NO",  2, 16, 5, 1)
     
-    ProjectNukeCoreGUIUtil.AddButton("Continue", nil, "Continue", colours.white, colours.blue, 41, 17, 10, 1, nil)
+    ProjectNukeCoreGUIUtil.AddButton("Continue", nil, "Continue", colours.white, colours.blue, 41, 17, 10, 1, ConfigurationMenuContinue)
     
     ProjectNukeCoreGUIUtil.StartEventListener()
-  elseif (pageNumber == 2) then
-  
+  elseif (nextPageNumber == 2) then
+    CurrentMenuPageNumber = 2
+    
+  elseif (nextPageNumber == 3) then
+    CurrentMenuPageNumber = 3
+    
   end
+end
+
+-- Configuration menu page continue
+function ConfigurationMenuContinue()
+  if (CurrentMenuPageNumber == 1) then
+    -- Validate applications are actually selected
+    ToggleButtons = ProjectNukeCoreGUIUtil.GetToggleButtons();
+    DisabledApplications = {}
+    EnabledApplications = {}
+    
+    for i, v in pairs(ToggleButtons) do
+      if (v:getValue() == "YES") then
+        table.insert(EnabledApplications, v:getID())
+      else
+        table.insert(DisabledApplications, v:getID())
+      end
+    end
+    
+    if (table.getn(EnabledApplications) == 0) then
+      ProjectNukeCoreGUIUtil.DrawErrorMessages({[10] = "Error: Please select applications to install."}, 3)
+    else
+      LaunchConfigurationMenu(2)
+      CurrentMenuPageNumber = 2
+    end
+  elseif (CurrentMenuPageNumber == 2) then
+    return
+  elseif (CurrentMenuPageNumber == 3) then
+    return
+  end
+  
+  CurrentMenuPageNumber = 0
 end
 
 -- Attempt to load the configuration, but if one is not detected, run the installer GUI

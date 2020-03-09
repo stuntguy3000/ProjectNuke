@@ -11,6 +11,9 @@
 
 --]]
 
+local ProjectNukeGUI = window.create(term.current(),1,1,51,21,true)
+local MessageWindow = window.create(ProjectNukeGUI,1,1,51,21,false)
+
 -- Basic drawing items
 function DrawBlackSquares(xStart, y) 
   for x=0, 50, 4 do
@@ -19,87 +22,95 @@ function DrawBlackSquares(xStart, y)
 end
 
 function DrawBaseGUI(title, subHeading)
-  term.clear()
+  ProjectNukeGUI.clear()
   
   -- nil santiy check
   title = title or ""
   subHeading = subHeading or ""
   
+  
   -- Draw Title/Subheading Backgrounds
   paintutils.drawFilledBox(1, 1, 51, 3, colors.yellow)
   paintutils.drawFilledBox(1, 4, 51, 6, colors.red)
+  paintutils.drawFilledBox(1, 7, 51, 9, colors.orange)
+  paintutils.drawFilledBox(1, 10, 51, 19, colors.lightGray)
   
   -- Draw Black Checker Pattern
   DrawBlackSquares(2, 1)
   DrawBlackSquares(1, 2)
   DrawBlackSquares(0, 3)
-
+  
   -- Title text
-  term.setBackgroundColor(colors.red)
-  term.setTextColor(colors.white)
-  DrawCenteredText(title, 5)
-
-  -- Subheading Text
-  paintutils.drawFilledBox(1, 7, 51, 9, colors.orange)
-  term.setTextColor(colors.black)
-  DrawCenteredText(subHeading, 8)
-  paintutils.drawFilledBox(1, 10, 51, 19, colors.lightGray)
+  
+  DrawCenteredText(title, 5, colors.white, colors.red, ProjectNukeGUI)
+  DrawCenteredText(subHeading, 8, colors.black, colors.orange, ProjectNukeGUI)
 end
 
-function DrawCenteredText(text, yVal) 
+function DrawCenteredText(text, yVal, textColor, backgroundColor, terminal) 
   local length = string.len(text) 
-  local width = term.getSize()
+  local width = terminal.getSize()
   local minus = math.floor(width-length) 
   local x = math.floor(minus/2) 
+  
+  terminal.setBackgroundColor(backgroundColor)
+  terminal.setTextColor(textColor)
 
-  term.setCursorPos(x+1,yVal) 
-  term.write(text)
+  terminal.setCursorPos(x+1,yVal) 
+  terminal.write(text)
 end
 
-function DrawStatus(message)
-  term.setTextColor(colors.gray)
-  DrawCenteredText("                                                                                                                  ", 19)
-  DrawCenteredText(message, 19)
+function DrawStatus(message, terminal)
+  terminal.setTextColor(colors.gray)
+  DrawCenteredText("                   ", 19, terminal)
+  DrawCenteredText(message, 19, terminal)
 end
 
 -- Used to draw a error messages
 -- Message is assumed to be a table
 --  Table: yValue messageText
 function DrawSuccessMessages(messageLines, timeout)
-  term.clear()
+  MessageWindow.setVisible(true)
+  MessageWindow.clear()
   
-  FillScreen(colors.green)
+  FillScreen(colors.green, MessageWindow)
   
-  term.setBackgroundColor(colors.green)
-  term.setTextColor(colors.black)
+  MessageWindow.setBackgroundColor(colors.green)
+  MessageWindow.setTextColor(colors.black)
   
   for yValue, message in pairs(messageLines) do
-    DrawCenteredText(message, yValue)
+    DrawCenteredText(message, yValue, MessageWindow)
   end
   
   sleep(timeout)
+  MessageWindow.setVisible(false)
+  ProjectNukeGUI.redraw()
 end
 
 -- Used to draw a error messages
 -- Message is assumed to be a table
 --  Table: yValue messageText
 function DrawErrorMessages(messageLines, timeout)
-  term.clear()
+  MessageWindow.setVisible(true)
+  MessageWindow.clear()
   
-  FillScreen(colors.red)
+  FillScreen(colors.red, MessageWindow)
   
-  term.setBackgroundColor(colors.red)
-  term.setTextColor(colors.black)
+  MessageWindow.setBackgroundColor(colors.red)
+  MessageWindow.setTextColor(colors.black)
   
   for yValue, message in pairs(messageLines) do
-    DrawCenteredText(message, yValue)
+    DrawCenteredText(message, yValue, MessageWindow)
   end
   
   sleep(timeout)
+  MessageWindow.setVisible(false)
+  ProjectNukeGUI.redraw()
 end
 
-function FillScreen(colour)
-  width, height = term.getSize()
+function FillScreen(colour, terminal)
+  terminal = terminal or ProjectNukeGUI
+
+  width, height = terminal.getSize()
   paintutils.drawFilledBox(0,0,width,height,colour)
 end
 
@@ -161,7 +172,7 @@ function AddToggleButton(buttonID, toggleStatus, xStart, yStart, width, height)
 	if (toggleStatus == "YES") then
 		AddButton(buttonID, toggleStatus, "Yes", colors.white, colors.green, xStart, yStart, width, height, ToggleButtonHandler)
 	else
-		AddButton(buttonID, toggleStatus, "No", colors.white, colors.red, xStart, yStart, width, height, ToggleButtonHandler)
+		AddButton(buttonID, toggleStatus, "No", colors.white, colors.orange, xStart, yStart, width, height, ToggleButtonHandler)
 	end
 end
 
@@ -174,6 +185,18 @@ function table.indexOf(t, object)
             return i
         end
     end
+end
+
+function GetToggleButtons()
+  AllToggleButtons = {}
+  
+  for i, v in pairs(ClickableItems) do
+    if (v:getActionFunction() == ToggleButtonHandler) then
+      table.insert(AllToggleButtons, v)
+    end
+  end  
+  
+  return AllToggleButtons
 end
 
 function RemoveToggleButton(clickableItem)
