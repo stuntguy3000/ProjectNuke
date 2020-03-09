@@ -1,9 +1,35 @@
--- Clickable Item Class
-local ProjectNukeClassClickableItemClass = {}
-ProjectNukeClassClickableItemClass.__index = ProjectNukeClassClickableItemClass
+-- Application Class
+Application = {}
+Application.__index = Application
 
-function ProjectNukeClassClickableItemClass.new(id, value, text, textColour, backgroundColour, xStart, yStart, width, height)
-  local self = setmetatable({}, ProjectNukeClassClickableItemClass)
+function Application.new(applicationName, applicationID, applicationFileName)
+  local self = setmetatable({}, Application)
+  self.applicationName = applicationName
+  self.applicationID = applicationID
+  self.applicationFileName = applicationFileName
+  return self
+end
+
+function Application.getName(self)
+  return self.applicationName
+end
+
+function Application.getID(self)
+  return self.applicationID
+end
+
+function Application.getFileName(self)
+  return self.applicationFileName
+end
+-- Application Class End
+
+
+-- Clickable Item Class
+local ClickableItem = {}
+ClickableItem.__index = ClickableItem
+
+function ClickableItem.new(id, value, text, textColour, backgroundColour, xStart, yStart, width, height)
+  local self = setmetatable({}, ClickableItem)
   
   self.enabled = true
   self.id = id
@@ -33,7 +59,7 @@ function ProjectNukeClassClickableItemClass.new(id, value, text, textColour, bac
   return self
 end
 
-function ProjectNukeClassClickableItemClass.render(self)
+function ClickableItem.render(self)
   term.setBackgroundColor(self.backgroundColour)
   term.setTextColor(self.textColour)
   
@@ -48,11 +74,11 @@ function ProjectNukeClassClickableItemClass.render(self)
   term.setCursorPos(self.xStart, self.yStart + self.height + 1)
 end
 
-function ProjectNukeClassClickableItemClass.isEnabled(self)
+function ClickableItem.isEnabled(self)
   return self.enabled
 end
 
-function ProjectNukeClassClickableItemClass.getSize(self)
+function ClickableItem.getSize(self)
   return self.xStart, self.yStart, self.width, self.height
 end
 -- End Clickable Item Class

@@ -21,8 +21,7 @@ _G["shell"] = shell
 
 -- Maps classes to source locations
 local ClassMap = {
-    ["Application"] = "ProjectNukeClassApplication.lua",
-    ["ClickableItem"] = "ProjectNukeClassClickableItem.lua",
+    ["CoreClasses"] = "ProjectNukeCoreClasses.lua",
 }
 
 -- Maps components to source locations
@@ -38,7 +37,7 @@ local ComponentsLoadOrder = {"FileUtil", "EncryptionUtil", "GUIUtil", "Applicati
 
 -- Core settings
 local CoreComponentFolderPath = "/ProjectNuke/Core/Components/"
-local CoreClassFolderPath = "/ProjectNuke/Core/Components/"
+local CoreClassFolderPath = "/ProjectNuke/Core/Classes/"
 
 -- Used to download the components
 function DownloadCoreComponents()

@@ -23,7 +23,7 @@ function RegisterApplication(applicationName, applicationID, applicationFileName
     error("Error: Application "..applicationID.." is already registered.")
   end
   
-  newApplication = ProjectNukeClassApplication.new(applicationName,applicationID,applicationFileName)
+  newApplication = Application.new(applicationName,applicationID,applicationFileName)
   table.insert(RegisteredApplications, newApplication)
   
   print("Registered application "..applicationName.." ("..applicationID..").")
