@@ -110,30 +110,22 @@ local ClickableItems = {}
 
 function AddButton(buttonID, buttonValue, buttonText, buttonTextColour, buttonColour, xStart, yStart, width, height)
   -- Draw the button
-  term.setBackgroundColor(buttonColour)
-  term.setTextColor(buttonTextColour)
-  
-  width = width - 1
-  height = height - 1
-  
-  if (width < 0) then
-    width = 0
-  end
-  
-  if (height < 0) then
-    height = 0
-  end
-  
-  paintutils.drawFilledBox(xStart, yStart, xStart + width, yStart + height, buttonColour)
-  
-  -- Cursor Position = xStart + half the button width minus half the text width
-  cursorX = math.ceil(xStart + (width / 2) - (string.len(buttonText) / 2))
-  cursorY = (yStart + (height / 2))
-  term.setCursorPos(cursorX, cursorY)
-  term.write(buttonText)
+  button = ProjectNukeClassClickableItemClass.new(buttonID, buttonValue, buttonText, buttonTextColour, buttonColour, xStart, yStart, width, height)
+  button:render()
   
   -- Save the button to memory for future reference
+  table.insert(ClickableItems, button)
 end
 
 function GetClickableItem(x, y)
+  for i,clickableItem in pairs(ClickableItems) do
+    if (clickableItem ~= nil) then
+      xStart = clickableItem:getXStart()
+      yStart
+      xEnd
+      yEnd =
+    end
+  end
+  
+  return nil
 end
