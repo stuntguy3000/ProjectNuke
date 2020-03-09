@@ -17,38 +17,13 @@ local ApplicationBasePath = "/ProjectNuke/Applications/"
 local RegisteredApplications = {}
 local LoadedApplications = {}
 
--- Application Class
-ProjectNukeApplicationClass = {}
-ProjectNukeApplicationClass.__index = ProjectNukeApplicationClass
-
-function ProjectNukeApplicationClass.new(applicationName, applicationID, applicationFileName)
-  local self = setmetatable({}, ProjectNukeApplicationClass)
-  self.applicationName = applicationName
-  self.applicationID = applicationID
-  self.applicationFileName = applicationFileName
-  return self
-end
-
-function ProjectNukeApplicationClass.getName(self)
-  return self.applicationName
-end
-
-function ProjectNukeApplicationClass.getID(self)
-  return self.applicationID
-end
-
-function ProjectNukeApplicationClass.getFileName(self)
-  return self.applicationFileName
-end
--- Application Class End
-
 function RegisterApplication(applicationName, applicationID, applicationFileName)
   -- Test if application exists
   if (GetApplicationByID(applicationID) ~= nil) then
     error("Error: Application "..applicationID.." is already registered.")
   end
   
-  newApplication = ProjectNukeApplicationClass.new(applicationName,applicationID,applicationFileName)
+  newApplication = ProjectNukeClassApplication.new(applicationName,applicationID,applicationFileName)
   table.insert(RegisteredApplications, newApplication)
   
   print("Registered application "..applicationName.." ("..applicationID..").")

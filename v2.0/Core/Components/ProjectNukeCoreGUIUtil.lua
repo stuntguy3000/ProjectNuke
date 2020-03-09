@@ -11,6 +11,7 @@
 
 --]]
 
+-- Basic drawing items
 function DrawBlackSquares(xStart, y) 
   for x=0, 50, 4 do
     paintutils.drawFilledBox(xStart + x, y, xStart + x + 1, y, colors.black)
@@ -76,8 +77,6 @@ function DrawSuccessMessages(messageLines, timeout)
     DrawCenteredText(message, yValue)
   end
   
-  DrawStatus("")
-  
   sleep(timeout)
 end
 
@@ -96,8 +95,6 @@ function DrawErrorMessages(messageLines, timeout)
     DrawCenteredText(message, yValue)
   end
   
-  DrawStatus("")
-  
   sleep(timeout)
 end
 
@@ -105,3 +102,37 @@ function FillScreen(colour)
   width, height = term.getSize()
   paintutils.drawFilledBox(0,0,width,height,colour)
 end
+
+
+
+-- Clickable Items
+local ClickableItems = {}
+
+function AddButton(buttonID, buttonValue, buttonText, buttonTextColour, buttonColour, xStart, yStart, width, height)
+  -- Draw the button
+  term.setBackgroundColor(buttonColour)
+  term.setTextColor(buttonTextColour)
+  
+  width = width - 1
+  height = height - 1
+  
+  if (width < 0) then
+    width = 0
+  end
+  
+  if (height < 0) then
+    height = 0
+  end
+  
+  paintutils.drawFilledBox(xStart, yStart, xStart + width, yStart + height, buttonColour)
+  
+  -- Cursor Position = xStart + half the button width minus half the text width
+  cursorX = math.ceil(xStart + (width / 2) - (string.len(buttonText) / 2))
+  cursorY = (yStart + (height / 2))
+  term.setCursorPos(cursorX, cursorY)
+  term.write(buttonText)
+  
+  -- Save the button to memory for future reference
+end
+
+function GetClickableItem(x, y)

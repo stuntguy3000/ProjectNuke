@@ -54,10 +54,7 @@ function LoadConfiguration()
     return true;
   end
   
-  DefaultApplications = {}
-  table.insert(DefaultApplications, "EASC")
-  
-  Config = Config.new("EncryptionKey", DefaultApplications)
+  Config = Config.new("EncryptionKey", {})
   SaveConfiguration()
   
   return false
@@ -74,5 +71,6 @@ if (LoadConfiguration() == false) then
   
   -- Create GUI
   ProjectNukeCoreGUIUtil.DrawBaseGUI("Project Nuke Installer", "Welcome to Project Nuke!")
+  ProjectNukeCoreGUIUtil.SetStatus("Please select which applications to install.")
   sleep(10)
 end

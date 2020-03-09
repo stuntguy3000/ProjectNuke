@@ -19,6 +19,12 @@
 
 _G["shell"] = shell 
 
+-- Maps classes to source locations
+local ClassMap = {
+    ["Application"] = "ProjectNukeClassApplication.lua",
+    ["ClickableItem"] = "ProjectNukeClassClickableItem.lua",
+}
+
 -- Maps components to source locations
 local ComponentsMap = {
   ["FileUtil"] = "ProjectNukeCoreFileUtil.lua",
@@ -31,7 +37,8 @@ local ComponentsMap = {
 local ComponentsLoadOrder = {"FileUtil", "EncryptionUtil", "GUIUtil", "ApplicationHandler", "ConfigurationHandler"}
 
 -- Core settings
-local CoreFolderPath = "/ProjectNuke/Core/Components/"
+local CoreComponentFolderPath = "/ProjectNuke/Core/Components/"
+local CoreClassPath = "/ProjectNuke/Core/Components/"
 
 -- Used to download the components
 function DownloadCoreComponents()
@@ -56,7 +63,21 @@ function LoadCoreComponents()
   
   for i, component in ipairs(ComponentsLoadOrder) do
     print("Loading component "..component)
-    os.loadAPI(CoreFolderPath..ComponentsMap[component])  
+    os.loadAPI(CoreComponentFolderPath..ComponentsMap[component])  
+  end
+end
+
+-- Downloads and loads external classes
+function LoadClasses()
+  -- Delete existing core classes
+  fs.delete(CoreFolderPath)
+  
+  -- Download the core classes to disk
+  for className, fileName in pairs(ClassMap) do
+    fullURL = "https://raw.githubusercontent.com/stuntguy3000/ProjectNuke/master/v2.0/Core/Classes/" .. fileName
+    
+    shell.run("wget "..fullURL.." "..CoreClassFolderPath..fileName)
+    os.loadAPI(CoreClassFolderPath..fileName) 
   end
 end
 
@@ -68,6 +89,11 @@ end
 shell.run("clear")
 print("==================================================")
 print("Starting ProjectNuke Core...")
+
+print("==================================================")
+print("Loading classes...")
+LoadClasses()
+print(" ...done!")
 
 print("==================================================")
 print("Downloading components...")
