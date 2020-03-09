@@ -110,7 +110,7 @@ local ClickableItems = {}
 
 function AddButton(buttonID, buttonValue, buttonText, buttonTextColour, buttonColour, xStart, yStart, width, height)
   -- Draw the button
-  button = ProjectNukeClassClickableItemClass.new(buttonID, buttonValue, buttonText, buttonTextColour, buttonColour, xStart, yStart, width, height)
+  button = ProjectNukeCoreClasses.ClickableItem.new(buttonID, buttonValue, buttonText, buttonTextColour, buttonColour, xStart, yStart, width, height)
   button:render()
   
   -- Save the button to memory for future reference

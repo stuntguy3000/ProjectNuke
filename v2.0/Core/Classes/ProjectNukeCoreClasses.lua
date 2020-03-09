@@ -25,7 +25,7 @@ end
 
 
 -- Clickable Item Class
-local ClickableItem = {}
+local CoreClasses = {}
 ClickableItem.__index = ClickableItem
 
 function ClickableItem.new(id, value, text, textColour, backgroundColour, xStart, yStart, width, height)
