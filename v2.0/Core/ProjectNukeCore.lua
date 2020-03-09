@@ -86,25 +86,25 @@ end
 
 -- Executes ProjectNukeCore
 shell.run("clear")
-print("==================================================")
+print("===================================================")
 print("Starting ProjectNuke Core...")
 
-print("==================================================")
+print("===================================================")
 print("Loading classes...")
 LoadClasses()
 print(" ...done!")
 
-print("==================================================")
+print("===================================================")
 print("Downloading components...")
 DownloadCoreComponents()
 print(" ...done!")
 
-print("==================================================")
+print("===================================================")
 print("Loading components...")
 LoadCoreComponents()
 print(" ...done!")
 
-print("==================================================")
+print("===================================================")
 print("Running ProjectNuke Applications...")
 RunApplications()
 shell.run("clear")

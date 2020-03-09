@@ -1,5 +1,5 @@
 -- Application Class
-local Application = {}
+Application = {}
 Application.__index = Application
 
 function Application.new(applicationName, applicationID, applicationFileName)
@@ -25,7 +25,7 @@ end
 
 
 -- Clickable Item Class
-local ClickableItem = {}
+ClickableItem = {}
 ClickableItem.__index = ClickableItem
 
 function ClickableItem.new(id, value, text, textColour, backgroundColour, xStart, yStart, width, height)
