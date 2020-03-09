@@ -11,8 +11,8 @@
 
 --]]
 
-local ProjectNukeGUI = window.create(term.current(),1,1,51,21,true)
-local MessageWindow = window.create(ProjectNukeGUI,1,1,51,21,false)
+ProjectNukeGUI = window.create(term.current(),1,1,51,21,true)
+MessageWindow = window.create(ProjectNukeGUI,1,1,51,21,false)
 
 -- Basic drawing items
 function DrawBlackSquares(xStart, y) 
@@ -42,11 +42,13 @@ function DrawBaseGUI(title, subHeading)
   
   -- Title text
   
-  DrawCenteredText(title, 5, colors.white, colors.red, ProjectNukeGUI)
-  DrawCenteredText(subHeading, 8, colors.black, colors.orange, ProjectNukeGUI)
+  DrawCenteredText(title, 5, colors.white, colors.red)
+  DrawCenteredText(subHeading, 8, colors.black, colors.orange)
 end
 
-function DrawCenteredText(text, yVal, textColor, backgroundColor, terminal) 
+function DrawCenteredText(text, yVal, textColor, backgroundColor) 
+  terminal = term.current()
+
   local length = string.len(text) 
   local width = terminal.getSize()
   local minus = math.floor(width-length) 
@@ -61,8 +63,8 @@ end
 
 function DrawStatus(message, terminal)
   terminal.setTextColor(colors.gray)
-  DrawCenteredText("                   ", 19, terminal)
-  DrawCenteredText(message, 19, terminal)
+  DrawCenteredText("                   ", 19)
+  DrawCenteredText(message, 19)
 end
 
 -- Used to draw a error messages
@@ -71,14 +73,13 @@ end
 function DrawSuccessMessages(messageLines, timeout)
   MessageWindow.setVisible(true)
   MessageWindow.clear()
+  MessageWindow.redraw()
   
   FillScreen(colors.green, MessageWindow)
-  
-  MessageWindow.setBackgroundColor(colors.green)
   MessageWindow.setTextColor(colors.black)
   
   for yValue, message in pairs(messageLines) do
-    DrawCenteredText(message, yValue, MessageWindow)
+    DrawCenteredText(message, yValue, colors.white, colors.green)
   end
   
   sleep(timeout)
@@ -92,14 +93,13 @@ end
 function DrawErrorMessages(messageLines, timeout)
   MessageWindow.setVisible(true)
   MessageWindow.clear()
+  MessageWindow.redraw()
   
   FillScreen(colors.red, MessageWindow)
-  
-  MessageWindow.setBackgroundColor(colors.red)
   MessageWindow.setTextColor(colors.black)
   
   for yValue, message in pairs(messageLines) do
-    DrawCenteredText(message, yValue, MessageWindow)
+    DrawCenteredText(message, yValue, colors.white, colors.red)
   end
   
   sleep(timeout)
@@ -108,8 +108,6 @@ function DrawErrorMessages(messageLines, timeout)
 end
 
 function FillScreen(colour, terminal)
-  terminal = terminal or ProjectNukeGUI
-
   width, height = terminal.getSize()
   paintutils.drawFilledBox(0,0,width,height,colour)
 end
