@@ -4,7 +4,6 @@
 
   ProjectNukeCore-ApplicationHandlers
     Provides internal application handling to allow the initalization and assignment of applications
-    Clients and Servers can 
 
 ================================================================================
 
@@ -23,7 +22,7 @@ function RegisterApplication(applicationName, applicationID, applicationFileName
     error("Error: Application "..applicationID.." is already registered.")
   end
   
-  newApplication = Application.new(applicationName,applicationID,applicationFileName)
+  newApplication = ProjectNukeCoreClasses.Application.new(applicationName,applicationID,applicationFileName)
   table.insert(RegisteredApplications, newApplication)
   
   print("Registered application "..applicationName.." ("..applicationID..").")
