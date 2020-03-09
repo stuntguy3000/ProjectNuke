@@ -13,7 +13,7 @@
 
 local ConfigurationPath = "/ProjectNuke/config.json"
 
-local LoadedConfiguration = {}
+local LoadedConfiguration = nil
 
 -- Returns true if a valid configuration was found, false if one was created.
 function LoadConfiguration()
@@ -26,7 +26,7 @@ function LoadConfiguration()
   end
   
   if (LoadedConfiguration ~= null and LoadedConfiguration:isValid()) then
-    return true;
+    return false;
   end
   
   LoadedConfiguration = ProjectNukeCoreClasses.Config.new("EncryptionKey", {})
@@ -40,12 +40,46 @@ function SaveConfiguration()
   ProjectNukeCoreFileUtil.SaveTable(LoadedConfiguration, ConfigurationPath)
 end
 
+function LaunchConfigurationMenu(pageNumber)
+  term.clear()
+  if (pageNumber == 1) then
+  
+    -- Create GUI
+    ProjectNukeCoreGUIUtil.DrawBaseGUI("Project Nuke Installer", "Please select which applications to install.")
+  
+    -- Labels
+    term.setTextColor(colors.gray)
+    term.setBackgroundColor(colors.lightGray)
+
+    term.setCursorPos(8,11) 
+    term.write("Access Control Client (ACC)")
+    term.setCursorPos(8,12) 
+    term.write("Access Control Server (ACS)")
+    term.setCursorPos(8,13) 
+    term.write("Emergency Alert System Client (EASC)")
+    term.setCursorPos(8,14) 
+    term.write("Emergency Alert System Server (EASS)")
+    term.setCursorPos(8,15) 
+    term.write("Reactor Monitoring (RM)")
+    term.setCursorPos(8,16) 
+    term.write("Reactor Controller (RC)")
+    
+    -- Buttons
+    ProjectNukeCoreGUIUtil.AddButton("ACC", "FALSE", "No", colours.white, colours.red, 3, 11, 2, 1)
+    ProjectNukeCoreGUIUtil.AddButton("ACS", "FALSE", "No", colours.white, colours.red, 3, 12, 2, 1)
+    ProjectNukeCoreGUIUtil.AddButton("EASC", "FALSE", "No", colours.white, colours.red, 3, 13, 2, 1)
+    ProjectNukeCoreGUIUtil.AddButton("EASS", "TRUE", "Yes", colours.white, colours.green, 3, 14, 2, 1)
+    ProjectNukeCoreGUIUtil.AddButton("RM", "FALSE", "No", colours.white, colours.red, 3, 15, 2, 1)
+    ProjectNukeCoreGUIUtil.AddButton("RC", "FALSE", "No", colours.white, colours.red, 3, 16, 2, 1)
+    
+    sleep(5)
+  elseif (pageNumber == 2) then
+  
+  end
+end
+
 -- Attempt to load the configuration, but if one is not detected, run the installer GUI
 if (LoadConfiguration() == false) then
   print("New configuration detected, launching installer.")
-  
-  -- Create GUI
-  ProjectNukeCoreGUIUtil.DrawBaseGUI("Project Nuke Installer", "Welcome to Project Nuke!")
-  ProjectNukeCoreGUIUtil.SetStatus("Please select which applications to install.")
-  sleep(10)
+  LaunchConfigurationMenu(1)
 end
