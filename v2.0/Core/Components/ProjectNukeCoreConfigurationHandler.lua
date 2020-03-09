@@ -15,46 +15,21 @@ local ConfigurationPath = "/ProjectNuke/config.json"
 
 local LoadedConfiguration = {}
 
--- Config Class
-Config = {}
-Config.__index = Config
-
-function Config.new(encryptionKey, enabledApplications)
-  local self = setmetatable({}, Config)
-  
-  self.encryptionKey = encryptionKey
-  self.enabledApplications = enabledApplications
-  
-  return self
-end
-
-function Config.getEncryptionKey(self)
-  return self.encryptionKey
-end
-
-function Config.getEnabledApplications(self)
-  return self.enabledApplications
-end
-
-function Config.isValid(self)
-  return (self.encryptionKey ~= null and self.enabledApplications ~= null)
-end
--- Config Class End
-
 -- Returns true if a valid configuration was found, false if one was created.
 function LoadConfiguration()
-  Config = Config or {}
   validConfig = false
   
   if (fs.exists(ConfigurationPath) == true) then
-    Config = ProjectNukeCoreFileUtil.LoadTable(ConfigurationPath)
+    configTable = ProjectNukeCoreFileUtil.LoadTable(ConfigurationPath)
+    
+    LoadedConfiguration = ProjectNukeCoreClasses.Config.new(configTable['encryptionKey'], configTable['enabledApplications'])
   end
   
-  if (Config ~= null and Config:isValid()) then
+  if (LoadedConfiguration ~= null and LoadedConfiguration:isValid()) then
     return true;
   end
   
-  Config = Config.new("EncryptionKey", {})
+  LoadedConfiguration = ProjectNukeCoreClasses.Config.new("EncryptionKey", {})
   SaveConfiguration()
   
   return false
@@ -62,7 +37,7 @@ end
 
 function SaveConfiguration()
   fs.delete(ConfigurationPath)
-  ProjectNukeCoreFileUtil.SaveTable(Config, ConfigurationPath)
+  ProjectNukeCoreFileUtil.SaveTable(LoadedConfiguration, ConfigurationPath)
 end
 
 -- Attempt to load the configuration, but if one is not detected, run the installer GUI

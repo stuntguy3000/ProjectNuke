@@ -1,5 +1,5 @@
 -- Application Class
-Application = {}
+local Application = {}
 Application.__index = Application
 
 function Application.new(applicationName, applicationID, applicationFileName)
@@ -25,7 +25,7 @@ end
 
 
 -- Clickable Item Class
-ClickableItem = {}
+local ClickableItem = {}
 ClickableItem.__index = ClickableItem
 
 function ClickableItem.new(id, value, text, textColour, backgroundColour, xStart, yStart, width, height)
@@ -82,3 +82,30 @@ function ClickableItem.getSize(self)
   return self.xStart, self.yStart, self.width, self.height
 end
 -- End Clickable Item Class
+
+
+-- Config Class
+Config = {}
+Config.__index = Config
+
+function Config.new(encryptionKey, enabledApplications)
+  local self = setmetatable({}, Config)
+  
+  self.encryptionKey = encryptionKey
+  self.enabledApplications = enabledApplications
+  
+  return self
+end
+
+function Config.getEncryptionKey(self)
+  return self.encryptionKey
+end
+
+function Config.getEnabledApplications(self)
+  return self.enabledApplications
+end
+
+function Config.isValid(self)
+  return (self.encryptionKey ~= null and self.enabledApplications ~= null)
+end
+-- Config Class End
