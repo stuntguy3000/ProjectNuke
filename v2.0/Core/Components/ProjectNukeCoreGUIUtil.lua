@@ -108,13 +108,39 @@ end
 -- Clickable Items
 local ClickableItems = {}
 
-function AddButton(buttonID, buttonValue, buttonText, buttonTextColour, buttonColour, xStart, yStart, width, height)
+function AddButton(buttonID, buttonValue, buttonText, buttonTextColour, buttonColour, xStart, yStart, width, height, actionFunction)
   -- Draw the button
-  button = ProjectNukeCoreClasses.ClickableItem.new(buttonID, buttonValue, buttonText, buttonTextColour, buttonColour, xStart, yStart, width, height)
+  button = ProjectNukeCoreClasses.ClickableItem.new(buttonID, buttonValue, buttonText, buttonTextColour, buttonColour, xStart, yStart, width, height, actionFunction)
   button:render()
   
   -- Save the button to memory for future reference
   table.insert(ClickableItems, button)
+end
+
+function StartEventListener()
+  local event, p1, p2, p3 = os.pullEvent()
+  
+  if (event == "mouse_click") then
+    x = p2
+    y = p3
+    
+    clickableItem = GetClickableItem(x, y)
+    
+    if (clickableItem ~= nil) then
+      print(textutils.serialize(clickableItem))
+	  
+      actionFunction = clickableItem:getActionFunction()
+      
+      if (actionFunction ~= nil) then
+        actionFunction()
+        return nil
+      end
+    end
+  elseif (event == "key") then
+    -- oof, todo
+  end
+  
+  StartEventListener()
 end
 
 function GetClickableItem(x, y)

@@ -28,7 +28,7 @@ end
 ClickableItem = {}
 ClickableItem.__index = ClickableItem
 
-function ClickableItem.new(id, value, text, textColour, backgroundColour, xStart, yStart, width, height)
+function ClickableItem.new(id, value, text, textColour, backgroundColour, xStart, yStart, width, height, actionFunction)
   local self = setmetatable({}, ClickableItem)
   
   self.enabled = true
@@ -41,6 +41,8 @@ function ClickableItem.new(id, value, text, textColour, backgroundColour, xStart
   
   self.xStart = xStart
   self.yStart = yStart
+  
+  self.actionFunction = actionFunction
   
   width = width - 1
   height = height - 1
@@ -76,6 +78,14 @@ end
 
 function ClickableItem.isEnabled(self)
   return self.enabled
+end
+
+function ClickableItem.getID(self)
+  return self.id
+end
+
+function ClickableItem.getActionFunction(self)
+  return self.actionFunction
 end
 
 function ClickableItem.getSize(self)
