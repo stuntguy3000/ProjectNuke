@@ -45,7 +45,8 @@ function LaunchConfigurationMenu(pageNumber)
   if (pageNumber == 1) then
   
     -- Create GUI
-    ProjectNukeCoreGUIUtil.DrawBaseGUI("Project Nuke Installer", "Please select which applications to install.")
+    ProjectNukeCoreGUIUtil.DrawBaseGUI("Project Nuke Installer", "Welcome to Project Nuke!")
+	ProjectNukeCoreGUIUtil.DrawStatus("Please select which applications to install.")
   
     -- Labels
     term.setTextColor(colors.gray)
@@ -65,13 +66,16 @@ function LaunchConfigurationMenu(pageNumber)
     term.write("Reactor Controller (RC)")
     
     -- Buttons
-    ProjectNukeCoreGUIUtil.AddButton("ACC", "FALSE", "No", colours.white, colours.red, 3, 11, 2, 1)
-    ProjectNukeCoreGUIUtil.AddButton("ACS", "FALSE", "No", colours.white, colours.red, 3, 12, 2, 1)
-    ProjectNukeCoreGUIUtil.AddButton("EASC", "FALSE", "No", colours.white, colours.red, 3, 13, 2, 1)
-    ProjectNukeCoreGUIUtil.AddButton("EASS", "TRUE", "Yes", colours.white, colours.green, 3, 14, 2, 1)
-    ProjectNukeCoreGUIUtil.AddButton("RM", "FALSE", "No", colours.white, colours.red, 3, 15, 2, 1)
-    ProjectNukeCoreGUIUtil.AddButton("RC", "FALSE", "No", colours.white, colours.red, 3, 16, 2, 1)
-    
+    ProjectNukeCoreGUIUtil.AddButton("ACC", "FALSE", "No", colours.white, colours.red, 2, 11, 5, 1)
+    ProjectNukeCoreGUIUtil.AddButton("ACS", "FALSE", "No", colours.white, colours.red, 2, 12, 5, 1)
+    ProjectNukeCoreGUIUtil.AddButton("EASC", "FALSE", "No", colours.white, colours.red, 2, 13, 5, 1)
+    ProjectNukeCoreGUIUtil.AddButton("EASS", "TRUE", "Yes", colours.white, colours.green, 2, 14, 5, 1)
+    ProjectNukeCoreGUIUtil.AddButton("RM", "FALSE", "No", colours.white, colours.red, 2, 15, 5, 1)
+    ProjectNukeCoreGUIUtil.AddButton("RC", "FALSE", "No", colours.white, colours.red, 2, 16, 5, 1)
+	
+	
+    ProjectNukeCoreGUIUtil.AddButton("Continue", nil, "Continue", colours.white, colours.blue, 41, 17, 10, 1)
+	
     sleep(5)
   elseif (pageNumber == 2) then
   
