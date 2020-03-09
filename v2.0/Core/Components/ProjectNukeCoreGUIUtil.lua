@@ -188,9 +188,9 @@ function ToggleButtonHandler(clickableItem)
   toggleStatus = nil
   
   if (clickableItem:getValue() == "YES") then
-	toggleStatus = "NO "
+    toggleStatus = "NO "
   else
-	toggleStatus = "YES"
+    toggleStatus = "YES"
   end
   
   -- Remove the old button from existance

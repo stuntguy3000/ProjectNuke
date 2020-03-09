@@ -66,13 +66,16 @@ function LaunchConfigurationMenu(pageNumber)
     term.write("Reactor Controller (RC)")
     
     -- Buttons
-    ProjectNukeCoreGUIUtil.AddButton("ACC", "FALSE", "No", colours.white, colours.red, 2, 11, 5, 1)
-    ProjectNukeCoreGUIUtil.AddButton("ACS", "FALSE", "No", colours.white, colours.red, 2, 12, 5, 1)
-    ProjectNukeCoreGUIUtil.AddButton("EASC", "FALSE", "No", colours.white, colours.red, 2, 13, 5, 1)
-    ProjectNukeCoreGUIUtil.AddButton("EASS", "TRUE", "Yes", colours.white, colours.green, 2, 14, 5, 1)
-    ProjectNukeCoreGUIUtil.AddButton("RM", "FALSE", "No", colours.white, colours.red, 2, 15, 5, 1)
-    ProjectNukeCoreGUIUtil.AddButton("RC", "FALSE", "No", colours.white, colours.red, 2, 16, 5, 1)
-    ProjectNukeCoreGUIUtil.AddButton("Continue", nil, "Continue", colours.white, colours.blue, 41, 17, 10, 1)
+    ProjectNukeCoreGUIUtil.AddToggleButton("ACC", "NO", 2, 11, 5, 1)
+    ProjectNukeCoreGUIUtil.AddToggleButton("ACS", "NO", 2, 12, 5, 1)
+    ProjectNukeCoreGUIUtil.AddToggleButton("EASC", "NO", 2, 13, 5, 1)
+    ProjectNukeCoreGUIUtil.AddToggleButton("EASS", "YES",  2, 14, 5, 1)
+    ProjectNukeCoreGUIUtil.AddToggleButton("RM", "NO", 2, 15, 5, 1)
+    ProjectNukeCoreGUIUtil.AddToggleButton("RC", "NO",  2, 16, 5, 1)
+    
+    ProjectNukeCoreGUIUtil.AddButton("Continue", nil, "Continue", colours.white, colours.blue, 41, 17, 10, 1, nil)
+    
+    ProjectNukeCoreGUIUtil.StartEventListener()
   elseif (pageNumber == 2) then
   
   end
