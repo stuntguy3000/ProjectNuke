@@ -2,7 +2,7 @@
 
 ================================================================================
 
-  ProjectNukeCore-GUIUtil
+  ProjectNukeCoreGUIUtil
     Provides common GUI utilities
 
 ================================================================================
@@ -11,29 +11,26 @@
 
 --]]
 
-ProjectNukeGUI = window.create(term.current(),1,1,51,21,true)
-MessageWindow = window.create(ProjectNukeGUI,1,1,51,21,false)
+ProjectNukeGUI = window.create(term.current(),1,1,51,21)
+MessageWindow = window.create(term.current(),1,1,51,21)
 
 -- Basic drawing items
 function DrawBlackSquares(xStart, y) 
   for x=0, 50, 4 do
-    paintutils.drawFilledBox(xStart + x, y, xStart + x + 1, y, colors.black)
+	DrawFilledBoxInWindow(colours.black, xStart + x, y, xStart + x + 1, y)
   end
 end
 
 function DrawBaseGUI(title, subHeading)
-  ProjectNukeGUI.clear()
-  
   -- nil santiy check
   title = title or ""
   subHeading = subHeading or ""
   
-  
   -- Draw Title/Subheading Backgrounds
-  paintutils.drawFilledBox(1, 1, 51, 3, colors.yellow)
-  paintutils.drawFilledBox(1, 4, 51, 6, colors.red)
-  paintutils.drawFilledBox(1, 7, 51, 9, colors.orange)
-  paintutils.drawFilledBox(1, 10, 51, 19, colors.lightGray)
+  DrawFilledBoxInWindow(colours.yellow, 1, 1, 51, 3)
+  DrawFilledBoxInWindow(colours.red, 1, 4, 51, 6)
+  DrawFilledBoxInWindow(colours.orange, 1, 7, 51, 9)
+  DrawFilledBoxInWindow(colours.lightGrey, 1, 10, 51, 19)
   
   -- Draw Black Checker Pattern
   DrawBlackSquares(2, 1)
@@ -41,78 +38,71 @@ function DrawBaseGUI(title, subHeading)
   DrawBlackSquares(0, 3)
   
   -- Title text
-  
-  DrawCenteredText(title, 5, colors.white, colors.red)
-  DrawCenteredText(subHeading, 8, colors.black, colors.orange)
+  DrawCenteredText(title, 5, colours.white, colours.red)
+  DrawCenteredText(subHeading, 8, colours.black, colours.orange)
 end
 
-function DrawCenteredText(text, yVal, textColor, backgroundColor) 
-  terminal = term.current()
+function DrawCenteredText(text, yVal, textcolour, backgroundcolour, window) 
+  if (window == nil) then
+    window = ProjectNukeGUI
+  end
 
   local length = string.len(text) 
-  local width = terminal.getSize()
+  local width = window.getSize()
   local minus = math.floor(width-length) 
   local x = math.floor(minus/2) 
   
-  terminal.setBackgroundColor(backgroundColor)
-  terminal.setTextColor(textColor)
+  window.setBackgroundColour(backgroundcolour)
+  window.setTextColour(textcolour)
 
-  terminal.setCursorPos(x+1,yVal) 
-  terminal.write(text)
+  window.setCursorPos(x+1,yVal) 
+  window.write(text)
 end
 
-function DrawStatus(message, terminal)
-  terminal.setTextColor(colors.gray)
-  DrawCenteredText("                   ", 19)
-  DrawCenteredText(message, 19)
+function DrawStatus(message, window)
+  if (window == nil) then
+    window = ProjectNukeGUI
+  end
+
+  DrawCenteredText("                   ", 19, colours.grey, colours.lightGrey, window)
+  DrawCenteredText(message, 19, colours.grey, colours.lightGrey, window)
 end
 
 -- Used to draw a error messages
 -- Message is assumed to be a table
 --  Table: yValue messageText
 function DrawSuccessMessages(messageLines, timeout)
-  MessageWindow.setVisible(true)
   MessageWindow.clear()
-  MessageWindow.redraw()
   
-  FillScreen(colors.green, MessageWindow)
-  MessageWindow.setTextColor(colors.black)
+  FillWindow(colours.green, MessageWindow)
+  MessageWindow.setTextColour(colours.black)
   
   for yValue, message in pairs(messageLines) do
-    DrawCenteredText(message, yValue, colors.white, colors.green)
+    DrawCenteredText(message, yValue, colours.white, colours.green, MessageWindow)
   end
   
+  MessageWindow.redraw()
   sleep(timeout)
-  MessageWindow.setVisible(false)
-  ProjectNukeGUI.redraw()
+  ProjectNukeGUI.redraw(true)
 end
 
 -- Used to draw a error messages
 -- Message is assumed to be a table
 --  Table: yValue messageText
 function DrawErrorMessages(messageLines, timeout)
-  MessageWindow.setVisible(true)
   MessageWindow.clear()
-  MessageWindow.redraw()
   
-  FillScreen(colors.red, MessageWindow)
-  MessageWindow.setTextColor(colors.black)
+  FillWindow(colours.red, MessageWindow)
+  MessageWindow.setTextColour(colours.black)
   
   for yValue, message in pairs(messageLines) do
-    DrawCenteredText(message, yValue, colors.white, colors.red)
+    DrawCenteredText(message, yValue, colours.white, colours.red, MessageWindow)
   end
   
+  MessageWindow.redraw()
   sleep(timeout)
-  MessageWindow.setVisible(false)
-  ProjectNukeGUI.redraw()
+  ProjectNukeGUI.redraw(true)
 end
-
-function FillScreen(colour, terminal)
-  width, height = terminal.getSize()
-  paintutils.drawFilledBox(0,0,width,height,colour)
-end
-
-
 
 -- Clickable Items
 local ClickableItems = {}
@@ -168,9 +158,9 @@ end
 
 function AddToggleButton(buttonID, toggleStatus, xStart, yStart, width, height)
 	if (toggleStatus == "YES") then
-		AddButton(buttonID, toggleStatus, "Yes", colors.white, colors.green, xStart, yStart, width, height, ToggleButtonHandler)
+		AddButton(buttonID, toggleStatus, "Yes", colours.white, colours.green, xStart, yStart, width, height, ToggleButtonHandler)
 	else
-		AddButton(buttonID, toggleStatus, "No", colors.white, colors.orange, xStart, yStart, width, height, ToggleButtonHandler)
+		AddButton(buttonID, toggleStatus, "No", colours.white, colours.orange, xStart, yStart, width, height, ToggleButtonHandler)
 	end
 end
 
@@ -221,4 +211,31 @@ function ToggleButtonHandler(clickableItem)
   AddToggleButton(id, toggleStatus, xStart, yStart, width + 1, height + 1)
   
   StartEventListener()
+end
+
+function FillWindow(colour, window)
+  if (window == nil) then
+    window = ProjectNukeGUI
+  end
+  
+  window.clear()
+  
+  x,y = window.getPosition()
+  w,h = window.getSize()
+  
+  DrawFilledBoxInWindow(colour, x, y, w, h, window)
+end
+
+function DrawFilledBoxInWindow(colour, x, y, w, h, window)
+  if (window == nil) then
+    window = ProjectNukeGUI
+  end
+  
+  window.setBackgroundColour(colour)
+  for xLoop = x, w do
+    for yLoop = y, h do
+      window.setCursorPos(xLoop, yLoop)
+      window.write(" ")
+    end
+  end
 end

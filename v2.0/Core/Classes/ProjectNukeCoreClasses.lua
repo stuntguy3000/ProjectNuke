@@ -62,18 +62,19 @@ function ClickableItem.new(id, value, text, textColour, backgroundColour, xStart
 end
 
 function ClickableItem.render(self)
-  term.setBackgroundColor(self.backgroundColour)
-  term.setTextColor(self.textColour)
+  window = ProjectNukeCoreGUIUtil.ProjectNukeGUI
+  ProjectNukeCoreGUIUtil.DrawFilledBoxInWindow(self.backgroundColour, self.xStart, self.yStart, self.xStart + self.width, self.yStart + self.height, window)
   
-  paintutils.drawFilledBox(self.xStart, self.yStart, self.xStart + self.width, self.yStart + self.height, self.backgroundColour)
+  window.setBackgroundColor(self.backgroundColour)
+  window.setTextColor(self.textColour)
   
   -- Cursor Position = xStart + half the button width minus half the text width
   cursorX = math.ceil(self.xStart + (self.width / 2) - (string.len(self.text) / 2))
   cursorY = (self.yStart + (self.height / 2))
-  term.setCursorPos(cursorX, cursorY)
-  term.write(self.text)
+  window.setCursorPos(cursorX, cursorY)
+  window.write(self.text)
   
-  term.setCursorPos(self.xStart, self.yStart + self.height + 1)
+  window.setCursorPos(self.xStart, self.yStart + self.height + 1)
 end
 
 function ClickableItem.isEnabled(self)
