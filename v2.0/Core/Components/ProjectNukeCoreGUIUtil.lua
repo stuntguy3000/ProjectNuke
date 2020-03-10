@@ -175,8 +175,9 @@ end
 function AddTextbox(textboxID, xStart, yStart, width)
   -- Draw the textbox
   textbox = ProjectNukeCoreClasses.ClickableItem.new(textboxID, "", "", colours.white, colours.white, xStart, yStart, width, 1, TextboxHandler)
+  textbox:render()
   
-  
+  table.insert(ClickableItems, textbox)
 end
 
 function GiveTextboxFocus(clickableItem)

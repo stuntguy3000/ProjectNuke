@@ -87,10 +87,9 @@ function LaunchConfigurationMenu(nextPageNumber)
     ProjectNukeCoreGUIUtil.DrawBaseGUI("Project Nuke Installer - Step 2/3", "Welcome to Project Nuke!")
 	  ProjectNukeCoreGUIUtil.DrawStatus("Please enter the shared encryption key.")
     
+    -- Labels
     window.setCursorPos(2,11) 
     window.write("Shared Encryption Key:")
-	  ProjectNukeCoreGUIUtil.AddTextInput("EncryptionKey", 2, 11, 5)
-	
 	  window.setCursorPos(2,14) 
     window.write("All applications in Project Nuke use Rednet to")
 	  window.setCursorPos(2,15) 
@@ -98,10 +97,11 @@ function LaunchConfigurationMenu(nextPageNumber)
 	  window.setCursorPos(2,16) 
     window.write("encryption ensure system security.")
     
-  -- Buttons
-  ProjectNukeCoreGUIUtil.AddButton("Continue", nil, "Continue", colours.white, colours.blue, 41, 17, 10, 1, ConfigurationMenuContinue)
+    -- Buttons
+	  ProjectNukeCoreGUIUtil.AddTextbox("EncryptionKey", 2, 12, 48)
+    ProjectNukeCoreGUIUtil.AddButton("Continue", nil, "Continue", colours.white, colours.blue, 41, 17, 10, 1, ConfigurationMenuContinue)
 	
-	ProjectNukeCoreGUIUtil.StartEventListener()
+    ProjectNukeCoreGUIUtil.StartEventListener()
   elseif (nextPageNumber == 3) then
     CurrentMenuPageNumber = 3
     
