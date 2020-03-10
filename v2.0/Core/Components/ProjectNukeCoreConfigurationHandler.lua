@@ -42,7 +42,8 @@ function SaveConfiguration()
 end
 
 function LaunchConfigurationMenu(nextPageNumber)
-  term.clear()
+  window = ProjectNukeCoreGUIUtil.ProjectNukeGUI
+  window.clear()
   if (nextPageNumber == 1) then
     CurrentMenuPageNumber = 1
     
@@ -51,21 +52,21 @@ function LaunchConfigurationMenu(nextPageNumber)
 	  ProjectNukeCoreGUIUtil.DrawStatus("Please select which applications to install.")
   
     -- Labels
-    term.setTextColor(colors.gray)
-    term.setBackgroundColor(colors.lightGray)
+    window.setTextColor(colors.gray)
+    window.setBackgroundColor(colors.lightGray)
 
-    term.setCursorPos(8,11) 
-    term.write("Access Control Client (ACC)")
-    term.setCursorPos(8,12) 
-    term.write("Access Control Server (ACS)")
-    term.setCursorPos(8,13) 
-    term.write("Emergency Alert System Client (EASC)")
-    term.setCursorPos(8,14) 
-    term.write("Emergency Alert System Server (EASS)")
-    term.setCursorPos(8,15) 
-    term.write("Reactor Monitoring (RM)")
-    term.setCursorPos(8,16) 
-    term.write("Reactor Controller (RC)")
+    window.setCursorPos(8,11) 
+    window.write("Access Control Client (ACC)")
+    window.setCursorPos(8,12) 
+    window.write("Access Control Server (ACS)")
+    window.setCursorPos(8,13) 
+    window.write("Emergency Alert System Client (EASC)")
+    window.setCursorPos(8,14) 
+    window.write("Emergency Alert System Server (EASS)")
+    window.setCursorPos(8,15) 
+    window.write("Reactor Monitoring (RM)")
+    window.setCursorPos(8,16) 
+    window.write("Reactor Controller (RC)")
     
     -- Buttons
     ProjectNukeCoreGUIUtil.AddToggleButton("ACC", "NO", 2, 11, 5, 1)
@@ -105,6 +106,7 @@ function ConfigurationMenuContinue()
     
     if (table.getn(EnabledApplications) == 0) then
       ProjectNukeCoreGUIUtil.DrawErrorMessages({[10] = "Error: Please select applications to install."}, 3)
+	  ProjectNukeCoreGUIUtil.StartEventListener()
     else
       LaunchConfigurationMenu(2)
       CurrentMenuPageNumber = 2

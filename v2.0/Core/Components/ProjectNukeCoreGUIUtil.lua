@@ -160,7 +160,7 @@ function AddToggleButton(buttonID, toggleStatus, xStart, yStart, width, height)
 	if (toggleStatus == "YES") then
 		AddButton(buttonID, toggleStatus, "Yes", colours.white, colours.green, xStart, yStart, width, height, ToggleButtonHandler)
 	else
-		AddButton(buttonID, toggleStatus, "No", colours.white, colours.orange, xStart, yStart, width, height, ToggleButtonHandler)
+		AddButton(buttonID, toggleStatus, "No", colours.white, colours.red, xStart, yStart, width, height, ToggleButtonHandler)
 	end
 end
 
