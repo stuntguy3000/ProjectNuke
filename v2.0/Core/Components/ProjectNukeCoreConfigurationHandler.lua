@@ -30,7 +30,7 @@ function LoadConfiguration()
     return false;
   end
   
-  LoadedConfiguration = ProjectNukeCoreClasses.Config.new("EncryptionKey", {})
+  LoadedConfiguration = ProjectNukeCoreClasses.Config.new("", {})
   SaveConfiguration()
   
   return false
@@ -43,17 +43,18 @@ end
 
 function LaunchConfigurationMenu(nextPageNumber)
   window = ProjectNukeCoreGUIUtil.ProjectNukeGUI
-  window.clear()
+  ProjectNukeGUI.ClearGUI(window)
+  
   if (nextPageNumber == 1) then
     CurrentMenuPageNumber = 1
     
     -- Create GUI
-    ProjectNukeCoreGUIUtil.DrawBaseGUI("Project Nuke Installer", "Welcome to Project Nuke!")
+    ProjectNukeCoreGUIUtil.DrawBaseGUI("Project Nuke Installer - Step 1/3", "Welcome to Project Nuke!")
 	  ProjectNukeCoreGUIUtil.DrawStatus("Please select which applications to install.")
   
     -- Labels
-    window.setTextColor(colors.gray)
-    window.setBackgroundColor(colors.lightGray)
+    window.setTextColor(colours.grey)
+    window.setBackgroundColor(colours.lightGrey)
 
     window.setCursorPos(8,11) 
     window.write("Access Control Client (ACC)")
@@ -82,6 +83,25 @@ function LaunchConfigurationMenu(nextPageNumber)
   elseif (nextPageNumber == 2) then
     CurrentMenuPageNumber = 2
     
+    -- Create GUI
+    ProjectNukeCoreGUIUtil.DrawBaseGUI("Project Nuke Installer - Step 2/3", "Welcome to Project Nuke!")
+	  ProjectNukeCoreGUIUtil.DrawStatus("Please enter the shared encryption key.")
+    
+    window.setCursorPos(2,11) 
+    window.write("Shared Encryption Key:")
+	  ProjectNukeCoreGUIUtil.AddTextInput("EncryptionKey", 2, 11, 5)
+	
+	  window.setCursorPos(2,14) 
+    window.write("All applications in Project Nuke use Rednet to")
+	  window.setCursorPos(2,15) 
+    window.write("communicate. Project Nuke implements AES 128")
+	  window.setCursorPos(2,16) 
+    window.write("encryption ensure system security.")
+    
+  -- Buttons
+  ProjectNukeCoreGUIUtil.AddButton("Continue", nil, "Continue", colours.white, colours.blue, 41, 17, 10, 1, ConfigurationMenuContinue)
+	
+	ProjectNukeCoreGUIUtil.StartEventListener()
   elseif (nextPageNumber == 3) then
     CurrentMenuPageNumber = 3
     
@@ -106,8 +126,11 @@ function ConfigurationMenuContinue()
     
     if (table.getn(EnabledApplications) == 0) then
       ProjectNukeCoreGUIUtil.DrawErrorMessages({[10] = "Error: Please select applications to install."}, 3)
-	  ProjectNukeCoreGUIUtil.StartEventListener()
+	    ProjectNukeCoreGUIUtil.StartEventListener()
     else
+      LoadedConfiguration.setEnabledApplications(EnabledApplications)
+      SaveConfiguration()
+      
       LaunchConfigurationMenu(2)
       CurrentMenuPageNumber = 2
     end

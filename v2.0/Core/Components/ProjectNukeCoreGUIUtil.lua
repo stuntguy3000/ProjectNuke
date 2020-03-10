@@ -68,7 +68,7 @@ function DrawStatus(message, window)
   DrawCenteredText(message, 19, colours.grey, colours.lightGrey, window)
 end
 
--- Used to draw a error messages
+-- Used to draw success messages
 -- Message is assumed to be a table
 --  Table: yValue messageText
 function DrawSuccessMessages(messageLines, timeout)
@@ -86,7 +86,7 @@ function DrawSuccessMessages(messageLines, timeout)
   ProjectNukeGUI.redraw(true)
 end
 
--- Used to draw a error messages
+-- Used to draw error messages
 -- Message is assumed to be a table
 --  Table: yValue messageText
 function DrawErrorMessages(messageLines, timeout)
@@ -104,8 +104,18 @@ function DrawErrorMessages(messageLines, timeout)
   ProjectNukeGUI.redraw(true)
 end
 
+
 -- Clickable Items
 local ClickableItems = {}
+
+function ClearGUI(window)
+  if (window == nil) then
+    window = ProjectNukeGUI
+  end
+  
+  window.clear()
+  ClickableItems = {}
+end
 
 function AddButton(buttonID, buttonValue, buttonText, buttonTextColour, buttonColour, xStart, yStart, width, height, actionFunction)
   -- Draw the button
@@ -114,6 +124,84 @@ function AddButton(buttonID, buttonValue, buttonText, buttonTextColour, buttonCo
   
   -- Save the button to memory for future reference
   table.insert(ClickableItems, button)
+end
+
+function AddToggleButton(buttonID, toggleStatus, xStart, yStart, width, height)
+	if (toggleStatus == "YES") then
+		AddButton(buttonID, toggleStatus, "Yes", colours.white, colours.green, xStart, yStart, width, height, ToggleButtonHandler)
+	else
+		AddButton(buttonID, toggleStatus, "No", colours.white, colours.red, xStart, yStart, width, height, ToggleButtonHandler)
+	end
+end
+
+function GetToggleButtons()
+  AllToggleButtons = {}
+  
+  for i, v in pairs(ClickableItems) do
+    if (v:getActionFunction() == ToggleButtonHandler) then
+      table.insert(AllToggleButtons, v)
+    end
+  end  
+  
+  return AllToggleButtons
+end
+
+function RemoveToggleButton(clickableItem)
+  index = table.indexOf(ClickableItems, clickableItem)
+  table.remove(ClickableItems, index)
+end
+ 
+function ToggleButtonHandler(clickableItem)
+  id = clickableItem:getID()
+  xStart, yStart, width, height = clickableItem:getSize()
+  
+  toggleStatus = nil
+  
+  if (clickableItem:getValue() == "YES") then
+    toggleStatus = "NO "
+  else
+    toggleStatus = "YES"
+  end
+  
+  -- Remove the old button from existance
+  RemoveToggleButton(clickableItem)
+  
+  -- Add a new one!
+  AddToggleButton(id, toggleStatus, xStart, yStart, width + 1, height + 1)
+  
+  StartEventListener()
+end
+
+function AddTextbox(textboxID, xStart, yStart, width)
+  -- Draw the textbox
+  textbox = ProjectNukeCoreClasses.ClickableItem.new(textboxID, "", "", colours.white, colours.white, xStart, yStart, width, 1, TextboxHandler)
+  
+  
+end
+
+function GiveTextboxFocus(clickableItem)
+  id = clickableItem:getID()
+end
+
+function TextboxHandler(clickableItem)
+  id = clickableItem:getID()
+  xStart, yStart, width, height = clickableItem:getSize()
+  
+  toggleStatus = nil
+  
+  if (clickableItem:getValue() == "YES") then
+    toggleStatus = "NO "
+  else
+    toggleStatus = "YES"
+  end
+  
+  -- Remove the old button from existance
+  RemoveToggleButton(clickableItem)
+  
+  -- Add a new one!
+  AddToggleButton(id, toggleStatus, xStart, yStart, width + 1, height + 1)
+  
+  StartEventListener()
 end
 
 function StartEventListener()
@@ -156,13 +244,7 @@ function GetClickableItem(x, y)
   return nil
 end
 
-function AddToggleButton(buttonID, toggleStatus, xStart, yStart, width, height)
-	if (toggleStatus == "YES") then
-		AddButton(buttonID, toggleStatus, "Yes", colours.white, colours.green, xStart, yStart, width, height, ToggleButtonHandler)
-	else
-		AddButton(buttonID, toggleStatus, "No", colours.white, colours.red, xStart, yStart, width, height, ToggleButtonHandler)
-	end
-end
+
 
 -- https://gist.github.com/walterlua/978150/2742d9479cd5bfb3d08d90cfcb014da94021e271
 function table.indexOf(t, object)
@@ -175,43 +257,6 @@ function table.indexOf(t, object)
     end
 end
 
-function GetToggleButtons()
-  AllToggleButtons = {}
-  
-  for i, v in pairs(ClickableItems) do
-    if (v:getActionFunction() == ToggleButtonHandler) then
-      table.insert(AllToggleButtons, v)
-    end
-  end  
-  
-  return AllToggleButtons
-end
-
-function RemoveToggleButton(clickableItem)
-  index = table.indexOf(ClickableItems, clickableItem)
-  table.remove(ClickableItems, index)
-end
- 
-function ToggleButtonHandler(clickableItem)
-  id = clickableItem:getID()
-  xStart, yStart, width, height = clickableItem:getSize()
-  
-  toggleStatus = nil
-  
-  if (clickableItem:getValue() == "YES") then
-    toggleStatus = "NO "
-  else
-    toggleStatus = "YES"
-  end
-  
-  -- Remove the old button from existance
-  RemoveToggleButton(clickableItem)
-  
-  -- Add a new one!
-  AddToggleButton(id, toggleStatus, xStart, yStart, width + 1, height + 1)
-  
-  StartEventListener()
-end
 
 function FillWindow(colour, window)
   if (window == nil) then
