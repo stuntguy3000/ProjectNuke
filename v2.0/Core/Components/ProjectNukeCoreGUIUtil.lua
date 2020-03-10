@@ -64,7 +64,7 @@ function DrawStatus(message, window)
     window = ProjectNukeGUI
   end
 
-  DrawCenteredText("                   ", 19, colours.grey, colours.lightGrey, window)
+  DrawCenteredText("                                                   ", 19, colours.grey, colours.lightGrey, window)
   DrawCenteredText(message, 19, colours.grey, colours.lightGrey, window)
 end
 
@@ -174,33 +174,28 @@ end
 
 function AddTextbox(textboxID, xStart, yStart, width)
   -- Draw the textbox
-  textbox = ProjectNukeCoreClasses.ClickableItem.new(textboxID, "", "", colours.white, colours.white, xStart, yStart, width, 1, TextboxHandler)
+  textbox = ProjectNukeCoreClasses.ClickableItem.new(textboxID, "", "", colours.white, colours.white, xStart, yStart, width, 1, TextboxClickHandler)
   textbox:render()
   
   table.insert(ClickableItems, textbox)
+  
+  return textbox
 end
 
-function GiveTextboxFocus(clickableItem)
-  id = clickableItem:getID()
-end
-
-function TextboxHandler(clickableItem)
-  id = clickableItem:getID()
-  xStart, yStart, width, height = clickableItem:getSize()
-  
-  toggleStatus = nil
-  
-  if (clickableItem:getValue() == "YES") then
-    toggleStatus = "NO "
-  else
-    toggleStatus = "YES"
+function GiveTextboxFocus(clickableItem, window)
+  if (window == nil) then
+    window = ProjectNukeGUI
   end
   
-  -- Remove the old button from existance
-  RemoveToggleButton(clickableItem)
+  id = clickableItem:getID()
+  x,y = clickableItem:getPosition()
   
-  -- Add a new one!
-  AddToggleButton(id, toggleStatus, xStart, yStart, width + 1, height + 1)
+  window.setCursorPos(x,y)
+  window.setCursorBlink(true)
+end
+
+function TextboxClickHandler(clickableItem)
+  GiveTextboxFocus(clickableItem)
   
   StartEventListener()
 end
@@ -222,8 +217,19 @@ function StartEventListener()
         return nil
       end
     end
-  elseif (event == "key") then
-    -- oof, todo
+  elseif (event == "key" or event == "char") then
+    x,y = ProjectNukeGUI.getCursorPos()
+    TextboxAtLocation = GetClickableItem(x,y)
+    
+    if (TextboxAtLocation ~= nil) then
+      actionFunction = clickableItem:getActionFunction()
+      
+      if (actionFunction == TextboxClickHandler) then
+        DrawStatus("Textbox found.")
+      else
+        DrawStatus("Textbox found.")
+      end
+    end
   end
   
   StartEventListener()

@@ -97,6 +97,10 @@ end
 function ClickableItem.getSize(self)
   return self.xStart, self.yStart, self.width, self.height
 end
+
+function ClickableItem.getPosition(self)
+  return self.xStart, self.yStart
+end
 -- End Clickable Item Class
 
 
