@@ -43,7 +43,7 @@ end
 
 function LaunchConfigurationMenu(nextPageNumber)
   window = ProjectNukeCoreGUIUtil.ProjectNukeGUI
-  ProjectNukeGUI.ClearGUI(window)
+  ProjectNukeCoreGUIUtil.ClearGUI(window)
   
   if (nextPageNumber == 1) then
     CurrentMenuPageNumber = 1
