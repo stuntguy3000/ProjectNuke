@@ -71,8 +71,8 @@ function LaunchConfigurationMenu(nextPageNumber)
     -- Buttons
     ProjectNukeCoreGUIUtil.AddToggleButton("ACC", "NO", 2, 11, 5, 1)
     ProjectNukeCoreGUIUtil.AddToggleButton("ACS", "NO", 2, 12, 5, 1)
-    ProjectNukeCoreGUIUtil.AddToggleButton("EASC", "NO", 2, 13, 5, 1)
-    ProjectNukeCoreGUIUtil.AddToggleButton("EASS", "YES",  2, 14, 5, 1)
+    ProjectNukeCoreGUIUtil.AddToggleButton("EASC", "YES", 2, 13, 5, 1)
+    ProjectNukeCoreGUIUtil.AddToggleButton("EASS", "NO",  2, 14, 5, 1)
     ProjectNukeCoreGUIUtil.AddToggleButton("RM", "NO", 2, 15, 5, 1)
     ProjectNukeCoreGUIUtil.AddToggleButton("RC", "NO",  2, 16, 5, 1)
     
