@@ -27,7 +27,7 @@ function LoadConfiguration()
   end
   
   if (LoadedConfiguration ~= null and LoadedConfiguration:isValid()) then
-    return false;
+    return true;
   end
   
   LoadedConfiguration = ProjectNukeCoreClasses.Config.new("", {})
