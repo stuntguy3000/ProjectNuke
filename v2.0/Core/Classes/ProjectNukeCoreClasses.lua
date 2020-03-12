@@ -89,6 +89,9 @@ function ClickableItem.getValue(self)
   return self.value
 end
 
+function ClickableItem.setValue(self, value)
+  self.value = value
+end
 
 function ClickableItem.getActionFunction(self)
   return self.actionFunction
@@ -96,6 +99,10 @@ end
 
 function ClickableItem.getSize(self)
   return self.xStart, self.yStart, self.width, self.height
+end
+
+function ClickableItem.getWidth(self)
+  return self.width
 end
 
 function ClickableItem.getPosition(self)

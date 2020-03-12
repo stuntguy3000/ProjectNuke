@@ -63,5 +63,6 @@ RegisterApplication("Access Control Server", "ACS", "ProjectNukeApplicationACS.l
 RegisterApplication("Emergency Alert System Client", "EASC", "ProjectNukeApplicationEASC.lua")
 RegisterApplication("Emergency Alert System Server", "EASS", "ProjectNukeApplicationEASS.lua")
 RegisterApplication("Reactor Monitoring", "RM", "ProjectNukeApplicationRM.lua")
+RegisterApplication("Reactor Controller", "RC", "ProjectNukeApplicationRC.lua")
 
 DownloadApplications()

@@ -43,9 +43,7 @@ function DrawBaseGUI(title, subHeading)
 end
 
 function DrawCenteredText(text, yVal, textcolour, backgroundcolour, window) 
-  if (window == nil) then
-    window = ProjectNukeGUI
-  end
+  window = window or ProjectNukeGUI
 
   local length = string.len(text) 
   local width = window.getSize()
@@ -60,9 +58,7 @@ function DrawCenteredText(text, yVal, textcolour, backgroundcolour, window)
 end
 
 function DrawStatus(message, window)
-  if (window == nil) then
-    window = ProjectNukeGUI
-  end
+  window = window or ProjectNukeGUI
 
   DrawCenteredText("                                                   ", 19, colours.grey, colours.lightGrey, window)
   DrawCenteredText(message, 19, colours.grey, colours.lightGrey, window)
@@ -109,9 +105,7 @@ end
 local ClickableItems = {}
 
 function ClearGUI(window)
-  if (window == nil) then
-    window = ProjectNukeGUI
-  end
+  window = window or ProjectNukeGUI
   
   window.clear()
   ClickableItems = {}
@@ -182,20 +176,35 @@ function AddTextbox(textboxID, xStart, yStart, width)
   return textbox
 end
 
-function GiveTextboxFocus(clickableItem, window)
-  if (window == nil) then
-    window = ProjectNukeGUI
+function UpdateTextbox(clickableItem, window)
+  window = window or ProjectNukeGUI
+  
+  -- Determine where the cursor goes
+  x,y = clickableItem:getPosition()
+  width = clickableItem:getWidth()
+  value = clickableItem:getValue() 
+  
+  -- Render it
+  window.setBackgroundColour(colors.white)
+  window.setTextColour(colors.black)
+  window.setCursorPos(x,y)
+  
+  value = clickableItem:getValue() or ""
+  window.write(value)
+  
+  cursorPosX, cursorPosY = window.getCursorPos()
+  
+  if (cursorPosX > (x + width)) then
+    window.setCursorPos(cursorPosX - 1, cursorPosY)
+    window.setCursorBlink(false)
+  else
+    window.setCursorBlink(true)
   end
   
-  id = clickableItem:getID()
-  x,y = clickableItem:getPosition()
-  
-  window.setCursorPos(x,y)
-  window.setCursorBlink(true)
 end
 
 function TextboxClickHandler(clickableItem)
-  GiveTextboxFocus(clickableItem)
+  UpdateTextbox(clickableItem)
   
   StartEventListener()
 end
@@ -220,14 +229,47 @@ function StartEventListener()
   elseif (event == "key" or event == "char") then
     x,y = ProjectNukeGUI.getCursorPos()
     TextboxAtLocation = GetClickableItem(x,y)
+	pressedKey = p1
     
     if (TextboxAtLocation ~= nil) then
-      actionFunction = clickableItem:getActionFunction()
+      actionFunction = TextboxAtLocation:getActionFunction()
       
       if (actionFunction == TextboxClickHandler) then
-        DrawStatus("Textbox found.")
-      else
-        DrawStatus("Textbox found.")
+        if (event == "char") then
+          textboxValue = TextboxAtLocation:getValue() or ""
+          
+		  -- Maximum length check
+		  if (#textboxValue <= TextboxAtLocation:getWidth()) then
+		  
+			textboxValue = textboxValue .. pressedKey
+			TextboxAtLocation:setValue(textboxValue)
+			 
+			UpdateTextbox(TextboxAtLocation)
+		  end
+        elseif (event == "key") then 
+		  if (pressedKey == keys.backspace) then
+		    textboxValue = TextboxAtLocation:getValue() or ""
+          
+            if (#textboxValue > 0) then
+				textboxValue = textboxValue:sub(1, #textboxValue - 1)
+				TextboxAtLocation:setValue(textboxValue)
+				
+				cursorX,cursorY = ProjectNukeGUI.getCursorPos()
+				textboxX, textboxY, width, height = TextboxAtLocation:getSize()
+				
+				DrawStatus(cursorX.." "..cursorY.." "..textboxX.." "..textboxY.." "..textbox.." "..textboxY2)
+				
+				-- Blank over previous character
+				if (cursorX == textboxX2) then
+					DrawFilledBoxInWindow(colours.white, cursorX, cursorY, cursorX, cursorY, ProjectNukeGUI)
+				else
+					DrawFilledBoxInWindow(colours.white, cursorX-1, cursorY, cursorX-1, cursorY, ProjectNukeGUI)
+				end
+				
+				UpdateTextbox(TextboxAtLocation)
+		    end
+		  end
+		end
       end
     end
   end
@@ -251,8 +293,6 @@ function GetClickableItem(x, y)
   return nil
 end
 
-
-
 -- https://gist.github.com/walterlua/978150/2742d9479cd5bfb3d08d90cfcb014da94021e271
 function table.indexOf(t, object)
     if type(t) ~= "table" then error("table expected, got " .. type(t), 2) end
@@ -264,12 +304,8 @@ function table.indexOf(t, object)
     end
 end
 
-
 function FillWindow(colour, window)
-  if (window == nil) then
-    window = ProjectNukeGUI
-  end
-  
+  window = window or ProjectNukeGUI
   window.clear()
   
   x,y = window.getPosition()
@@ -278,14 +314,11 @@ function FillWindow(colour, window)
   DrawFilledBoxInWindow(colour, x, y, w, h, window)
 end
 
-function DrawFilledBoxInWindow(colour, x, y, w, h, window)
-  if (window == nil) then
-    window = ProjectNukeGUI
-  end
-  
+function DrawFilledBoxInWindow(colour, x1, y1, x2, y2, window)
+  window = window or ProjectNukeGUI
   window.setBackgroundColour(colour)
-  for xLoop = x, w do
-    for yLoop = y, h do
+  for xLoop = x1, x2 do
+    for yLoop = y1, y2 do
       window.setCursorPos(xLoop, yLoop)
       window.write(" ")
     end

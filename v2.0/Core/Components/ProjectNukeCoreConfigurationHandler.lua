@@ -98,10 +98,10 @@ function LaunchConfigurationMenu(nextPageNumber)
     window.write("encryption ensure system security.")
     
     -- Buttons
-	  textbox = ProjectNukeCoreGUIUtil.AddTextbox("EncryptionKey", 2, 12, 48)
+	textbox = ProjectNukeCoreGUIUtil.AddTextbox("EncryptionKey", 2, 12, 48)
     ProjectNukeCoreGUIUtil.AddButton("Continue", nil, "Continue", colours.white, colours.blue, 41, 17, 10, 1, ConfigurationMenuContinue)
 	
-    ProjectNukeCoreGUIUtil.GiveTextboxFocus(textbox)
+    ProjectNukeCoreGUIUtil.UpdateTextbox(textbox)
     ProjectNukeCoreGUIUtil.StartEventListener()
   elseif (nextPageNumber == 3) then
     CurrentMenuPageNumber = 3
