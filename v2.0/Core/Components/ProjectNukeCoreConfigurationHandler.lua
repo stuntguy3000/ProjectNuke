@@ -13,7 +13,7 @@
 
 local ConfigurationPath = "/ProjectNuke/config.json"
 
-local LoadedConfiguration = nil
+LoadedConfiguration = nil
 local CurrentMenuPageNumber = 0
 
 -- Returns true if a valid configuration was found, false if one was created.
