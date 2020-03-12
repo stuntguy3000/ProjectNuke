@@ -88,12 +88,12 @@ function RunApplications()
   window.setCursorPos(2,11) 
   window.write("Programs: ")
   window.setCursorPos(2,12) 
-  window.write(textutils.serialise(ProjectNukeCoreConfigurationHandler.LoadedConfiguration.getEnabledApplications()))
+  window.write(textutils.serialise(ProjectNukeCoreConfigurationHandler.LoadedConfiguration:getEnabledApplications()))
   
   window.setCursorPos(2,14) 
   window.write("Encryption Key: ")
   window.setCursorPos(2,15) 
-  window.write(ProjectNukeCoreConfigurationHandler.LoadedConfiguration.getEncryptionKey())
+  window.write(ProjectNukeCoreConfigurationHandler.LoadedConfiguration:getEncryptionKey())
   
   ProjectNukeCoreGUIUtil.StartEventListener()
 end
