@@ -81,7 +81,8 @@ function LoadClasses()
 end
 
 function RunApplications()
-  
+  ProjectNukeCoreGUIUtil.DrawBaseGUI("Project Nuke", "Welcome to Project Nuke!")
+	ProjectNukeCoreGUIUtil.DrawStatus("Pretend the programs are running...")
 end
 
 -- Executes ProjectNukeCore
