@@ -84,7 +84,7 @@ function RunApplications()
   ProjectNukeCoreGUIUtil.DrawBaseGUI("Project Nuke", "Welcome to Project Nuke!")
 	ProjectNukeCoreGUIUtil.DrawStatus("Pretend the programs are running...")
   
-  Window = ProjectNukeCoreGUIUtil.ProjectNukeGUI
+  window = ProjectNukeCoreGUIUtil.ProjectNukeGUI
   window.setCursorPos(2,11) 
   window.write("Programs: ")
   window.setCursorPos(2,12) 
