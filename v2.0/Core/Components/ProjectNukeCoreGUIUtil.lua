@@ -169,6 +169,8 @@ function ToggleButtonHandler(clickableItem)
     toggleStatus = "YES"
   end
   
+  clickableItem:setValue(toggleStatus)
+  
   -- Remove the old button from existance
   RemoveToggleButton(clickableItem)
   

@@ -38,6 +38,7 @@ end
 
 function SaveConfiguration()
   fs.delete(ConfigurationPath)
+  
   ProjectNukeCoreFileUtil.SaveTable(LoadedConfiguration, ConfigurationPath)
 end
 
@@ -141,7 +142,7 @@ function ConfigurationMenuContinue()
     EnabledApplications = {}
     
     for i, v in pairs(ToggleButtons) do
-      if (v:getValue() == "YES" or v:getValue() == "Yes") then
+      if (v:getValue() == "YES") then
         table.insert(EnabledApplications, v:getID())
       else
         table.insert(DisabledApplications, v:getID())
@@ -153,7 +154,7 @@ function ConfigurationMenuContinue()
 	    ProjectNukeCoreGUIUtil.StartEventListener()
       return nil
     else
-      LoadedConfiguration.setEnabledApplications(EnabledApplications)
+      LoadedConfiguration:setEnabledApplications(EnabledApplications)
       SaveConfiguration()
       
       LaunchConfigurationMenu(2)

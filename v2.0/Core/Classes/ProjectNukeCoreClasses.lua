@@ -136,11 +136,11 @@ function Config.isValid(self)
   return (self.encryptionKey ~= null and self.enabledApplications ~= null)
 end
 
-function Config.setEnabledApplications(self, enabledApplications)
-  self.enabledApplications = enabledApplications
+function Config.setEnabledApplications(self, applications)
+  self.enabledApplications = applications
 end
 
-function Config.setEncryptionKey(self, encryptionKey)
-  self.encryptionKey = encryptionKey
+function Config.setEncryptionKey(self, key)
+  self.encryptionKey = key
 end
 -- Config Class End
