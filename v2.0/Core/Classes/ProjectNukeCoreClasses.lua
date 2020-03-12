@@ -139,4 +139,8 @@ end
 function Config.setEnabledApplications(self, enabledApplications)
   self.enabledApplications = enabledApplications
 end
+
+function Config.setEncryptionKey(self, encryptionKey)
+  self.encryptionKey = encryptionKey
+end
 -- Config Class End

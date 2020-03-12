@@ -108,6 +108,7 @@ function ClearGUI(window)
   window = window or ProjectNukeGUI
   
   window.clear()
+  window.setCursorBlink(false)
   ClickableItems = {}
 end
 
@@ -127,6 +128,17 @@ function AddToggleButton(buttonID, toggleStatus, xStart, yStart, width, height)
 		AddButton(buttonID, toggleStatus, "No", colours.white, colours.red, xStart, yStart, width, height, ToggleButtonHandler)
 	end
 end
+
+function GetClickableItemByID(id)
+  for i, v in pairs(ClickableItems) do
+    if (v:getID() == id) then
+      return v
+    end
+  end 
+  
+  return nil
+end
+
 
 function GetToggleButtons()
   AllToggleButtons = {}
@@ -213,29 +225,26 @@ function StartEventListener()
   local event, p1, p2, p3 = os.pullEvent()
   
   if (event == "mouse_click") then
-    x = p2
-    y = p3
-    
-    clickableItem = GetClickableItem(x, y)
+    clickableItem = GetClickableItem(p2, p3)
     
     if (clickableItem ~= nil) then
-	  
       actionFunction = clickableItem:getActionFunction()
+	  
       if (actionFunction ~= nil) then
         actionFunction(clickableItem)
         return nil
       end
     end
   elseif (event == "key" or event == "char") then
-    x,y = ProjectNukeGUI.getCursorPos()
-    TextboxAtLocation = GetClickableItem(x,y)
+    cursorX,cursorY = ProjectNukeGUI.getCursorPos()
+    TextboxAtLocation = GetClickableItem(cursorX,cursorY)
 	pressedKey = p1
     
     if (TextboxAtLocation ~= nil) then
       actionFunction = TextboxAtLocation:getActionFunction()
       
       if (actionFunction == TextboxClickHandler) then
-        if (event == "char") then
+		if (event == "char") then
           textboxValue = TextboxAtLocation:getValue() or ""
           
 		  -- Maximum length check
@@ -243,7 +252,8 @@ function StartEventListener()
 		  
 			textboxValue = textboxValue .. pressedKey
 			TextboxAtLocation:setValue(textboxValue)
-			 
+			
+			textboxX, textboxY, width, height = TextboxAtLocation:getSize()
 			UpdateTextbox(TextboxAtLocation)
 		  end
         elseif (event == "key") then 
@@ -254,17 +264,14 @@ function StartEventListener()
 				textboxValue = textboxValue:sub(1, #textboxValue - 1)
 				TextboxAtLocation:setValue(textboxValue)
 				
-				cursorX,cursorY = ProjectNukeGUI.getCursorPos()
 				textboxX, textboxY, width, height = TextboxAtLocation:getSize()
-				
-				DrawStatus(cursorX.." "..cursorY.." "..textboxX.." "..textboxY.." "..textbox.." "..textboxY2)
-				
-				-- Blank over previous character
-				if (cursorX == textboxX2) then
+	  		
+				-- Blank over previous character or current one if last character
+				if (cursorX == (textboxX+width)) then
 					DrawFilledBoxInWindow(colours.white, cursorX, cursorY, cursorX, cursorY, ProjectNukeGUI)
-				else
-					DrawFilledBoxInWindow(colours.white, cursorX-1, cursorY, cursorX-1, cursorY, ProjectNukeGUI)
 				end
+				
+				DrawFilledBoxInWindow(colours.white, cursorX-1, cursorY, cursorX-1, cursorY, ProjectNukeGUI)
 				
 				UpdateTextbox(TextboxAtLocation)
 		    end

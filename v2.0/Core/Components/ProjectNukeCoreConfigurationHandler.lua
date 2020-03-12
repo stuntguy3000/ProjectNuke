@@ -98,14 +98,37 @@ function LaunchConfigurationMenu(nextPageNumber)
     window.write("encryption ensure system security.")
     
     -- Buttons
-	textbox = ProjectNukeCoreGUIUtil.AddTextbox("EncryptionKey", 2, 12, 48)
     ProjectNukeCoreGUIUtil.AddButton("Continue", nil, "Continue", colours.white, colours.blue, 41, 17, 10, 1, ConfigurationMenuContinue)
+    ProjectNukeCoreGUIUtil.UpdateTextbox(ProjectNukeCoreGUIUtil.AddTextbox("EncryptionKeyInput", 2, 12, 48))
 	
-    ProjectNukeCoreGUIUtil.UpdateTextbox(textbox)
     ProjectNukeCoreGUIUtil.StartEventListener()
   elseif (nextPageNumber == 3) then
     CurrentMenuPageNumber = 3
     
+    -- Create GUI
+    ProjectNukeCoreGUIUtil.DrawBaseGUI("Project Nuke Installer - Step 3/3", "Welcome to Project Nuke!")
+	  ProjectNukeCoreGUIUtil.DrawStatus("Installation completed.")
+    
+    -- Labels
+    window.setCursorPos(2,11) 
+    window.setTextColour(colours.white)
+    window.write("Thanks for installing Project Nuke!")
+    window.setTextColour(colours.grey)
+	  window.setCursorPos(2,13) 
+    window.write("Please setup all your other computers with various")
+	  window.setCursorPos(2,14) 
+    window.write("Project Nuke applications and begin generating")
+	  window.setCursorPos(2,15) 
+    window.write("safe, clean and efficient nuclear power!")
+    
+    
+	  window.setCursorPos(2,17) 
+    window.write("To begin, click Finish.")
+    
+    -- Buttons
+    ProjectNukeCoreGUIUtil.AddButton("Finish", nil, "Finish", colours.white, colours.green, 41, 17, 10, 1, ConfigurationMenuContinue)
+	
+    ProjectNukeCoreGUIUtil.StartEventListener()
   end
 end
 
@@ -126,8 +149,10 @@ function ConfigurationMenuContinue()
     end
     
     if (table.getn(EnabledApplications) == 0) then
-      ProjectNukeCoreGUIUtil.DrawErrorMessages({[10] = "Error: Please select applications to install."}, 3)
+        ProjectNukeCoreGUIUtil.DrawErrorMessages({[10] = "Error: Please select applications to install."}, 3)
 	    ProjectNukeCoreGUIUtil.StartEventListener()
+		
+		return nil
     else
       LoadedConfiguration.setEnabledApplications(EnabledApplications)
       SaveConfiguration()
@@ -136,12 +161,31 @@ function ConfigurationMenuContinue()
       CurrentMenuPageNumber = 2
     end
   elseif (CurrentMenuPageNumber == 2) then
-    return
-  elseif (CurrentMenuPageNumber == 3) then
-    return
+      -- Store value from EncryptionKey textbox
+      EncryptionKeyTextbox = ProjectNukeCoreGUIUtil.GetClickableItemByID("EncryptionKeyInput");
+      
+	  if (EncryptionKeyTextbox == nil) then
+	    ProjectNukeCoreGUIUtil.DrawErrorMessages({[10] = "Error: Please enter a Encryption Key."}, 3)
+	    ProjectNukeCoreGUIUtil.StartEventListener()
+		
+		return nil
+	  end
+	  
+	  EncryptionKey = EncryptionKeyTextbox:getValue()
+	  
+	  if (EncryptionKey == nil or EncryptionKey == "") then
+	    ProjectNukeCoreGUIUtil.DrawErrorMessages({[10] = "Error: Please enter a Encryption Key."}, 3)
+	    ProjectNukeCoreGUIUtil.StartEventListener()
+		
+		return nil
+	  end
+	  
+      LoadedConfiguration:setEncryptionKey(EncryptionKey)
+      SaveConfiguration()
+      
+      LaunchConfigurationMenu(3)
+      CurrentMenuPageNumber = 3
   end
-  
-  CurrentMenuPageNumber = 0
 end
 
 -- Attempt to load the configuration, but if one is not detected, run the installer GUI
