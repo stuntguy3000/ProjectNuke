@@ -141,7 +141,7 @@ function ConfigurationMenuContinue()
     EnabledApplications = {}
     
     for i, v in pairs(ToggleButtons) do
-      if (v:getValue() == "YES") then
+      if (v:getValue() == "YES" or v:getValue() == "Yes") then
         table.insert(EnabledApplications, v:getID())
       else
         table.insert(DisabledApplications, v:getID())
@@ -149,10 +149,9 @@ function ConfigurationMenuContinue()
     end
     
     if (table.getn(EnabledApplications) == 0) then
-        ProjectNukeCoreGUIUtil.DrawErrorMessages({[10] = "Error: Please select applications to install."}, 3)
+      ProjectNukeCoreGUIUtil.DrawErrorMessages({[10] = "Error: Please select applications to install."}, 3)
 	    ProjectNukeCoreGUIUtil.StartEventListener()
-		
-		return nil
+      return nil
     else
       LoadedConfiguration.setEnabledApplications(EnabledApplications)
       SaveConfiguration()
