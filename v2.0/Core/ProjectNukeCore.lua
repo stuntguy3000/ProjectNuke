@@ -84,6 +84,7 @@ function RunApplications()
   ProjectNukeCoreGUIUtil.DrawBaseGUI("Project Nuke", "Welcome to Project Nuke!")
 	ProjectNukeCoreGUIUtil.DrawStatus("Pretend the programs are running...")
   
+  Window = ProjectNukeCoreGUIUtil.ProjectNukeGUI
   window.setCursorPos(2,11) 
   window.write("Programs: ")
   window.setCursorPos(2,12) 
@@ -93,7 +94,6 @@ function RunApplications()
   window.write("Encryption Key: ")
   window.setCursorPos(2,15) 
   window.write(ProjectNukeCoreConfigurationHandler.LoadedConfiguration.getEncryptionKey())
-  
   
   ProjectNukeCoreGUIUtil.StartEventListener()
 end
