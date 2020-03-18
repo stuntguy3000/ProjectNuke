@@ -2,7 +2,7 @@
 
 ================================================================================
 
-  ProjectNukeCore-ApplicationHandlers
+  ProjectNukeCoreApplicationHandler
     Provides internal application handling to allow the initalization and assignment of applications
 
 ================================================================================
@@ -22,7 +22,7 @@ function RegisterApplication(applicationName, applicationID, applicationFileName
     error("Error: Application "..applicationID.." is already registered.")
   end
   
-  newApplication = ProjectNukeCoreClasses.Application.new(applicationName,applicationID,applicationFileName)
+  newApplication = ProjectNukeCoreObjects.Application.new(applicationName,applicationID,applicationFileName)
   table.insert(RegisteredApplications, newApplication)
   
   print("Registered application "..applicationName.." ("..applicationID..").")
@@ -58,11 +58,9 @@ function GetRegisteredApplications()
   return RegisteredApplications
 end
 
-RegisterApplication("Access Control Client", "ACC", "ProjectNukeApplicationACC.lua")
 RegisterApplication("Access Control Server", "ACS", "ProjectNukeApplicationACS.lua")
-RegisterApplication("Emergency Alert System Client", "EASC", "ProjectNukeApplicationEASC.lua")
-RegisterApplication("Emergency Alert System Server", "EASS", "ProjectNukeApplicationEASS.lua")
-RegisterApplication("Reactor Monitoring", "RM", "ProjectNukeApplicationRM.lua")
+RegisterApplication("Emergency Alert Controller", "EAC", "ProjectNukeApplicationEAC.lua")
+RegisterApplication("Reactor Monitor", "RM", "ProjectNukeApplicationRM.lua")
 RegisterApplication("Reactor Controller", "RC", "ProjectNukeApplicationRC.lua")
 
 DownloadApplications()

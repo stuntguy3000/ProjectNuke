@@ -3,7 +3,7 @@
 ================================================================================
 
   ProjectNukeApplicarionRM
-    Application: Reactor Monitoring
+    Application: Reactor Monitor
 
 ================================================================================
 

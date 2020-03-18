@@ -1,4 +1,17 @@
--- Application Class
+--[[
+
+================================================================================
+
+  ProjectNukeCoreObjects
+    A generic class containing all Lua class objects used by various components and applications
+
+================================================================================
+
+  Author: stuntguy3000
+
+--]]
+
+-- Application Object
 Application = {}
 Application.__index = Application
 
@@ -21,10 +34,10 @@ end
 function Application.getFileName(self)
   return self.applicationFileName
 end
--- Application Class End
+-- Application Object End
 
 
--- Clickable Item Class
+-- Clickable Item Object
 ClickableItem = {}
 ClickableItem.__index = ClickableItem
 
@@ -108,10 +121,10 @@ end
 function ClickableItem.getPosition(self)
   return self.xStart, self.yStart
 end
--- End Clickable Item Class
+-- End Clickable Item Object
 
 
--- Config Class
+-- Config Object
 Config = {}
 Config.__index = Config
 
@@ -143,4 +156,30 @@ end
 function Config.setEncryptionKey(self, key)
   self.encryptionKey = key
 end
--- Config Class End
+-- Config Object End
+
+-- Packet Object
+Packet = {}
+Packet.__index = Packet
+
+function Packet.new(id, data)
+  local self = setmetatable({}, Packet)
+  
+  self.id = id
+  self.data = data
+  
+  return self
+  
+  function Packet.getId(self)
+    return self.id
+  end
+  
+  function Packet.getData(self)
+    return self.data
+  end
+  
+  function Packet.setData(self, data)
+    self.data = data
+  end
+end
+-- Packet Object End

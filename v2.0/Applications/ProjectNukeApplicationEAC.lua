@@ -3,7 +3,7 @@
 ================================================================================
 
   ProjectNukeApplicarionEASS
-    Application: Emergency Alert System Server
+    Application: Emergency Alert Controller
 
 ================================================================================
 

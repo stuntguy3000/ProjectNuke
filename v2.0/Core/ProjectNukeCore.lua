@@ -21,7 +21,7 @@ _G["shell"] = shell
 
 -- Maps classes to source locations
 local ClassMap = {
-    ["CoreClasses"] = "ProjectNukeCoreClasses.lua",
+    ["CoreObjects"] = "ProjectNukeCoreObjects.lua",
 }
 
 -- Maps components to source locations
@@ -31,9 +31,10 @@ local ComponentsMap = {
   ["GUIUtil"] = "ProjectNukeCoreGUIUtil.lua",
   ["ApplicationHandler"] = "ProjectNukeCoreApplicationHandler.lua",
   ["ConfigurationHandler"] = "ProjectNukeCoreConfigurationHandler.lua",
+  ["RednetHandler"] = "ProjectNukeCoreRednetHandler.lua",
 }
 
-local ComponentsLoadOrder = {"FileUtil", "EncryptionUtil", "GUIUtil", "ApplicationHandler", "ConfigurationHandler"}
+local ComponentsLoadOrder = {"FileUtil", "EncryptionUtil", "GUIUtil", "ApplicationHandler", "ConfigurationHandler", "RednetHandler"}
 
 -- Core settings
 local CoreComponentFolderPath = "/ProjectNuke/Core/Components/"
@@ -80,22 +81,8 @@ function LoadClasses()
   end
 end
 
-function RunApplications()
-  ProjectNukeCoreGUIUtil.DrawBaseGUI("Project Nuke", "Welcome to Project Nuke!")
-	ProjectNukeCoreGUIUtil.DrawStatus("Pretend the programs are running...")
-  
-  window = ProjectNukeCoreGUIUtil.ProjectNukeGUI
-  window.setCursorPos(2,11) 
-  window.write("Programs: ")
-  window.setCursorPos(2,12) 
-  window.write(textutils.serialise(ProjectNukeCoreConfigurationHandler.LoadedConfiguration:getEnabledApplications()))
-  
-  window.setCursorPos(2,14) 
-  window.write("Encryption Key: ")
-  window.setCursorPos(2,15) 
-  window.write(ProjectNukeCoreConfigurationHandler.LoadedConfiguration:getEncryptionKey())
-  
-  ProjectNukeCoreGUIUtil.StartEventListener()
+function Run()
+  -- Run parallel tasks...
 end
 
 -- Executes ProjectNukeCore
@@ -119,6 +106,6 @@ LoadCoreComponents()
 print(" ...done!")
 
 print("===================================================")
-print("Running ProjectNuke Applications...")
-RunApplications()
+print("Running ProjectNuke...")
+Run()
 shell.run("clear")

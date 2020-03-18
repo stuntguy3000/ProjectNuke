@@ -114,7 +114,7 @@ end
 
 function AddButton(buttonID, buttonValue, buttonText, buttonTextColour, buttonColour, xStart, yStart, width, height, actionFunction)
   -- Draw the button
-  button = ProjectNukeCoreClasses.ClickableItem.new(buttonID, buttonValue, buttonText, buttonTextColour, buttonColour, xStart, yStart, width, height, actionFunction)
+  button = ProjectNukeCoreObjects.ClickableItem.new(buttonID, buttonValue, buttonText, buttonTextColour, buttonColour, xStart, yStart, width, height, actionFunction)
   button:render()
   
   -- Save the button to memory for future reference
@@ -182,7 +182,7 @@ end
 
 function AddTextbox(textboxID, xStart, yStart, width)
   -- Draw the textbox
-  textbox = ProjectNukeCoreClasses.ClickableItem.new(textboxID, "", "", colours.white, colours.white, xStart, yStart, width, 1, TextboxClickHandler)
+  textbox = ProjectNukeCoreObjects.ClickableItem.new(textboxID, "", "", colours.white, colours.white, xStart, yStart, width, 1, TextboxClickHandler)
   textbox:render()
   
   table.insert(ClickableItems, textbox)
@@ -332,4 +332,8 @@ function DrawFilledBoxInWindow(colour, x1, y1, x2, y2, window)
       window.write(" ")
     end
   end
+end
+
+function ButtonShellCommandHandler(command)
+  shell.run(command)  
 end

@@ -2,7 +2,7 @@
 
 ================================================================================
 
-  ProjectNukeCore-ConfigurationHandler
+  ProjectNukeCoreConfigurationHandler
     Provides computer configuration handling for ProjectNuke core/applications
 
 ================================================================================
@@ -23,14 +23,14 @@ function LoadConfiguration()
   if (fs.exists(ConfigurationPath) == true) then
     configTable = ProjectNukeCoreFileUtil.LoadTable(ConfigurationPath)
     
-    LoadedConfiguration = ProjectNukeCoreClasses.Config.new(configTable['encryptionKey'], configTable['enabledApplications'])
+    LoadedConfiguration = ProjectNukeCoreObjects.Config.new(configTable['encryptionKey'], configTable['enabledApplications'])
   end
   
   if (LoadedConfiguration ~= null and LoadedConfiguration:isValid()) then
     return true;
   end
   
-  LoadedConfiguration = ProjectNukeCoreClasses.Config.new("", {})
+  LoadedConfiguration = ProjectNukeCoreObjects.Config.new("", {})
   SaveConfiguration()
   
   return false
@@ -58,25 +58,19 @@ function LaunchConfigurationMenu(nextPageNumber)
     window.setBackgroundColor(colours.lightGrey)
 
     window.setCursorPos(8,11) 
-    window.write("Access Control Client (ACC)")
-    window.setCursorPos(8,12) 
     window.write("Access Control Server (ACS)")
+    window.setCursorPos(8,12) 
+    window.write("Emergency Alert Controller (EAC)")
     window.setCursorPos(8,13) 
-    window.write("Emergency Alert System Client (EASC)")
+    window.write("Reactor Monitor (RM)")
     window.setCursorPos(8,14) 
-    window.write("Emergency Alert System Server (EASS)")
-    window.setCursorPos(8,15) 
-    window.write("Reactor Monitoring (RM)")
-    window.setCursorPos(8,16) 
     window.write("Reactor Controller (RC)")
     
     -- Buttons
-    ProjectNukeCoreGUIUtil.AddToggleButton("ACC", "NO", 2, 11, 5, 1)
-    ProjectNukeCoreGUIUtil.AddToggleButton("ACS", "NO", 2, 12, 5, 1)
-    ProjectNukeCoreGUIUtil.AddToggleButton("EASC", "YES", 2, 13, 5, 1)
-    ProjectNukeCoreGUIUtil.AddToggleButton("EASS", "NO",  2, 14, 5, 1)
-    ProjectNukeCoreGUIUtil.AddToggleButton("RM", "NO", 2, 15, 5, 1)
-    ProjectNukeCoreGUIUtil.AddToggleButton("RC", "NO",  2, 16, 5, 1)
+    ProjectNukeCoreGUIUtil.AddToggleButton("ACS", "NO", 2, 11, 5, 1)
+    ProjectNukeCoreGUIUtil.AddToggleButton("EAC", "YES", 2, 12, 5, 1)
+    ProjectNukeCoreGUIUtil.AddToggleButton("RM", "NO",  2, 13, 5, 1)
+    ProjectNukeCoreGUIUtil.AddToggleButton("RC", "NO",  2, 14, 5, 1)
     
     ProjectNukeCoreGUIUtil.AddButton("Continue", nil, "Continue", colours.white, colours.blue, 41, 17, 10, 1, ConfigurationMenuContinue)
     
