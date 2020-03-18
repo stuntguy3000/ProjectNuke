@@ -71,13 +71,13 @@ end
 -- Downloads and loads external classes
 function LoadClasses()
   -- Delete existing core classes
-  fs.delete(CoreClassFolderPath)
+  --fs.delete(CoreClassFolderPath)
   
   -- Download the core classes to disk
   for className, fileName in pairs(ClassMap) do
     fullURL = "https://raw.githubusercontent.com/stuntguy3000/ProjectNuke/master/v2.0/Core/Classes/" .. fileName
     
-    shell.run("wget "..fullURL.." "..CoreClassFolderPath..fileName)
+    --shell.run("wget "..fullURL.." "..CoreClassFolderPath..fileName)
     os.loadAPI(CoreClassFolderPath..fileName) 
   end
 end
@@ -98,7 +98,7 @@ print(" ...done!")
 
 print("===================================================")
 print("Downloading components...")
-DownloadCoreComponents()
+--DownloadCoreComponents()
 print(" ...done!")
 
 print("===================================================")

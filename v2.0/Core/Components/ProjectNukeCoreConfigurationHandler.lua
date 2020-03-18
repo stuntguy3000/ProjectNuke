@@ -11,7 +11,7 @@
 
 --]]
 
-local ConfigurationPath = "/ProjectNuke/config.json"
+local ConfigurationPath = "/ProjectNuke/config"
 
 LoadedConfiguration = nil
 local CurrentMenuPageNumber = 0
@@ -23,10 +23,12 @@ function LoadConfiguration()
   if (fs.exists(ConfigurationPath) == true) then
     configTable = ProjectNukeCoreFileUtil.LoadTable(ConfigurationPath)
     
-    LoadedConfiguration = ProjectNukeCoreObjects.Config.new(configTable['encryptionKey'], configTable['enabledApplications'])
+    if (configTable ~= nil) then
+      LoadedConfiguration = ProjectNukeCoreObjects.Config.new(configTable['encryptionKey'], configTable['enabledApplications'])
+    end
   end
   
-  if (LoadedConfiguration ~= null and LoadedConfiguration:isValid()) then
+  if (LoadedConfiguration ~= nil and LoadedConfiguration:isValid()) then
     return true;
   end
   

@@ -16,7 +16,6 @@
 --]]
 
 REDNET_PROTOCOL_ID = "ProjectNuke"
-REDNET_PROTOCOL_MESSAGE_PATTERN = "(%a+);(.+)"
 
 function Initalize()
   rednet.close()
@@ -49,46 +48,73 @@ function WaitForPacket(PacketID)
   senderId, message, protocol = rednet.receive(REDNET_PROTOCOL_ID)
   
   -- Attempt to decrypt the message
-  decryptedMessage = ProjectNukeCoreEncryptionUtil:decrypt(ProjectNukeCoreConfigurationHandler.LoadedConfiguration.getEncryptionKey(), message)
+  decryptedMessage = ProjectNukeCoreEncryptionUtil.decrypt(ProjectNukeCoreConfigurationHandler.LoadedConfiguration:getEncryptionKey(), message)
   
   if (decryptedMessage == nil) then
+    term.write("R E1")
     return nil
   end
   
   -- Attempt to unserialize the message
-  decodedObject = textutils.unserialize(decryptedMessage)
+  decodedObject = ProjectNukeCoreFileUtil.Unserialize(decryptedMessage)
   
-  if (decodedObject == nil) then
-    return nil
-  end
   
-  -- Verification checks
-  -- Does it look like a packet?
-  metadatatable = getmetatable(decodedObject)
-  if (metadatatable == nil or metadatatable ~= ProjectNukeCorePackets.GeneralCommunicationPacket) then
-    return nil
-  end
+  --print(decryptedMessage)
+  --print(decodedObject["id"])
+  --print(decodedObject["data"])
   
   -- Does it smell like a packet?
-  if (decodedObject:getID() ~= 0 or decodedObject:getData() == nil) then
+  if (decodedObject == nil or decodedObject["id"] == nil or decodedObject["id"] ~= 0 or decodedObject["data"] == nil) then
+    term.write("R E2")
     return nil
   end
   
   -- Check the payload
-  decodedData = textutils.unserialize(decodedObject:getData())
+  decodedData = ProjectNukeCoreFileUtil.Unserialize(decodedObject["data"])
   
-  -- Does it look like a packet?
-  if (decodedData == nil) then
+  if (decodedData == nil or decodedData["id"] == nil or decodedData["id"] ~= PacketID) then
+    term.write("R E3")
     return nil
   end
   
-  -- Does it smell like a packet?
-  metadatatable = getmetatable(decodedData)
-  if (metadatatable == nil or metadatatable ~= ProjectNukeCoreObjects.Packet) then
-    return nil
-  end
+  term.write("R 4")
   
   return decodedData
+end
+
+function SendPacket(Packet)
+  -- Validation checks
+  if (Packet == nil) then
+    term.write("S E1")
+    return false
+  end
+  
+  metadatatable = getmetatable(Packet)
+  if (metadatatable == nil or metadatatable ~= ProjectNukeCoreObjects.Packet) then
+    term.write("S E2")
+    return false
+  end
+  
+  -- Encode the data
+  encodedData = ProjectNukeCoreFileUtil.Serialize(Packet)
+  
+  if (encodedData == nil) then
+    term.write("S E3")
+    return false
+  end
+  
+  -- Encapsulate it
+  communicationPacket = ProjectNukeCorePackets.GeneralCommunicationPacket
+  communicationPacket:setData(encodedData)
+  
+  -- Encrypt it
+  communicationString = ProjectNukeCoreFileUtil.Serialize(communicationPacket)
+  encryptedCommunicationString = ProjectNukeCoreEncryptionUtil.encrypt(ProjectNukeCoreConfigurationHandler.LoadedConfiguration:getEncryptionKey(), communicationString)
+  
+  -- Send it
+  result = rednet.broadcast(encryptedCommunicationString, REDNET_PROTOCOL_ID)
+  
+  return result
 end
 
 Initalize()
