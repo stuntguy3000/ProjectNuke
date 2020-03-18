@@ -22,6 +22,7 @@ _G["shell"] = shell
 -- Maps classes to source locations
 local ClassMap = {
     ["CoreObjects"] = "ProjectNukeCoreObjects.lua",
+    ["CorePackets"] = "ProjectNukeCorePackets.lua",
 }
 
 -- Maps components to source locations
@@ -82,7 +83,7 @@ function LoadClasses()
 end
 
 function Run()
-  -- Run parallel tasks...
+  
 end
 
 -- Executes ProjectNukeCore
