@@ -169,17 +169,17 @@ function Packet.new(id, data)
   self.data = data
   
   return self
+end
   
-  function Packet.getId(self)
-    return self.id
-  end
+function Packet.getId(self)
+  return self.id
+end
   
-  function Packet.getData(self)
-    return self.data
-  end
+function Packet.getData(self)
+  return self.data
+end
   
-  function Packet.setData(self, data)
-    self.data = data
-  end
+function Packet.setData(self, data)
+  self.data = data
 end
 -- Packet Object End
