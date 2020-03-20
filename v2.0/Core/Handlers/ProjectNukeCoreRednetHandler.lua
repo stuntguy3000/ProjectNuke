@@ -90,7 +90,7 @@ function SendPacket(Packet)
   end
   
   metadatatable = getmetatable(Packet)
-  if (metadatatable == nil or metadatatable ~= ProjectNukeCoreObjects.Packet) then
+  if (metadatatable == nil or metadatatable ~= ProjectNukeCoreClasses.Packet) then
     term.write("S E2")
     return false
   end

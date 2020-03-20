@@ -36,6 +36,26 @@ function Application.getFileName(self)
 end
 -- Application Object End
 
+-- Service Object
+Service = {}
+Service.__index = Service
+
+function Service.new(id, fileName)
+  local self = setmetatable({}, Service)
+  self.id = id
+  self.fileName = fileName
+  return self
+end
+
+function Service.getID(self)
+  return self.id
+end
+
+function Service.getFileName(self)
+  return self.fileName
+end
+-- Service Object End
+
 
 -- Clickable Item Object
 ClickableItem = {}

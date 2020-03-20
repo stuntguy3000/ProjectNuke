@@ -21,50 +21,54 @@ _G["shell"] = shell
 
 -- Maps classes to source locations
 local ClassMap = {
-    ["CoreObjects"] = "ProjectNukeCoreObjects.lua",
+    ["CoreClasses"] = "ProjectNukeCoreClasses.lua",
     ["CorePackets"] = "ProjectNukeCorePackets.lua",
 }
 
--- Maps components to source locations
-local ComponentsMap = {
-  ["FileUtil"] = "ProjectNukeCoreFileUtil.lua",
-  ["EncryptionUtil"] = "ProjectNukeCoreEncryptionUtil.lua", 
-  ["GUIUtil"] = "ProjectNukeCoreGUIUtil.lua",
+-- Maps handlers to source locations
+local HandlersMap = {
   ["ApplicationHandler"] = "ProjectNukeCoreApplicationHandler.lua",
   ["ConfigurationHandler"] = "ProjectNukeCoreConfigurationHandler.lua",
   ["RednetHandler"] = "ProjectNukeCoreRednetHandler.lua",
 }
 
-local ComponentsLoadOrder = {"FileUtil", "EncryptionUtil", "GUIUtil", "ApplicationHandler", "ConfigurationHandler", "RednetHandler"}
+local UtilMap = {
+  ["FileUtil"] = "ProjectNukeCoreFileUtil.lua",
+  ["EncryptionUtil"] = "ProjectNukeCoreEncryptionUtil.lua", 
+  ["GUIUtil"] = "ProjectNukeCoreGUIUtil.lua",
+}
+
+local HandlersLoadOrder = {"ApplicationHandler", "ConfigurationHandler", "RednetHandler"}
 
 -- Core settings
-local CoreComponentFolderPath = "/ProjectNuke/Core/Components/"
+local CoreHandlerFolderPath = "/ProjectNuke/Core/Handlers/"
+local CoreUtilFolderPath = "/ProjectNuke/Core/Util/"
 local CoreClassFolderPath = "/ProjectNuke/Core/Classes/"
 
--- Used to download the components
-function DownloadCoreComponents()
-  -- Delete existing core components
-  fs.delete(CoreComponentFolderPath)
+-- Used to download the Handlers
+function DownloadCoreHandlers()
+  -- Delete existing core Handlers
+  fs.delete(CoreHandlerFolderPath)
   
-  -- Download the core components to disk
-  for component, fileName in pairs(ComponentsMap) do
-    fullURL = "https://raw.githubusercontent.com/stuntguy3000/ProjectNuke/master/v2.0/Core/Components/" .. fileName
+  -- Download the core Handlers to disk
+  for Handler, fileName in pairs(HandlersMap) do
+    fullURL = "https://raw.githubusercontent.com/stuntguy3000/ProjectNuke/master/v2.0/Core/Handlers/" .. fileName
     
-    shell.run("wget "..fullURL.." "..CoreComponentFolderPath..fileName)
+    shell.run("wget "..fullURL.." "..CoreHandlerFolderPath..fileName)
   end
 end
 
--- Loads the components
-function LoadCoreComponents()
-  for component, fileName in pairs(ComponentsMap) do
-    if (fs.exists(CoreComponentFolderPath..fileName) == false) then
-      error("Component "..component.." could not be found!")
+-- Loads the Handlers
+function LoadCoreHandlers()
+  for Handler, fileName in pairs(HandlersMap) do
+    if (fs.exists(CoreHandlerFolderPath..fileName) == false) then
+      error("Handler "..Handler.." could not be found!")
     end
   end
   
-  for i, component in ipairs(ComponentsLoadOrder) do
-    print("Loading component "..component)
-    os.loadAPI(CoreComponentFolderPath..ComponentsMap[component])  
+  for i, Handler in ipairs(HandlersLoadOrder) do
+    print("Loading Handler "..Handler)
+    os.loadAPI(CoreHandlerFolderPath..HandlersMap[Handler])  
   end
 end
 
@@ -79,6 +83,20 @@ function LoadClasses()
     
     --shell.run("wget "..fullURL.." "..CoreClassFolderPath..fileName)
     os.loadAPI(CoreClassFolderPath..fileName) 
+  end
+end
+
+-- Downloads and loads external util
+function LoadUtil()
+  -- Delete existing core util
+  --fs.delete(CoreUtilFolderPath)
+  
+  -- Download the core util to disk
+  for utilName, fileName in pairs(UtilMap) do
+    fullURL = "https://raw.githubusercontent.com/stuntguy3000/ProjectNuke/master/v2.0/Core/Util/" .. fileName
+    
+    --shell.run("wget "..fullURL.." "..CoreUtilFolderPath..fileName)
+    os.loadAPI(CoreUtilFolderPath..fileName) 
   end
 end
 
@@ -97,13 +115,18 @@ LoadClasses()
 print(" ...done!")
 
 print("===================================================")
-print("Downloading components...")
---DownloadCoreComponents()
+print("Loading util...")
+LoadClasses()
 print(" ...done!")
 
 print("===================================================")
-print("Loading components...")
-LoadCoreComponents()
+print("Downloading Handlers...")
+--DownloadCoreHandlers()
+print(" ...done!")
+
+print("===================================================")
+print("Loading Handlers...")
+LoadCoreHandlerss()
 print(" ...done!")
 
 print("===================================================")

@@ -114,7 +114,7 @@ end
 
 function AddButton(buttonID, buttonValue, buttonText, buttonTextColour, buttonColour, xStart, yStart, width, height, actionFunction)
   -- Draw the button
-  button = ProjectNukeCoreObjects.ClickableItem.new(buttonID, buttonValue, buttonText, buttonTextColour, buttonColour, xStart, yStart, width, height, actionFunction)
+  button = ProjectNukeCoreClasses.ClickableItem.new(buttonID, buttonValue, buttonText, buttonTextColour, buttonColour, xStart, yStart, width, height, actionFunction)
   button:render()
   
   -- Save the button to memory for future reference
@@ -182,7 +182,7 @@ end
 
 function AddTextbox(textboxID, xStart, yStart, width)
   -- Draw the textbox
-  textbox = ProjectNukeCoreObjects.ClickableItem.new(textboxID, "", "", colours.white, colours.white, xStart, yStart, width, 1, TextboxClickHandler)
+  textbox = ProjectNukeCoreClasses.ClickableItem.new(textboxID, "", "", colours.white, colours.white, xStart, yStart, width, 1, TextboxClickHandler)
   textbox:render()
   
   table.insert(ClickableItems, textbox)

@@ -24,7 +24,7 @@ function LoadConfiguration()
     configTable = ProjectNukeCoreFileUtil.LoadTable(ConfigurationPath)
     
     if (configTable ~= nil) then
-      LoadedConfiguration = ProjectNukeCoreObjects.Config.new(configTable['encryptionKey'], configTable['enabledApplications'])
+      LoadedConfiguration = ProjectNukeCoreClasses.Config.new(configTable['encryptionKey'], configTable['enabledApplications'])
     end
   end
   
@@ -32,7 +32,7 @@ function LoadConfiguration()
     return true;
   end
   
-  LoadedConfiguration = ProjectNukeCoreObjects.Config.new("", {})
+  LoadedConfiguration = ProjectNukeCoreClasses.Config.new("", {})
   SaveConfiguration()
   
   return false
