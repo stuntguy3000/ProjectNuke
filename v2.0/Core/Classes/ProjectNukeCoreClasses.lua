@@ -166,7 +166,7 @@ function Config.getEnabledApplications(self)
 end
 
 function Config.isValid(self)
-  return (self.encryptionKey ~= null and self.enabledApplications ~= null)
+  return (self.encryptionKey ~= null and self.enabledApplications ~= null and self.encryptionKey ~= "")
 end
 
 function Config.setEnabledApplications(self, applications)
