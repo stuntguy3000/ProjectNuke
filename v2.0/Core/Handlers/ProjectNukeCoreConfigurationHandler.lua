@@ -70,7 +70,7 @@ function LaunchConfigurationMenu(nextPageNumber)
     
     -- Buttons
     ProjectNukeCoreGUIUtil.AddToggleButton("ACS", "NO", 2, 11, 5, 1)
-    ProjectNukeCoreGUIUtil.AddToggleButton("EAC", "YES", 2, 12, 5, 1)
+    ProjectNukeCoreGUIUtil.AddToggleButton("EAC", "NO", 2, 12, 5, 1)
     ProjectNukeCoreGUIUtil.AddToggleButton("RM", "NO",  2, 13, 5, 1)
     ProjectNukeCoreGUIUtil.AddToggleButton("RC", "NO",  2, 14, 5, 1)
     

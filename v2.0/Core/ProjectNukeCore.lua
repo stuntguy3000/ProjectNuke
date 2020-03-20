@@ -38,6 +38,7 @@ local UtilMap = {
   ["GUIUtil"] = "ProjectNukeCoreGUIUtil.lua",
 }
 
+local ClassLoadOrder = {"CoreClasses", "CorePackets"}
 local HandlersLoadOrder = {"ApplicationHandler", "ConfigurationHandler", "RednetHandler"}
 
 -- Core settings
@@ -72,8 +73,7 @@ function LoadCoreHandlers()
   end
 end
 
--- Downloads and loads external classes
-function LoadClasses()
+function DownloadClasses()
   -- Delete existing core classes
   fs.delete(CoreClassFolderPath)
   
@@ -82,7 +82,19 @@ function LoadClasses()
     fullURL = "https://raw.githubusercontent.com/stuntguy3000/ProjectNuke/master/v2.0/Core/Classes/" .. fileName
     
     shell.run("wget "..fullURL.." "..CoreClassFolderPath..fileName)
-    os.loadAPI(CoreClassFolderPath..fileName) 
+  end
+end
+
+function LoadClasses()
+  for Class, fileName in pairs(ClassMap) do
+    if (fs.exists(CoreClassFolderPath..fileName) == false) then
+      error("Class "..Class.." could not be found!")
+    end
+  end
+  
+  for i, Class in ipairs(ClassLoadOrder) do
+    print("Loading Class "..Class)
+    os.loadAPI(CoreClassFolderPath..ClassMap[Class])  
   end
 end
 
@@ -110,23 +122,28 @@ print("===================================================")
 print("Starting ProjectNuke Core...")
 
 print("===================================================")
+print("Downloading classes...")
+DownloadClasses()
+print(" ...done!")
+
+print("===================================================")
 print("Loading classes...")
 LoadClasses()
 print(" ...done!")
 
 print("===================================================")
 print("Loading util...")
-LoadClasses()
+LoadUtil()
 print(" ...done!")
 
 print("===================================================")
 print("Downloading Handlers...")
---DownloadCoreHandlers()
+DownloadCoreHandlers()
 print(" ...done!")
 
 print("===================================================")
 print("Loading Handlers...")
-LoadCoreHandlerss()
+LoadCoreHandlers()
 print(" ...done!")
 
 print("===================================================")
