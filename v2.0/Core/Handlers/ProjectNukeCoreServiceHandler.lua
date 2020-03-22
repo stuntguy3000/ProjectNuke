@@ -30,7 +30,7 @@ function LoadServices()
     
     shell.run("wget "..fullURL.." "..fullPath)
     
-    -- Load the service (test)
+    -- Load the service (test2)
     os.loadAPI(fullPath)  
   end
 end
