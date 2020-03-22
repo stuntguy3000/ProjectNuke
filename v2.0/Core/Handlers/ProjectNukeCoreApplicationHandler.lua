@@ -58,6 +58,10 @@ function GetRegisteredApplications()
   return RegisteredApplications
 end
 
+function RunApplications()
+  
+end
+
 RegisterApplication("Access Control Server", "ACS", "ProjectNukeApplicationACS.lua")
 RegisterApplication("Emergency Alert Controller", "EAC", "ProjectNukeApplicationEAC.lua")
 RegisterApplication("Reactor Monitor", "RM", "ProjectNukeApplicationRM.lua")

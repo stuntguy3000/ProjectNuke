@@ -13,22 +13,29 @@
 
 -- http://www.computercraft.info/forums2/index.php?/topic/29696-apifunction-failing/
 local ServiceBasePath = "/ProjectNuke/Services/"
-local Services = {}
+local Services = {
+  ["EmergencyService"] = "ProjectNukeEmergencyService.lua",
+}
 
-function DownloadServices()
+function LoadServices()
   fs.delete("/ProjectNuke/Services/")
 
-  -- Download Services
-  for i,service in pairs(RegisteredApplications) do
+  -- Download and load services
+  for i,service in pairs(Services) do
     fileName = service:getFileName()
     print("Downloading "..service:getName().."("..service:getFileName()..")")
     
     fullURL = "https://raw.githubusercontent.com/stuntguy3000/ProjectNuke/master/v2.0/Services/"..fileName
     fullPath = ServiceBasePath..fileName
-    print(fullPath)
     
     shell.run("wget "..fullURL.." "..fullPath)
+    
+    -- Load the service
+    os.loadAPI(fullPath)  
   end
 end
 
-DownloadServices()
+function RunServices()
+end
+
+LoadServices()
