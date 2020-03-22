@@ -9,6 +9,11 @@
     
   Applications can request to recieve any MESSAGES addressed to them.
 
+  Packet Map:
+    ID    USAGE
+    0     REDNET Communication Wrapper
+    1     REDNET Emergency Service Protocol
+
 ================================================================================
 
   Author: stuntguy3000
@@ -58,7 +63,6 @@ function WaitForPacket(PacketID)
   -- Attempt to unserialize the message
   decodedObject = ProjectNukeCoreFileUtil.Unserialize(decryptedMessage)
   
-  
   --print(decryptedMessage)
   --print(decodedObject["id"])
   --print(decodedObject["data"])
@@ -76,8 +80,6 @@ function WaitForPacket(PacketID)
     term.write("R E3")
     return nil
   end
-  
-  term.write("R 4")
   
   return decodedData
 end

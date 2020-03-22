@@ -36,6 +36,7 @@ function LoadServices()
 end
 
 function RunServices()
+  ProjectNukeEmergencyService.Run()
 end
 
 LoadServices()
