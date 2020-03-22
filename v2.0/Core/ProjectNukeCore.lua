@@ -30,6 +30,7 @@ local HandlersMap = {
   ["ApplicationHandler"] = "ProjectNukeCoreApplicationHandler.lua",
   ["ConfigurationHandler"] = "ProjectNukeCoreConfigurationHandler.lua",
   ["RednetHandler"] = "ProjectNukeCoreRednetHandler.lua",
+  ["ServiceHandler"] = "ProjectNukeCoreServiceHandler.lua",
 }
 
 local UtilMap = {
@@ -39,7 +40,7 @@ local UtilMap = {
 }
 
 local ClassLoadOrder = {"CoreClasses", "CorePackets"}
-local HandlersLoadOrder = {"ApplicationHandler", "ConfigurationHandler", "RednetHandler"}
+local HandlersLoadOrder = {"ApplicationHandler", "ConfigurationHandler", "RednetHandler", "ServiceHandler"}
 
 -- Core settings
 local CoreHandlerFolderPath = "/ProjectNuke/Core/Handlers/"
