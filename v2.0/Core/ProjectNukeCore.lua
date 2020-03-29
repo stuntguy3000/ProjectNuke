@@ -19,6 +19,7 @@
 
 _G["shell"] = shell 
 DOWNLOAD = true
+RUN = true
 
 -- Maps classes to source locations
 local ClassMap = {
@@ -122,10 +123,12 @@ function LoadUtil()
 end
 
 function Run()
-  parallel.waitForAny(ProjectNukeCoreApplicationHandler.RunApplications(), ProjectNukeCoreServiceHandler.RunServices())
-  
-  -- In normal operation the application handler will NEVER finish executing. This is assumed so when Parallel finishes, a RunServices service has terminated and needs priority, so now it's time to run the services again.
-  ProjectNukeCoreServiceHandler.RunServices()
+  if (RUN) then
+    parallel.waitForAny(ProjectNukeCoreApplicationHandler.RunApplications(), ProjectNukeCoreServiceHandler.RunServices())
+    
+    -- In normal operation the application handler will NEVER finish executing. This is assumed so when Parallel finishes, a RunServices service has terminated and needs priority, so now it's time to run the services again.
+    ProjectNukeCoreServiceHandler.RunServices()
+  end
 end
 
 -- Executes ProjectNukeCore
@@ -134,8 +137,10 @@ print("===================================================")
 print("Starting ProjectNuke Core...")
 
 if (arg[1] == "NODOWNLOAD") then
-  print(" ARG1 = NODOWNLOAD")
   DOWNLOAD = false
+elseif if (arg[1] == "LOADONLY") then
+  DOWNLOAD = false
+  RUN = false
 end
 
 if (DOWNLOAD == true) then
