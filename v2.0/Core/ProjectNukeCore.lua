@@ -18,6 +18,7 @@
 --]]
 
 _G["shell"] = shell 
+DOWNLOAD = true
 
 -- Maps classes to source locations
 local ClassMap = {
@@ -99,17 +100,24 @@ function LoadClasses()
   end
 end
 
--- Downloads and loads external util
-function LoadUtil()
+function DownloadUtil()
   -- Delete existing core util
   fs.delete(CoreUtilFolderPath)
   
-  -- Download the core util to disk
+  -- Download the core classes to disk
   for utilName, fileName in pairs(UtilMap) do
     fullURL = "https://raw.githubusercontent.com/stuntguy3000/ProjectNuke/master/v2.0/Core/Util/" .. fileName
     
     shell.run("wget "..fullURL.." "..CoreUtilFolderPath..fileName)
+  end
+end
+
+-- Downloads and loads external util
+function LoadUtil()
+  for utilName, fileName in pairs(UtilMap) do
+    print(fileName)
     os.loadAPI(CoreUtilFolderPath..fileName) 
+    print(fileName)
   end
 end
 
@@ -122,25 +130,41 @@ shell.run("clear")
 print("===================================================")
 print("Starting ProjectNuke Core...")
 
-print("===================================================")
-print("Downloading classes...")
-DownloadClasses()
-print(" ...done!")
+if (arg[1] == "NODOWNLOAD") then
+  print(" ARG1 = NODOWNLOAD")
+  DOWNLOAD = false
+end
+
+if (DOWNLOAD == true) then
+  print("===================================================")
+  print("Downloading classes...")
+  DownloadClasses()
+  print(" ...done!")
+end
 
 print("===================================================")
 print("Loading classes...")
 LoadClasses()
 print(" ...done!")
 
+if (DOWNLOAD == true) then
+  print("===================================================")
+  print("Downloading util...")
+  DownloadUtil()
+  print(" ...done!")
+end
+
 print("===================================================")
 print("Loading util...")
 LoadUtil()
 print(" ...done!")
 
-print("===================================================")
-print("Downloading Handlers...")
-DownloadCoreHandlers()
-print(" ...done!")
+if (DOWNLOAD == true) then
+  print("===================================================")
+  print("Downloading Handlers...")
+  DownloadCoreHandlers()
+  print(" ...done!")
+end
 
 print("===================================================")
 print("Loading Handlers...")
