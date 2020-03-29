@@ -153,8 +153,12 @@ function ConfigurationMenuContinue()
       LoadedConfiguration:setEnabledApplications(EnabledApplications)
       SaveConfiguration()
       
-      LaunchConfigurationMenu(2)
-      CurrentMenuPageNumber = 2
+      term.clear()
+      print(EnabledApplications.get(0))
+      sleep(20)
+      
+      --LaunchConfigurationMenu(2)
+      --CurrentMenuPageNumber = 2
     end
   elseif (CurrentMenuPageNumber == 2) then
       -- Store value from EncryptionKey textbox

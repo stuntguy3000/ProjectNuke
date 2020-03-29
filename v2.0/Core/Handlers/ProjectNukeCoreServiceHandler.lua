@@ -17,7 +17,7 @@ local Services = {
   ["EmergencyService"] = "ProjectNukeEmergencyService.lua",
 }
 
-function LoadServices()
+function DownloadServices()
   fs.delete("/ProjectNuke/Services/")
 
   -- Download and load services
@@ -28,14 +28,16 @@ function LoadServices()
     fullPath = ServiceBasePath..fileName
     
     shell.run("wget "..fullURL.." "..fullPath)
-    
-    -- Load the service (test2)
+  end
+end
+
+function LoadServices()
+  for serviceName,fileName in pairs(Services) do
+    fullPath = ServiceBasePath..fileName
     os.loadAPI(fullPath)  
   end
 end
 
 function RunServices()
-  ProjectNukeEmergencyService.StartEventListener()
+  ProjectNukeEmergencyService.Run()
 end
-
-LoadServices()

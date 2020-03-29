@@ -122,9 +122,12 @@ function LoadUtil()
   end
 end
 
+
 function Run()
   if (RUN) then
-    parallel.waitForAny(ProjectNukeCoreApplicationHandler.RunApplications(), ProjectNukeCoreServiceHandler.RunServices())
+    term.clear()
+    
+    parallel.waitForAny(ProjectNukeCoreApplicationHandler.RunApplications, ProjectNukeCoreServiceHandler.RunServices)
     
     -- In normal operation the application handler will NEVER finish executing. This is assumed so when Parallel finishes, a RunServices service has terminated and needs priority, so now it's time to run the services again.
     ProjectNukeCoreServiceHandler.RunServices()
@@ -138,7 +141,7 @@ print("Starting ProjectNuke Core...")
 
 if (arg[1] == "NODOWNLOAD") then
   DOWNLOAD = false
-elseif if (arg[1] == "LOADONLY") then
+elseif (arg[1] == "LOADONLY") then
   DOWNLOAD = false
   RUN = false
 end
@@ -178,6 +181,16 @@ print("===================================================")
 print("Loading Handlers...")
 LoadCoreHandlers()
 print(" ...done!")
+
+if (DOWNLOAD == true) then
+  print("===================================================")
+  print("Downloading Applications/Services...")
+  ProjectNukeCoreApplicationHandler.DownloadApplications()
+  ProjectNukeCoreServiceHandler.DownloadServices()
+  print(" ...done!")
+end
+
+ProjectNukeCoreServiceHandler.LoadServices()
 
 print("===================================================")
 print("Running ProjectNuke...")

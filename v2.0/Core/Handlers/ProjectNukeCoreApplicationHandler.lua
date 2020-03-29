@@ -59,18 +59,17 @@ function GetRegisteredApplications()
 end
 
 function RunApplications()
-  if (table.getn(RegisteredApplications) > 1) then
-    ProjectNukeCoreGUIUtil.DrawBaseGUI("A", "B")
-    ProjectNukeCoreGUIUtil.StartEventListener()
-  else
-    
-    ProjectNukeCoreGUIUtil.DrawBaseGUI("C", "D")
-  end
+    if (table.getn(RegisteredApplications) == 1) then
+      -- Run the single registered application
+      RegisteredApplications[0].Run()
+    else 
+      -- Menu, coming later
+      print("Multi Menu")
+      sleep(10000)
+    end
 end
 
 RegisterApplication("Access Control Server", "ACS", "ProjectNukeApplicationACS.lua")
 RegisterApplication("Emergency Alert Controller", "EAC", "ProjectNukeApplicationEAC.lua")
 RegisterApplication("Reactor Monitor", "RM", "ProjectNukeApplicationRM.lua")
 RegisterApplication("Reactor Controller", "RC", "ProjectNukeApplicationRC.lua")
-
-DownloadApplications()
