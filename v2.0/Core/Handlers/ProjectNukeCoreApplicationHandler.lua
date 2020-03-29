@@ -59,7 +59,13 @@ function GetRegisteredApplications()
 end
 
 function RunApplications()
-  
+  if (table.getn(RegisteredApplications) > 1) then
+    ProjectNukeCoreGUIUtil.DrawBaseGUI("A", "B")
+    ProjectNukeCoreGUIUtil.StartEventListener()
+  else
+    
+    ProjectNukeCoreGUIUtil.DrawBaseGUI("C", "D")
+  end
 end
 
 RegisterApplication("Access Control Server", "ACS", "ProjectNukeApplicationACS.lua")

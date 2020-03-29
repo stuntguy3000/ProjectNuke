@@ -122,7 +122,10 @@ function LoadUtil()
 end
 
 function Run()
+  parallel.waitForAny(ProjectNukeCoreApplicationHandler.RunApplications(), ProjectNukeCoreServiceHandler.RunServices())
   
+  -- In normal operation the application handler will NEVER finish executing. This is assumed so when Parallel finishes, a RunServices service has terminated and needs priority, so now it's time to run the services again.
+  ProjectNukeCoreServiceHandler.RunServices()
 end
 
 -- Executes ProjectNukeCore

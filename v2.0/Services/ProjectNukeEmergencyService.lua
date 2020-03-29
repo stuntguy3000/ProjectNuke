@@ -20,29 +20,47 @@
 local EmergencyServicePacket = ProjectNukeCoreClasses.Packet.new(1, nil)
 -- End Service Packet Definitions
 
+local CurrentEmergencyState = "NONE"
+
 function SendState(EmergencyState)
   EmergencyServicePacket:setData(EmergencyState)
   ProjectNukeCoreRednetHandler.SendPacket(EmergencyServicePacket)
 end
 
 function Run()
-  -- Wait for receipt of emergency service packet
-  Data = ProjectNukeCoreRednetHandler.WaitForPacket(EmergencyServicePacket:getId())
-  EmergencyState = EmergencyServicePacket.new(EmergencyServicePacket:getId(), Data['data'])
-  
   if (EmergencyState == "ALERT") then
     RunAlertSequence()
   elseif (EmergencyState == "CLEAR") then
     RunClearSequence()
   else
-    Run()
+    -- Wait for receipt of emergency service packet
+    Data = ProjectNukeCoreRednetHandler.WaitForPacket(EmergencyServicePacket:getId())
+    CurrentEmergencyState = EmergencyServicePacket.new(EmergencyServicePacket:getId(), Data['data'])
   end
 end
 
 function RunAlertSequence()
-  -- Trigger a redstone
+  ProjectNukeCoreGUIUtil.DrawErrorMessage({"1" = "ALERT"}, 0.1)
+  ProjectNukeCoreGUIUtil.DrawErrorMessage({"2" = "ALERT"}, 0.1)
+  ProjectNukeCoreGUIUtil.DrawErrorMessage({3 = "ALERT"}, 0.1)
+  ProjectNukeCoreGUIUtil.DrawErrorMessage({4 = "ALERT"}, 0.1)
+  ProjectNukeCoreGUIUtil.DrawErrorMessage({5 = "ALERT"}, 0.1)
+  ProjectNukeCoreGUIUtil.DrawErrorMessage({6 = "ALERT"}, 0.1)
+  ProjectNukeCoreGUIUtil.DrawErrorMessage({7 = "ALERT"}, 0.1)
+  ProjectNukeCoreGUIUtil.DrawErrorMessage({8 = "ALERT"}, 0.1)
+  ProjectNukeCoreGUIUtil.DrawErrorMessage({9 = "ALERT"}, 0.1)
+  ProjectNukeCoreGUIUtil.DrawErrorMessage({10 = "ALERT"}, 0.1)
 end
 
 function RunClearSequence()
-  
+  ProjectNukeCoreGUIUtil.DrawSuccessMessage({1 = "CLEAR"}, 0.1)
+  ProjectNukeCoreGUIUtil.DrawSuccessMessage({2 = "CLEAR"}, 0.1)
+  ProjectNukeCoreGUIUtil.DrawSuccessMessage({3 = "CLEAR"}, 0.1)
+  ProjectNukeCoreGUIUtil.DrawSuccessMessage({4 = "CLEAR"}, 0.1)
+  ProjectNukeCoreGUIUtil.DrawSuccessMessage({5 = "CLEAR"}, 0.1)
+  ProjectNukeCoreGUIUtil.DrawSuccessMessage({6 = "CLEAR"}, 0.1)
+  ProjectNukeCoreGUIUtil.DrawSuccessMessage({7 = "CLEAR"}, 0.1)
+  ProjectNukeCoreGUIUtil.DrawSuccessMessage({8 = "CLEAR"}, 0.1)
+  ProjectNukeCoreGUIUtil.DrawSuccessMessage({9 = "CLEAR"}, 0.1)
+  ProjectNukeCoreGUIUtil.DrawSuccessMessage({10 = "CLEAR"}, 0.1)  
 end
