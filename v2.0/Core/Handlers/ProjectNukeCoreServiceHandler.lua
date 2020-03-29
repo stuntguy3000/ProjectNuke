@@ -21,7 +21,7 @@ function LoadServices()
   fs.delete("/ProjectNuke/Services/")
 
   -- Download and load services
-  for serviceName,fileName pairs(Services) do
+  for serviceName,fileName in pairs(Services) do
     print("Downloading "..serviceName.."("..fileName..")")
     
     fullURL = "https://raw.githubusercontent.com/stuntguy3000/ProjectNuke/master/v2.0/Services/"..fileName
