@@ -11,6 +11,10 @@
 
 --]]
 function Run()
-  print("Hi! I'm an RM.")
-  os.sleep(10000)
+  ProjectNukeCoreGUIUtil.DrawBaseGUI("Reactor Monitor", nil)
+  
+  ProjectNukeCoreGUIUtil.DrawStatus("Beep boop, I'm monitoring your shit")
+  ProjectNukeCoreGUIUtil.AddToggleButton("TOGGLE", "NO", 5, 12, 40, 5)
+  
+  ProjectNukeCoreGUIUtil.StartEventListener()
 end
