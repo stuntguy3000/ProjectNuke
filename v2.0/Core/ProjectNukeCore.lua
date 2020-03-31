@@ -127,8 +127,10 @@ function Run()
   if (RUN) then
     term.clear()
     
-    parallel.waitForAny(ProjectNukeCoreApplicationHandler.RunApplications, ProjectNukeCoreServiceHandler.RunServices)
+    WhoFinished = parallel.waitForAny(ProjectNukeCoreApplicationHandler.RunApplications, ProjectNukeCoreServiceHandler.RunServices)
     
+    term.clear()
+    print("We done here. Relaunching... = "..WhoFinished)
     -- In normal operation the application handler will NEVER finish executing. This is assumed so when Parallel finishes, a RunServices service has terminated and needs priority, so now it's time to run the services again.
     ProjectNukeCoreServiceHandler.RunServices()
   end
@@ -190,9 +192,12 @@ if (DOWNLOAD == true) then
   print(" ...done!")
 end
 
+print("===================================================")
+print("Load Applications/Services...")
+
+ProjectNukeCoreApplicationHandler.LoadApplications()
 ProjectNukeCoreServiceHandler.LoadServices()
 
 print("===================================================")
 print("Running ProjectNuke...")
 Run()
-shell.run("clear")

@@ -15,11 +15,11 @@
 Application = {}
 Application.__index = Application
 
-function Application.new(applicationName, applicationID, applicationFileName)
+function Application.new(applicationName, applicationID, applicationLaunchFunction)
   local self = setmetatable({}, Application)
   self.applicationName = applicationName
   self.applicationID = applicationID
-  self.applicationFileName = applicationFileName
+  self.applicationLaunchFunction = applicationLaunchFunction
   return self
 end
 
@@ -31,8 +31,8 @@ function Application.getID(self)
   return self.applicationID
 end
 
-function Application.getFileName(self)
-  return self.applicationFileName
+function Application.getLaunchFunction(self)
+  return self.applicationLaunchFunction
 end
 -- Application Object End
 
@@ -155,26 +155,6 @@ function Config.new(encryptionKey, enabledApplications)
   self.enabledApplications = enabledApplications
   
   return self
-end
-
-function Config.getEncryptionKey(self)
-  return self.encryptionKey
-end
-
-function Config.getEnabledApplications(self)
-  return self.enabledApplications
-end
-
-function Config.isValid(self)
-  return (self.encryptionKey ~= null and self.enabledApplications ~= null and self.encryptionKey ~= "")
-end
-
-function Config.setEnabledApplications(self, applications)
-  self.enabledApplications = applications
-end
-
-function Config.setEncryptionKey(self, key)
-  self.encryptionKey = key
 end
 -- Config Object End
 

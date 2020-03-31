@@ -28,8 +28,6 @@ function SendState(EmergencyState)
 end
 
 function Run()
-  print(EmergencyState)
-  
   if (EmergencyState == "ALERT") then
     RunAlertSequence()
   elseif (EmergencyState == "CLEAR") then
@@ -42,27 +40,31 @@ function Run()
 end
 
 function RunAlertSequence()
-  ProjectNukeCoreGUIUtil.DrawErrorMessages({[1] = "ALERT"}, 0.1)
-  ProjectNukeCoreGUIUtil.DrawErrorMessages({[2] = "ALERT"}, 0.1)
-  ProjectNukeCoreGUIUtil.DrawErrorMessages({[3] = "ALERT"}, 0.1)
-  ProjectNukeCoreGUIUtil.DrawErrorMessages({[4] = "ALERT"}, 0.1)
-  ProjectNukeCoreGUIUtil.DrawErrorMessages({[5] = "ALERT"}, 0.1)
-  ProjectNukeCoreGUIUtil.DrawErrorMessages({[6] = "ALERT"}, 0.1)
-  ProjectNukeCoreGUIUtil.DrawErrorMessages({[7] = "ALERT"}, 0.1)
-  ProjectNukeCoreGUIUtil.DrawErrorMessages({[8] = "ALERT"}, 0.1)
-  ProjectNukeCoreGUIUtil.DrawErrorMessages({[9] = "ALERT"}, 0.1)
-  ProjectNukeCoreGUIUtil.DrawErrorMessages({[10] = "ALERT"}, 0.1)
+  for i = 3,1,-1 do
+    ProjectNukeCoreGUIUtil.DrawErrorMessages({[1] = "ALERT"}, 0.1)
+    ProjectNukeCoreGUIUtil.DrawErrorMessages({[2] = "ALERT"}, 0.1)
+    ProjectNukeCoreGUIUtil.DrawErrorMessages({[3] = "ALERT"}, 0.1)
+    ProjectNukeCoreGUIUtil.DrawErrorMessages({[4] = "ALERT"}, 0.1)
+    ProjectNukeCoreGUIUtil.DrawErrorMessages({[5] = "ALERT"}, 0.1)
+    ProjectNukeCoreGUIUtil.DrawErrorMessages({[6] = "ALERT"}, 0.1)
+    ProjectNukeCoreGUIUtil.DrawErrorMessages({[7] = "ALERT"}, 0.1)
+    ProjectNukeCoreGUIUtil.DrawErrorMessages({[8] = "ALERT"}, 0.1)
+    ProjectNukeCoreGUIUtil.DrawErrorMessages({[9] = "ALERT"}, 0.1)
+    ProjectNukeCoreGUIUtil.DrawErrorMessages({[10] = "ALERT"}, 0.1)
+  end
 end
 
 function RunClearSequence()
-  ProjectNukeCoreGUIUtil.DrawSuccessMessages({[1] = "CLEAR"}, 0.1)
-  ProjectNukeCoreGUIUtil.DrawSuccessMessages({[2] = "CLEAR"}, 0.1)
-  ProjectNukeCoreGUIUtil.DrawSuccessMessages({[3] = "CLEAR"}, 0.1)
-  ProjectNukeCoreGUIUtil.DrawSuccessMessages({[4] = "CLEAR"}, 0.1)
-  ProjectNukeCoreGUIUtil.DrawSuccessMessages({[5] = "CLEAR"}, 0.1)
-  ProjectNukeCoreGUIUtil.DrawSuccessMessages({[6] = "CLEAR"}, 0.1)
-  ProjectNukeCoreGUIUtil.DrawSuccessMessages({[7] = "CLEAR"}, 0.1)
-  ProjectNukeCoreGUIUtil.DrawSuccessMessages({[8] = "CLEAR"}, 0.1)
-  ProjectNukeCoreGUIUtil.DrawSuccessMessages({[9] = "CLEAR"}, 0.1)
-  ProjectNukeCoreGUIUtil.DrawSuccessMessages({[10] = "CLEAR"}, 0.1)  
+  for i = 3,1,-1 do
+    ProjectNukeCoreGUIUtil.DrawSuccessMessages({[1] = "CLEAR"}, 0.1)
+    ProjectNukeCoreGUIUtil.DrawSuccessMessages({[2] = "CLEAR"}, 0.1)
+    ProjectNukeCoreGUIUtil.DrawSuccessMessages({[3] = "CLEAR"}, 0.1)
+    ProjectNukeCoreGUIUtil.DrawSuccessMessages({[4] = "CLEAR"}, 0.1)
+    ProjectNukeCoreGUIUtil.DrawSuccessMessages({[5] = "CLEAR"}, 0.1)
+    ProjectNukeCoreGUIUtil.DrawSuccessMessages({[6] = "CLEAR"}, 0.1)
+    ProjectNukeCoreGUIUtil.DrawSuccessMessages({[7] = "CLEAR"}, 0.1)
+    ProjectNukeCoreGUIUtil.DrawSuccessMessages({[8] = "CLEAR"}, 0.1)
+    ProjectNukeCoreGUIUtil.DrawSuccessMessages({[9] = "CLEAR"}, 0.1)
+    ProjectNukeCoreGUIUtil.DrawSuccessMessages({[10] = "CLEAR"}, 0.1)  
+  end
 end

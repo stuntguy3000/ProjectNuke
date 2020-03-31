@@ -18,8 +18,6 @@ local CurrentMenuPageNumber = 0
 
 -- Returns true if a valid configuration was found, false if one was created.
 function LoadConfiguration()
-  validConfig = false
-  
   if (fs.exists(ConfigurationPath) == true) then
     configTable = ProjectNukeCoreFileUtil.LoadTable(ConfigurationPath)
     
@@ -28,7 +26,7 @@ function LoadConfiguration()
     end
   end
   
-  if (LoadedConfiguration ~= nil and LoadedConfiguration:isValid()) then
+  if (LoadedConfiguration ~= nil and (LoadedConfiguration.encryptionKey ~= null and LoadedConfiguration.enabledApplications ~= null and LoadedConfiguration.encryptionKey ~= "")) then
     return true;
   end
   
@@ -150,15 +148,11 @@ function ConfigurationMenuContinue()
 	    ProjectNukeCoreGUIUtil.StartEventListener()
       return nil
     else
-      LoadedConfiguration:setEnabledApplications(EnabledApplications)
+      LoadedConfiguration.enabledApplications = EnabledApplications
       SaveConfiguration()
       
-      term.clear()
-      print(EnabledApplications.get(0))
-      sleep(20)
-      
-      --LaunchConfigurationMenu(2)
-      --CurrentMenuPageNumber = 2
+      LaunchConfigurationMenu(2)
+      CurrentMenuPageNumber = 2
     end
   elseif (CurrentMenuPageNumber == 2) then
       -- Store value from EncryptionKey textbox
@@ -180,7 +174,7 @@ function ConfigurationMenuContinue()
 		return nil
 	  end
 	  
-      LoadedConfiguration:setEncryptionKey(EncryptionKey)
+      LoadedConfiguration.encryptionKey = EncryptionKey
       SaveConfiguration()
       
       LaunchConfigurationMenu(3)

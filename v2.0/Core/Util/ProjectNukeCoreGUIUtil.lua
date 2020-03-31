@@ -22,6 +22,8 @@ function DrawBlackSquares(xStart, y)
 end
 
 function DrawBaseGUI(title, subHeading)
+  ClearGUI(nil)
+  
   -- nil santiy check
   title = title or ""
   subHeading = subHeading or ""
@@ -29,8 +31,11 @@ function DrawBaseGUI(title, subHeading)
   -- Draw Title/Subheading Backgrounds
   DrawFilledBoxInWindow(colours.yellow, 1, 1, 51, 3)
   DrawFilledBoxInWindow(colours.red, 1, 4, 51, 6)
-  DrawFilledBoxInWindow(colours.orange, 1, 7, 51, 9)
-  DrawFilledBoxInWindow(colours.lightGrey, 1, 10, 51, 19)
+  DrawFilledBoxInWindow(colours.lightGrey, 1, 7, 51, 19)
+  
+  if (subHeading ~= "") then
+    DrawFilledBoxInWindow(colours.orange, 1, 7, 51, 9)
+  end
   
   -- Draw Black Checker Pattern
   DrawBlackSquares(2, 1)
@@ -39,7 +44,10 @@ function DrawBaseGUI(title, subHeading)
   
   -- Title text
   DrawCenteredText(title, 5, colours.white, colours.red)
-  DrawCenteredText(subHeading, 8, colours.black, colours.orange)
+  
+  if (subHeading ~= "") then
+    DrawCenteredText(subHeading, 8, colours.black, colours.orange)
+  end
 end
 
 function DrawCenteredText(text, yVal, textcolour, backgroundcolour, window) 
@@ -109,6 +117,7 @@ function ClearGUI(window)
   
   window.clear()
   window.setCursorBlink(false)
+
   ClickableItems = {}
 end
 

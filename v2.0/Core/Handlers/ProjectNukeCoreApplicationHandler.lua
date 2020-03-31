@@ -16,13 +16,13 @@ local ApplicationBasePath = "/ProjectNuke/Applications/"
 local RegisteredApplications = {}
 local LoadedApplications = {}
 
-function RegisterApplication(applicationName, applicationID, applicationFileName)
+function RegisterApplication(applicationName, applicationID, applicationLaunchFunction)
   -- Test if application exists
   if (GetApplicationByID(applicationID) ~= nil) then
     error("Error: Application "..applicationID.." is already registered.")
   end
   
-  newApplication = ProjectNukeCoreClasses.Application.new(applicationName,applicationID,applicationFileName)
+  newApplication = ProjectNukeCoreClasses.Application.new(applicationName,applicationID, applicationLaunchFunction)
   table.insert(RegisteredApplications, newApplication)
   
   print("Registered application "..applicationName.." ("..applicationID..").")
@@ -30,7 +30,7 @@ end
 
 function GetApplicationByID(applicationID)
   for i,application in pairs(RegisteredApplications) do
-    if (application ~= nil and application.id == applicationID) then
+    if (application ~= nil and application:getID() == applicationID) then
       return application
     end
   end
@@ -54,22 +54,54 @@ function DownloadApplications()
   end
 end
 
+function LoadApplications()
+  -- Load all files in ApplicationBasePath
+  for i,fileName in pairs(fs.list(ApplicationBasePath)) do
+    print("Loading "..fileName)
+    os.loadAPI(ApplicationBasePath .. fileName)
+  end
+  
+  -- Register known applications now with run functions
+  RegisteredApplications = {}
+  RegisterApplication("Access Control Server", "ACS", ProjectNukeApplicationACS.Run)
+  RegisterApplication("Emergency Alert Controller", "EAC", ProjectNukeApplicationEAC.Run)
+  RegisterApplication("Reactor Monitor", "RM", ProjectNukeApplicationRM.Run)
+  RegisterApplication("Reactor Controller", "RC", ProjectNukeApplicationRC.Run)
+  
+  -- Add in enabled applications
+  for i,applicationName in pairs(ProjectNukeCoreConfigurationHandler.LoadedConfiguration.enabledApplications) do
+    application = GetApplicationByID(applicationName)
+    
+    if (application ~= nil) then
+      print("Adding enabled application: "..applicationName)
+      table.insert(LoadedApplications, application)
+    end
+  end
+end
+
 function GetRegisteredApplications()
   return RegisteredApplications
 end
 
 function RunApplications()
-    if (table.getn(RegisteredApplications) == 1) then
+    if (table.getn(LoadedApplications) == 1) then
       -- Run the single registered application
-      RegisteredApplications[0].Run()
+      print("Launching application!")
+      RunApplication(LoadedApplications[1])
     else 
       -- Menu, coming later
-      print("Multi Menu")
+      print(table.getn(LoadedApplications))
       sleep(10000)
     end
 end
 
-RegisterApplication("Access Control Server", "ACS", "ProjectNukeApplicationACS.lua")
-RegisterApplication("Emergency Alert Controller", "EAC", "ProjectNukeApplicationEAC.lua")
-RegisterApplication("Reactor Monitor", "RM", "ProjectNukeApplicationRM.lua")
-RegisterApplication("Reactor Controller", "RC", "ProjectNukeApplicationRC.lua")
+function RunApplication(application)
+    runFunction = application:getLaunchFunction()
+    
+    runFunction()
+end
+
+RegisterApplication("Access Control Server", "ACS", nil)
+RegisterApplication("Emergency Alert Controller", "EAC", nil)
+RegisterApplication("Reactor Monitor", "RM", nil)
+RegisterApplication("Reactor Controller", "RC", nil)
