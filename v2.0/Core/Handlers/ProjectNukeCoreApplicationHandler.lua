@@ -16,13 +16,13 @@ local ApplicationBasePath = "/ProjectNuke/Applications/"
 local RegisteredApplications = {}
 local LoadedApplications = {}
 
-function RegisterApplication(applicationName, applicationID, applicationLaunchFunction)
+function RegisterApplication(applicationName, applicationID, applicationFileName, applicationLaunchFunction)
   -- Test if application exists
   if (GetApplicationByID(applicationID) ~= nil) then
     error("Error: Application "..applicationID.." is already registered.")
   end
   
-  newApplication = ProjectNukeCoreClasses.Application.new(applicationName,applicationID, applicationLaunchFunction)
+  newApplication = ProjectNukeCoreClasses.Application.new(applicationName,applicationID, applicationFileName,applicationLaunchFunction)
   table.insert(RegisteredApplications, newApplication)
   
   print("Registered application "..applicationName.." ("..applicationID..").")
@@ -63,10 +63,10 @@ function LoadApplications()
   
   -- Register known applications now with run functions
   RegisteredApplications = {}
-  RegisterApplication("Access Control Server", "ACS", ProjectNukeApplicationACS.Run)
-  RegisterApplication("Emergency Alert Controller", "EAC", ProjectNukeApplicationEAC.Run)
-  RegisterApplication("Reactor Monitor", "RM", ProjectNukeApplicationRM.Run)
-  RegisterApplication("Reactor Controller", "RC", ProjectNukeApplicationRC.Run)
+  RegisterApplication("Access Control Server", "ACS", "ProjectNukeApplicationACS.lua", ProjectNukeApplicationACS.Run)
+  RegisterApplication("Emergency Alert Controller", "EAC", "ProjectNukeApplicationEAC.lua",ProjectNukeApplicationEAC.Run)
+  RegisterApplication("Reactor Monitor", "RM", "ProjectNukeApplicationRM.lua",ProjectNukeApplicationRM.Run)
+  RegisterApplication("Reactor Controller", "RC", "ProjectNukeApplicationRC.lua",ProjectNukeApplicationRC.Run)
   
   -- Add in enabled applications
   for i,applicationName in pairs(ProjectNukeCoreConfigurationHandler.LoadedConfiguration.enabledApplications) do
@@ -101,7 +101,7 @@ function RunApplication(application)
     runFunction()
 end
 
-RegisterApplication("Access Control Server", "ACS", nil)
-RegisterApplication("Emergency Alert Controller", "EAC", nil)
-RegisterApplication("Reactor Monitor", "RM", nil)
-RegisterApplication("Reactor Controller", "RC", nil)
+  RegisterApplication("Access Control Server", "ACS", "ProjectNukeApplicationACS.lua", nil)
+  RegisterApplication("Emergency Alert Controller", "EAC", "ProjectNukeApplicationEAC.lua",nil)
+  RegisterApplication("Reactor Monitor", "RM", "ProjectNukeApplicationRM.lua",nil)
+  RegisterApplication("Reactor Controller", "RC", "ProjectNukeApplicationRC.lua",nil)

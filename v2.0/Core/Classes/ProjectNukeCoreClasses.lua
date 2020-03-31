@@ -15,10 +15,11 @@
 Application = {}
 Application.__index = Application
 
-function Application.new(applicationName, applicationID, applicationLaunchFunction)
+function Application.new(applicationName, applicationID, applicationFileName, applicationLaunchFunction)
   local self = setmetatable({}, Application)
   self.applicationName = applicationName
   self.applicationID = applicationID
+  self.applicationFileName = applicationFileName
   self.applicationLaunchFunction = applicationLaunchFunction
   return self
 end
@@ -29,6 +30,10 @@ end
 
 function Application.getID(self)
   return self.applicationID
+end
+
+function Application.getFileName(self)
+  return self.applicationFileName
 end
 
 function Application.getLaunchFunction(self)
