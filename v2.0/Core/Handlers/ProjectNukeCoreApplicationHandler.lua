@@ -61,12 +61,12 @@ function LoadApplications()
     os.loadAPI(ApplicationBasePath .. fileName)
   end
   
-  -- Register known applications now with run functions
+  -- Re-Register known applications now with run functions
   RegisteredApplications = {}
   RegisterApplication("Access Control Server", "ACS", "ProjectNukeApplicationACS.lua", ProjectNukeApplicationACS.Run)
-  RegisterApplication("Emergency Alert Controller", "EAC", "ProjectNukeApplicationEAC.lua",ProjectNukeApplicationEAC.Run)
-  RegisterApplication("Reactor Monitor", "RM", "ProjectNukeApplicationRM.lua",ProjectNukeApplicationRM.Run)
-  RegisterApplication("Reactor Controller", "RC", "ProjectNukeApplicationRC.lua",ProjectNukeApplicationRC.Run)
+  RegisterApplication("Emergency Alert Controller", "EAC", "ProjectNukeApplicationEAC.lua", ProjectNukeApplicationEAC.Run)
+  RegisterApplication("Reactor Monitor", "RM", "ProjectNukeApplicationRM.lua", ProjectNukeApplicationRM.Run)
+  RegisterApplication("Reactor Controller", "RC", "ProjectNukeApplicationRC.lua", ProjectNukeApplicationRC.Run)
   
   -- Add in enabled applications
   for i,applicationName in pairs(ProjectNukeCoreConfigurationHandler.LoadedConfiguration.enabledApplications) do
@@ -101,7 +101,9 @@ function RunApplication(application)
     runFunction()
 end
 
-  RegisterApplication("Access Control Server", "ACS", "ProjectNukeApplicationACS.lua", nil)
-  RegisterApplication("Emergency Alert Controller", "EAC", "ProjectNukeApplicationEAC.lua",nil)
-  RegisterApplication("Reactor Monitor", "RM", "ProjectNukeApplicationRM.lua",nil)
-  RegisterApplication("Reactor Controller", "RC", "ProjectNukeApplicationRC.lua",nil)
+-- Register the applications, to trigger them to be downloaded.
+-- Todo: Change this to be pulled dynamically
+RegisterApplication("Access Control Server", "ACS", "ProjectNukeApplicationACS.lua", nil)
+RegisterApplication("Emergency Alert Controller", "EAC", "ProjectNukeApplicationEAC.lua",nil)
+RegisterApplication("Reactor Monitor", "RM", "ProjectNukeApplicationRM.lua", nil)
+RegisterApplication("Reactor Controller", "RC", "ProjectNukeApplicationRC.lua", nil)

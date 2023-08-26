@@ -26,24 +26,7 @@ function Initalize()
   rednet.close()
   
     if (peripheral.getType("back") ~= "modem") then
-      ProjectNukeCoreGUIUtil.DrawBaseGUI("Project Nuke", "Critical error occurred during startup")
-  
-      -- Labels
-      window = ProjectNukeCoreGUIUtil.ProjectNukeGUI
-      
-      window.setTextColour(colours.white)
-      window.setBackgroundColor(colours.lightGrey)
-      window.setCursorPos(2,11) 
-      window.write("Critical Error:")
-      window.setTextColour(colours.grey)
-      window.setBackgroundColor(colours.lightGrey)
-      window.setCursorPos(2,13) 
-      window.write("No modem detected on the back of this computer.")
-      window.setCursorPos(2,15) 
-      window.write("Please add one and click Reboot.")
-    
-      ProjectNukeCoreGUIUtil.AddButton("Reboot", nil, "Reboot", colours.white, colours.red, 41, 17, 10, 1, ProjectNukeCoreGUIUtil.ButtonShellCommandHandler("reboot"))
-      ProjectNukeCoreGUIUtil.StartEventListener()
+      ProjectNukeCoreGUIUtil.DrawCriticalError({[8] = "No modem installed on back side.", [12] = "Please install one and click Reboot."})
   end
   
   rednet.open("back")

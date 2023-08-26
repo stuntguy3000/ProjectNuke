@@ -65,6 +65,6 @@ function RunClearSequence()
     ProjectNukeCoreGUIUtil.DrawSuccessMessages({[7] = "CLEAR"}, 0.1)
     ProjectNukeCoreGUIUtil.DrawSuccessMessages({[8] = "CLEAR"}, 0.1)
     ProjectNukeCoreGUIUtil.DrawSuccessMessages({[9] = "CLEAR"}, 0.1)
-    ProjectNukeCoreGUIUtil.DrawSuccessMessages({[10] = "CLEAR"}, 0.1)  
+    ProjectNukeCoreGUIUtil.DrawSuccessMessages({[10] = "CLEAR"}, 0.1)
   end
 end
