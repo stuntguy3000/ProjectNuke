@@ -30,8 +30,8 @@ end
 function Run()
   if (EmergencyState == "ALERT") then
     RunAlertSequence()
-  elseif (EmergencyState == "CLEAR") then
-    RunClearSequence()
+  elseif (EmergencyState == "ALLCLEAR") then
+    RunAllClearSequence()
   else
     -- Wait for receipt of emergency service packet
     Data = ProjectNukeCoreRednetHandler.WaitForPacket(EmergencyServicePacket:getId())
@@ -54,17 +54,17 @@ function RunAlertSequence()
   end
 end
 
-function RunClearSequence()
+function RunAllClearSequence()
   for i = 3,1,-1 do
-    ProjectNukeCoreGUIUtil.DrawSuccessMessages({[1] = "CLEAR"}, 0.1)
-    ProjectNukeCoreGUIUtil.DrawSuccessMessages({[2] = "CLEAR"}, 0.1)
-    ProjectNukeCoreGUIUtil.DrawSuccessMessages({[3] = "CLEAR"}, 0.1)
-    ProjectNukeCoreGUIUtil.DrawSuccessMessages({[4] = "CLEAR"}, 0.1)
-    ProjectNukeCoreGUIUtil.DrawSuccessMessages({[5] = "CLEAR"}, 0.1)
-    ProjectNukeCoreGUIUtil.DrawSuccessMessages({[6] = "CLEAR"}, 0.1)
-    ProjectNukeCoreGUIUtil.DrawSuccessMessages({[7] = "CLEAR"}, 0.1)
-    ProjectNukeCoreGUIUtil.DrawSuccessMessages({[8] = "CLEAR"}, 0.1)
-    ProjectNukeCoreGUIUtil.DrawSuccessMessages({[9] = "CLEAR"}, 0.1)
-    ProjectNukeCoreGUIUtil.DrawSuccessMessages({[10] = "CLEAR"}, 0.1)
+    ProjectNukeCoreGUIUtil.DrawSuccessMessages({[1] = "ALL CLEAR"}, 0.1)
+    ProjectNukeCoreGUIUtil.DrawSuccessMessages({[2] = "ALL CLEAR"}, 0.1)
+    ProjectNukeCoreGUIUtil.DrawSuccessMessages({[3] = "ALL CLEAR"}, 0.1)
+    ProjectNukeCoreGUIUtil.DrawSuccessMessages({[4] = "ALL CLEAR"}, 0.1)
+    ProjectNukeCoreGUIUtil.DrawSuccessMessages({[5] = "ALL CLEAR"}, 0.1)
+    ProjectNukeCoreGUIUtil.DrawSuccessMessages({[6] = "ALL CLEAR"}, 0.1)
+    ProjectNukeCoreGUIUtil.DrawSuccessMessages({[7] = "ALL CLEAR"}, 0.1)
+    ProjectNukeCoreGUIUtil.DrawSuccessMessages({[8] = "ALL CLEAR"}, 0.1)
+    ProjectNukeCoreGUIUtil.DrawSuccessMessages({[9] = "ALL CLEAR"}, 0.1)
+    ProjectNukeCoreGUIUtil.DrawSuccessMessages({[10] = "ALL CLEAR"}, 0.1)
   end
 end
