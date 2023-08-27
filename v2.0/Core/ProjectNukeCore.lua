@@ -60,8 +60,6 @@ function DownloadCoreHandlers()
 
     -- Execute
     shell.run("wget "..fullURL.." "..CoreHandlerFolderPath..fileName)
-
-    sleep(1)
   end
 end
 
@@ -130,8 +128,8 @@ function RunApplication()
 
     parallel.waitForAll(ProjectNukeCoreServiceHandler.tryRunServices, ProjectNukeCoreApplicationHandler.tryRunApplications)
 
-    sleep(5)
     print("Execution completed. Rebooting")
+    sleep(5)
 
     RunApplication() -- TODO: Validate this behavior as intended
   end
