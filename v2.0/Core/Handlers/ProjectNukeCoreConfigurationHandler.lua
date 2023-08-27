@@ -54,7 +54,7 @@ end
 
 function DrawConfigurationMenu(pageNumber)
   -- Init GUI
-  window = ProjectNukeCoreGUIUtil.ProjectNukeGUI
+  window = ProjectNukeCoreGUIUtil.MainWindow
   ProjectNukeCoreGUIUtil.ClearGUI(window)
 
   if (pageNumber == 1) then

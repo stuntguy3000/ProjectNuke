@@ -11,8 +11,9 @@ Author: stuntguy3000
 
 --]]
 
-ProjectNukeGUI = window.create(term.current(),1,1,51,21)
-MessageWindow = window.create(term.current(),1,1,51,21)
+--- Window Objects for 
+MainWindow = window.create(term.current(),1,1,51,21) -- The main window for drawing graphic elements
+MessageWindow = window.create(term.current(),1,1,51,21) -- A window designed to overlay popup messages
 
 -- Basic drawing items
 function DrawBlackSquares(xStart, y)
@@ -51,7 +52,7 @@ function DrawBaseGUI(title, subHeading)
 end
 
 function DrawCenteredText(text, yVal, textcolour, backgroundcolour, window)
-   window = window or ProjectNukeGUI
+   window = window or MainWindow
 
    local length = string.len(text)
    local width = window.getSize()
@@ -66,7 +67,7 @@ function DrawCenteredText(text, yVal, textcolour, backgroundcolour, window)
 end
 
 function DrawStatus(message, window)
-   window = window or ProjectNukeGUI
+   window = window or MainWindow
 
    DrawCenteredText("                                                   ", 19, colours.grey, colours.lightGrey, window)
    DrawCenteredText(message, 19, colours.grey, colours.lightGrey, window)
@@ -87,7 +88,7 @@ function DrawSuccessMessages(messageLines, timeout)
 
    MessageWindow.redraw()
    sleep(timeout)
-   ProjectNukeGUI.redraw(true)
+   MainWindow.redraw(true)
 end
 
 -- Used to draw error messages
@@ -105,20 +106,20 @@ function DrawErrorMessages(messageLines, timeout)
 
    MessageWindow.redraw()
    sleep(timeout)
-   ProjectNukeGUI.redraw(true)
+   MainWindow.redraw(true)
 end
 
 function DrawCriticalError(messageLines)
-   ProjectNukeGUI.clear()
-   FillWindow(colours.red, ProjectNukeGUI)
+   MainWindow.clear()
+   FillWindow(colours.red, MainWindow)
 
    -- Inject Header
    messageLines[3] = "»»»»» CRITICAL SYSTEM ERROR «««««"
 
    -- Draw Text   
-   ProjectNukeGUI.setTextColour(colours.black)
+   MainWindow.setTextColour(colours.black)
    for yValue, message in pairs(messageLines) do
-      DrawCenteredText(message, yValue, colours.white, colours.red, ProjectNukeGUI)
+      DrawCenteredText(message, yValue, colours.white, colours.red, MainWindow)
    end
 
    -- Add Reboot Button
@@ -132,7 +133,7 @@ end
 local ClickableItems = {}
 
 function ClearGUI(window)
-   window = window or ProjectNukeGUI
+   window = window or MainWindow
 
    window.clear()
    window.setCursorBlink(false)
@@ -219,7 +220,7 @@ function AddTextbox(textboxID, xStart, yStart, width)
 end
 
 function UpdateTextbox(clickableItem, window)
-   window = window or ProjectNukeGUI
+   window = window or MainWindow
 
    -- Determine where the cursor goes
    x,y = clickableItem:getPosition()
@@ -255,7 +256,7 @@ function StartEventListener()
    local event, p1, p2, p3 = os.pullEvent()
 
    if (event == "mouse_click") then
-      clickableItem = GetClickableItem(p2, p3)
+      clickableItem = GetClickableItemAtPos(p2, p3)
 
       if (clickableItem ~= nil) then
          actionFunction = clickableItem:getActionFunction()
@@ -266,8 +267,8 @@ function StartEventListener()
          end
       end
    elseif (event == "key" or event == "char") then
-      cursorX,cursorY = ProjectNukeGUI.getCursorPos()
-      TextboxAtLocation = GetClickableItem(cursorX,cursorY)
+      cursorX,cursorY = MainWindow.getCursorPos()
+      TextboxAtLocation = GetClickableItemAtPos(cursorX,cursorY)
       pressedKey = p1
 
       if (TextboxAtLocation ~= nil) then
@@ -298,10 +299,10 @@ function StartEventListener()
 
                      -- Blank over previous character or current one if last character
                      if (cursorX == (textboxX+width)) then
-                        DrawFilledBoxInWindow(colours.white, cursorX, cursorY, cursorX, cursorY, ProjectNukeGUI)
+                        DrawFilledBoxInWindow(colours.white, cursorX, cursorY, cursorX, cursorY, MainWindow)
                      end
 
-                     DrawFilledBoxInWindow(colours.white, cursorX-1, cursorY, cursorX-1, cursorY, ProjectNukeGUI)
+                     DrawFilledBoxInWindow(colours.white, cursorX-1, cursorY, cursorX-1, cursorY, MainWindow)
 
                      UpdateTextbox(TextboxAtLocation)
                   end
@@ -314,7 +315,7 @@ function StartEventListener()
    StartEventListener()
 end
 
-function GetClickableItem(x, y)
+function GetClickableItemAtPos(x, y)
    for i,clickableItem in pairs(ClickableItems) do
       if (clickableItem ~= nil and clickableItem:isEnabled() == true) then
          xStart, yStart, width, height = clickableItem:getSize()
@@ -342,7 +343,7 @@ function table.indexOf(t, object)
 end
 
 function FillWindow(colour, window)
-   window = window or ProjectNukeGUI
+   window = window or MainWindow
    window.clear()
 
    x,y = window.getPosition()
@@ -352,7 +353,7 @@ function FillWindow(colour, window)
 end
 
 function DrawFilledBoxInWindow(colour, x1, y1, x2, y2, window)
-   window = window or ProjectNukeGUI
+   window = window or MainWindow
    window.setBackgroundColour(colour)
    for xLoop = x1, x2 do
       for yLoop = y1, y2 do
