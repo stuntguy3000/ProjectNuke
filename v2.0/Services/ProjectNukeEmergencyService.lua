@@ -34,7 +34,7 @@ function Run()
     -- Wait for receipt of emergency service packet
     packetData = ProjectNukeCoreRednetHandler.WaitForPacket(emergencyStatePacket:getId())
 
-    if (Data ~= nil) then
+    if (packetData ~= nil) then
       emergencyState = EmergencyServicePacket.new(emergencyStatePacket:getId(), packetData['data']):getData()
     end
   end
