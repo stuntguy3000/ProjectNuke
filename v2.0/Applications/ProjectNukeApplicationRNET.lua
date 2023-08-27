@@ -30,8 +30,6 @@ function run()
     else
       print("------------------------------")
       print(decryptedMessage)
-      
-      term.scroll(2)
     end
   end
 end
