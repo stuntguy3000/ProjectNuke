@@ -14,7 +14,7 @@
 function SaveTable(table, fileName)
   local file = fs.open(fileName, "w")
   data = Serialize(table)
-  
+
   file.write(data)
   file.close()
 end
