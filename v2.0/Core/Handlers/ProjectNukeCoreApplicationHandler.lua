@@ -74,6 +74,3 @@ end
 function getApplicationsDatabase()
   return applicationsDatabase
 end
-
--- Load applications as soon as the class is loaded
-loadApplications()

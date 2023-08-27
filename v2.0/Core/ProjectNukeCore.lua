@@ -68,8 +68,11 @@ end
 -- Loads the Handlers
 function LoadCoreHandlers()
   for i, handlerID in ipairs(HandlersLoadOrder) do
+    print("")
     print("Loading Handler "..handlerID)
-    tryLoadAPI(Handler, CoreHandlerFolderPath..HandlersMap[handlerID])
+    print(CoreHandlerFolderPath .. HandlersMap[handlerID])
+    print("")
+    tryLoadAPI(Handler, CoreHandlerFolderPath .. HandlersMap[handlerID])
   end
 end
 
@@ -175,6 +178,9 @@ LoadClasses()
 LoadUtil()
 
 -- Initalize Handlers
+ProjectNukeCoreApplicationHandler.loadApplications()
+ProjectNukeCoreServiceHandler.loadServices()
+
 LoadCoreHandlers()
 
 -- Launch!

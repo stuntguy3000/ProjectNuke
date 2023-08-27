@@ -70,6 +70,3 @@ end
 function getServicesDatabase()
   return servicesDatabase
 end
-
--- Load services as soon as the class is loaded
-loadServices()
