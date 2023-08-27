@@ -60,6 +60,8 @@ function DownloadCoreHandlers()
 
     -- Execute
     shell.run("wget "..fullURL.." "..CoreHandlerFolderPath..fileName)
+
+    sleep(1)
   end
 end
 

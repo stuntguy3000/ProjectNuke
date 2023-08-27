@@ -2,7 +2,7 @@
 
 ================================================================================
 
-  ProjectNukeApplicarionACS
+  ProjectNukeApplicarionAUTH
     Application: Authentication Server
 
 ================================================================================
