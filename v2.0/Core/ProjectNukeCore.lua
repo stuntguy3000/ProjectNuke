@@ -17,10 +17,6 @@
 
 --]]
 
-_G["shell"] = shell
-DOWNLOAD = true
-RUN = true
-
 -- Maps classes to source locations
 local ClassMap = {
     ["CoreClasses"] = "ProjectNukeCoreClasses.lua",
@@ -44,12 +40,14 @@ local UtilMap = {
 
 -- Defines the order to load class and handlers
 local ClassLoadOrder = {"CoreClasses", "CorePackets"}
-local HandlersLoadOrder = {"ApplicationHandler", "ConfigurationHandler", "RednetHandler", "ServiceHandler"}
+local HandlersLoadOrder = {"ApplicationHandler", "ServiceHandler", "ConfigurationHandler", "RednetHandler"}
 
 -- Core settings 
 local CoreHandlerFolderPath = "/ProjectNuke/Core/Handlers/"
 local CoreUtilFolderPath = "/ProjectNuke/Core/Util/"
 local CoreClassFolderPath = "/ProjectNuke/Core/Classes/"
+
+-- ===== START FUNCTIONS =====
 
 -- Used to download the Handlers
 function DownloadCoreHandlers()
@@ -57,7 +55,7 @@ function DownloadCoreHandlers()
   fs.delete(CoreHandlerFolderPath)
 
   -- Download the core Handlers to disk
-  for Handler, fileName in pairs(HandlersMap) do
+  for handlerID, fileName in pairs(HandlersMap) do
     fullURL = "https://raw.githubusercontent.com/stuntguy3000/ProjectNuke/master/v2.0/Core/Handlers/" .. fileName
 
     -- Execute
@@ -67,25 +65,9 @@ end
 
 -- Loads the Handlers
 function LoadCoreHandlers()
-  --[[
-  -- Scan disk to ensure all handlers are present
-  for Handler, fileName in pairs(HandlersMap) do
-    if (fs.exists(CoreHandlerFolderPath..fileName) == false) then
-      error("Handler "..Handler.." could not be found!")
-    end
-  end
-  
-  -- Load each handler into the OS
-  for i, Handler in ipairs(HandlersLoadOrder) do
-    print("Loading Handler "..Handler)
-    
-    os.loadAPI(CoreHandlerFolderPath..HandlersMap[Handler])  
-  end
-  ]]
-
-  for i, Handler in ipairs(HandlersLoadOrder) do
-    print("Loading Handler "..Handler)
-    LoadAPI(Handler, CoreHandlerFolderPath..HandlersMap[Handler])
+  for i, handlerID in ipairs(HandlersLoadOrder) do
+    print("Loading Handler "..handlerID)
+    tryLoadAPI(Handler, CoreHandlerFolderPath..HandlersMap[handlerID])
   end
 end
 
@@ -103,23 +85,8 @@ function DownloadClasses()
 end
 
 function LoadClasses()
-  --[[
-  -- Scan disk to ensure all classes are present
-  for Class, fileName in pairs(ClassMap) do
-    if (fs.exists(CoreClassFolderPath..fileName) == false) then
-      error("Class "..Class.." could not be found!")
-    end
-  end
-  
-  -- Load each class into the OS
   for i, Class in ipairs(ClassLoadOrder) do
-    print("Loading Class "..Class)
-    os.loadAPI(CoreClassFolderPath..ClassMap[Class])  
-  end
-  ]]
-
-  for i, Class in ipairs(ClassLoadOrder) do
-    LoadAPI(Class, CoreClassFolderPath..ClassMap[Class])
+    tryLoadAPI(Class, CoreClassFolderPath..ClassMap[Class])
   end
 end
 
@@ -128,7 +95,7 @@ function DownloadUtil()
   fs.delete(CoreUtilFolderPath)
 
   -- Download the core classes to disk
-  for utilName, fileName in pairs(UtilMap) do
+  for utilID, fileName in pairs(UtilMap) do
     fullURL = "https://raw.githubusercontent.com/stuntguy3000/ProjectNuke/master/v2.0/Core/Util/" .. fileName
 
     shell.run("wget "..fullURL.." "..CoreUtilFolderPath..fileName)
@@ -137,14 +104,13 @@ end
 
 -- Downloads and loads external util
 function LoadUtil()
-  for UutilName, fileName in pairs(UtilMap) do
-    --os.loadAPI(CoreUtilFolderPath..fileName)
-    LoadAPI(UutilName, CoreUtilFolderPath..fileName)
+  for utilID, fileName in pairs(UtilMap) do
+    tryLoadAPI(utilID, CoreUtilFolderPath..fileName)
   end
 end
 
 -- Attempt to load an API File into the OS
-function LoadAPI(friendlyName, filepath)
+function tryLoadAPI(friendlyName, filepath)
   local loaded = os.loadAPI(filepath)
 
   if (loaded == false) then
@@ -152,85 +118,55 @@ function LoadAPI(friendlyName, filepath)
   end
 end
 
-function Run()
-  if (RUN) then
+function RunApplication()
+  if (doRun) then
     term.clear()
+    parallel.waitForAll(ProjectNukeCoreServiceHandler.tryRunService, ProjectNukeCoreApplicationHandler.RunApplications)
 
-    WhoFinished = parallel.waitForAny(ProjectNukeCoreApplicationHandler.RunApplications, ProjectNukeCoreServiceHandler.RunServices)
+    sleep(5)
+    print("Execution completed. Rebooting")
 
-    term.clear()
-    print("We done here. Relaunching... = "..WhoFinished)
-
-    -- In normal operation the application handler will NEVER finish executing. This is assumed so when Parallel finishes, a RunServices service has terminated and needs priority, so now it's time to run the services again.
-    Run()
-
-    -- TODO: Validate this behavior as intended
+    RunApplication() -- TODO: Validate this behavior as intended
   end
 end
 
+-- ===== END FUNCTIONS =====
+
 -- Executes ProjectNukeCore
-shell.run("clear")
-print("===================================================")
-print("Starting ProjectNuke Core...")
+_G["shell"] = shell
 
--- Parse any arguments to modify behavior
+doRun = true
+
 if (arg[1] == "NODOWNLOAD") then
-  DOWNLOAD = false
+  doDownload = false
 elseif (arg[1] == "LOADONLY") then
-  DOWNLOAD = false
-  RUN = false
+  doDownload = false
+  doRun = false
 end
 
-if (DOWNLOAD == true) then
-  print("===================================================")
-  print("Downloading classes...")
+term.clear()
+term.setCursorPos(0,1)
+
+-- Download content, if needed
+if (doDownload) then
+  print(" >> Downloading Content <<")
   DownloadClasses()
-  print(" ...done!")
-end
-
-print("===================================================")
-print("Loading classes...")
-LoadClasses()
-print(" ...done!")
-
-if (DOWNLOAD == true) then
-  print("===================================================")
-  print("Downloading util...")
   DownloadUtil()
-  print(" ...done!")
-end
-
-print("===================================================")
-print("Loading util...")
-LoadUtil()
-print(" ...done!")
-
-if (DOWNLOAD == true) then
-  print("===================================================")
-  print("Downloading Handlers...")
   DownloadCoreHandlers()
-  print(" ...done!")
-end
-
-print("===================================================")
-print("Loading Handlers...")
-LoadCoreHandlers()
-print(" ...done!")
-
-if (DOWNLOAD == true) then
-  print("===================================================")
-  print("Downloading Applications/Services...")
   ProjectNukeCoreApplicationHandler.DownloadApplications()
-  ProjectNukeCoreServiceHandler.DownloadServices()
-  print(" ...done!")
+  ProjectNukeCoreServiceHandler.downloadServices()
 end
 
-print("===================================================")
-print("Load Applications/Services...")
+print(" >> Loading... <<")
+
+-- Load Classes
+LoadClasses()
+LoadUtil()
+
+-- Initalize Handlers
+LoadCoreHandlers()
 
 ProjectNukeCoreApplicationHandler.LoadApplications()
-ProjectNukeCoreServiceHandler.LoadServices()
 
-print("===================================================")
-print("Running ProjectNuke...")
-Run()
+print(" >> Launching ProjectNuke <<")
+RunApplication()

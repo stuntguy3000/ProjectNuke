@@ -11,39 +11,66 @@
 
 --]]
 
--- http://www.computercraft.info/forums2/index.php?/topic/29696-apifunction-failing/
-local ServiceBasePath = "/ProjectNuke/Services/"
-local Services = {
-  ["EmergencyService"] = "ProjectNukeEmergencyService.lua",
-}
+local servicesFolderBasePath = "/ProjectNuke/Services/"
+local servicesDatabase = { "ProjectNukeServiceEMRG" }
+local enabledService = nil
 
 -- Download Services to Disk
-function DownloadServices()
+function downloadServices()
+  -- Clear local service files
   fs.delete("/ProjectNuke/Services/")
 
-  -- Download and load services
-  for serviceName,fileName in pairs(Services) do
-    print("Downloading "..serviceName.."("..fileName..")")
+  -- Download services to disk
+  for i, serviceClassName in ipairs(servicesDatabase) do
+    print("Downloading "..serviceClassName)
     
-    fullURL = "https://raw.githubusercontent.com/stuntguy3000/ProjectNuke/master/v2.0/Services/"..fileName
-    fullPath = ServiceBasePath..fileName
+    local fileName = serviceClassName..".lua"
+    local fullURL = "https://raw.githubusercontent.com/stuntguy3000/ProjectNuke/master/v2.0/Services/"..fileName
+    local fullPath = servicesFolderBasePath..fileName
     
     shell.run("wget "..fullURL.." "..fullPath)
   end
 end
 
--- Load Services from Disk
-function LoadServices()
-  for serviceName,fileName in pairs(Services) do
-    local loaded = os.loadAPI(ServiceBasePath..fileName)
+-- Load all services into the OS
+function loadServices()
+  -- Process the Services Database for all Service Classes
+  for i, service in ipairs(servicesDatabase) do
+    local loaded = os.loadAPI(servicesFolderBasePath..service..".lua")
 
+    -- Loading Error Handling
     if (loaded == false) then
-      error("Service "..fileName.." could not be loaded!")
+      error("Service "..service.." could not be loaded!")
+      return
     end
+
+    print("Service "..service.." loaded.")
   end
 end
 
 -- Run Services
-function RunServices()
-  ProjectNukeEmergencyService.Run()
+function tryRunService()
+  -- Identify the services to enable
+  for i, service in ipairs(servicesDatabase) do
+    -- Enable the service if specified in the configuration
+    local configEnabledService = ProjectNukeCoreConfigurationHandler.LoadedConfiguration.enabledService
+
+    if (configEnabledService ~= nil and configEnabledService == service) then
+      -- Store as our enabled service
+      enabledService = service
+      print("Service "..service.." enabled.")
+
+      runFunction = _G[enabledService]:run()
+      runFunction()
+      
+      return
+    end
+  end
 end
+
+function getServicesDatabase()
+  return servicesDatabase
+end
+
+-- Load services as soon as the class is loaded
+loadServices()

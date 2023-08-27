@@ -21,10 +21,10 @@ function RegisterApplication(applicationName, applicationID, applicationFileName
   if (GetApplicationByID(applicationID) ~= nil) then
     error("Error: Application "..applicationID.." is already registered.")
   end
-  
+
   newApplication = ProjectNukeCoreClasses.Application.new(applicationName,applicationID, applicationFileName,applicationLaunchFunction)
   table.insert(RegisteredApplications, newApplication)
-  
+
   print("Registered application "..applicationName.." ("..applicationID..").")
 end
 
@@ -34,7 +34,7 @@ function GetApplicationByID(applicationID)
       return application
     end
   end
-  
+
   return nil
 end
 
@@ -45,11 +45,11 @@ function DownloadApplications()
   for i,application in pairs(RegisteredApplications) do
     fileName = application:getFileName()
     print("Downloading "..application:getName().."("..application:getFileName()..")")
-    
+
     fullURL = "https://raw.githubusercontent.com/stuntguy3000/ProjectNuke/master/v2.0/Applications/"..fileName
     fullPath = ApplicationBasePath..fileName
     print(fullPath)
-    
+
     shell.run("wget "..fullURL.." "..fullPath)
   end
 end
@@ -63,7 +63,7 @@ function LoadApplications()
       error("Application "..fileName.." could not be loaded!")
     end
   end
-  
+
   -- Re-Register known applications now with run functions
   RegisteredApplications = {}
   RegisterApplication("Authentication Server", "AUTH", "ProjectNukeApplicationAUTH.lua", ProjectNukeApplicationAUTH.Run)
@@ -72,11 +72,11 @@ function LoadApplications()
   RegisterApplication("Reactor Monitor", "RM", "ProjectNukeApplicationRM.lua", ProjectNukeApplicationRM.Run)
   RegisterApplication("Alert & Siren Monitor", "ALRT", "ProjectNukeApplicationALRT.lua", ProjectNukeApplicationALRT.Run)
   RegisterApplication("REDNET Monitor", "RNET", "ProjectNukeApplicationRNET.lua", ProjectNukeApplicationRNET.Run)
-  
+
   -- Add in enabled applications
   for i,applicationName in pairs(ProjectNukeCoreConfigurationHandler.LoadedConfiguration.enabledApplications) do
     application = GetApplicationByID(applicationName)
-    
+
     if (application ~= nil) then
       print("Adding enabled application: "..applicationName)
       table.insert(LoadedApplications, application)
@@ -93,7 +93,7 @@ function RunApplications()
       -- Run the single registered application
       print("Launching application!")
       RunApplication(LoadedApplications[1])
-    else 
+    else
       -- Menu, coming later
       print(#LoadedApplications)
       sleep(10000)
@@ -102,7 +102,7 @@ end
 
 function RunApplication(application)
     runFunction = application:getLaunchFunction()
-    
+
     runFunction()
 end
 

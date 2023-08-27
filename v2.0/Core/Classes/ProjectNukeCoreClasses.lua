@@ -41,27 +41,6 @@ function Application.getLaunchFunction(self)
 end
 -- Application Object End
 
--- Service Object
-Service = {}
-Service.__index = Service
-
-function Service.new(id, fileName)
-  local self = setmetatable({}, Service)
-  self.id = id
-  self.fileName = fileName
-  return self
-end
-
-function Service.getID(self)
-  return self.id
-end
-
-function Service.getFileName(self)
-  return self.fileName
-end
--- Service Object End
-
-
 -- Clickable Item Object
 ClickableItem = {}
 ClickableItem.__index = ClickableItem
@@ -153,11 +132,12 @@ end
 Config = {}
 Config.__index = Config
 
-function Config.new(encryptionKey, enabledApplications)
+function Config.new(encryptionKey, enabledApplications, enabledService)
   local self = setmetatable({}, Config)
 
   self.encryptionKey = encryptionKey
   self.enabledApplications = enabledApplications
+  self.enabledService = enabledService
 
   return self
 end

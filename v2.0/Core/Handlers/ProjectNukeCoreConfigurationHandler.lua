@@ -13,8 +13,12 @@
 
 local ConfigurationPath = "/ProjectNuke/config"
 local ConfigurationPageNumber = 0
+
 local ApplicationSelectionPageNumber = 1
 local ApplicationSelectionPageNumberMaximum = math.ceil(#ProjectNukeCoreApplicationHandler:GetRegisteredApplications() / 5)
+
+local ServiceSelectionPageNumber = 1
+local ServiceSelectionPageNumberMaximum = math.ceil(#ProjectNukeCoreServiceHandler:getServicesDatabase() / 5)
 
 LoadedConfiguration = nil
 
@@ -24,11 +28,15 @@ function LoadConfiguration()
     configTable = ProjectNukeCoreFileUtil.LoadTable(ConfigurationPath)
 
     if (configTable ~= nil) then
-      LoadedConfiguration = ProjectNukeCoreClasses.Config.new(configTable['encryptionKey'], configTable['enabledApplications'])
+      LoadedConfiguration = ProjectNukeCoreClasses.Config.new(configTable['encryptionKey'], configTable['enabledApplications'], configTable['enabledService'])
     end
   end
 
-  if (LoadedConfiguration ~= nil and (LoadedConfiguration.encryptionKey ~= null and LoadedConfiguration.enabledApplications ~= null and LoadedConfiguration.encryptionKey ~= "")) then
+  if (LoadedConfiguration ~= nil and
+    (LoadedConfiguration.encryptionKey ~= null and
+    LoadedConfiguration.enabledApplications ~= null and
+    LoadedConfiguration.enabledService ~= null and
+    LoadedConfiguration.encryptionKey ~= "")) then
     return true;
   end
 
@@ -53,7 +61,7 @@ function DrawConfigurationMenu(pageNumber)
     ConfigurationPageNumber = 1
 
     -- Create GUI
-    ProjectNukeCoreGUIUtil.DrawBaseGUI("Project Nuke Configuration (Step 1/3)", "Welcome to Project Nuke!")
+    ProjectNukeCoreGUIUtil.DrawBaseGUI("Project Nuke Configuration (Step 1/4)", "Welcome to Project Nuke!")
 	  ProjectNukeCoreGUIUtil.DrawStatus("Please select which applications to install.")
 
     -- Draw Application Buttons
@@ -73,7 +81,27 @@ function DrawConfigurationMenu(pageNumber)
     ConfigurationPageNumber = 2
 
     -- Create GUI
-    ProjectNukeCoreGUIUtil.DrawBaseGUI("Project Nuke Configuration (Step 2/3)", "Welcome to Project Nuke!")
+    ProjectNukeCoreGUIUtil.DrawBaseGUI("Project Nuke Configuration (Step 2/4)", "Welcome to Project Nuke!")
+	  ProjectNukeCoreGUIUtil.DrawStatus("Please (optionally) select a service to enable.")
+
+    -- Draw Service Buttons
+    DrawServiceSelectionPage(ServiceSelectionPageNumber)
+
+    -- Draw Buttons
+    ProjectNukeCoreGUIUtil.AddButton("Continue", nil, "Continue", colours.white, colours.blue, 41, 17, 10, 1, ConfigurationMenuContinue)
+
+    if (ServiceSelectionPageNumberMaximum > 1) then
+      ProjectNukeCoreGUIUtil.AddButton("ServicePageBack", nil, "<", colours.white, colours.grey, 2, 17, 3, 1, ServicePageBack)
+      ProjectNukeCoreGUIUtil.AddButton("ServicePageNumber", nil, ServiceSelectionPageNumber, colours.white, colours.lightGrey, 5, 17, 3, 1, nil)
+      ProjectNukeCoreGUIUtil.AddButton("ServicePageForward", nil, ">", colours.white, colours.grey, 8, 17, 3, 1, ServicePageForward)
+    end
+
+    ProjectNukeCoreGUIUtil.StartEventListener()
+  elseif (pageNumber == 3) then
+    ConfigurationPageNumber = 3
+
+    -- Create GUI
+    ProjectNukeCoreGUIUtil.DrawBaseGUI("Project Nuke Configuration (Step 3/4)", "Welcome to Project Nuke!")
 	  ProjectNukeCoreGUIUtil.DrawStatus("Please enter the shared encryption key.")
 
     -- Labels
@@ -91,11 +119,11 @@ function DrawConfigurationMenu(pageNumber)
     ProjectNukeCoreGUIUtil.UpdateTextbox(ProjectNukeCoreGUIUtil.AddTextbox("EncryptionKeyInput", 2, 12, 48))
 
     ProjectNukeCoreGUIUtil.StartEventListener()
-  elseif (pageNumber == 3) then
-    ConfigurationPageNumber = 3
+  elseif (pageNumber == 4) then
+    ConfigurationPageNumber = 4
 
     -- Create GUI
-    ProjectNukeCoreGUIUtil.DrawBaseGUI("Project Nuke Configuration (Step 3/3)", "Welcome to Project Nuke!")
+    ProjectNukeCoreGUIUtil.DrawBaseGUI("Project Nuke Configuration (Step 4/4)", "Welcome to Project Nuke!")
 	  ProjectNukeCoreGUIUtil.DrawStatus("Installation completed.")
 
     -- Labels
@@ -145,6 +173,31 @@ function DrawApplicationSelectionPage(pageNumber)
   end
 end
 
+function DrawServiceSelectionPage(pageNumber)
+  -- Index All Services
+  servicesDatabase = ProjectNukeCoreServiceHandler:getServicesDatabase()
+
+  -- Attempt to draw up to 5 Services depending on the pageNumber
+  baseIndex = (pageNumber - 1) * 5
+
+  for i = 1, 5, 1 do
+    serviceName = servicesDatabase[i + baseIndex]
+
+    if (serviceName ~= nil) then
+      -- Service entry is valid
+      window.setTextColor(colours.grey)
+      window.setBackgroundColor(colours.lightGrey)
+
+      -- Draw Label
+      window.setCursorPos(8, 10 + i)
+      window.write(_G[serviceName]:getDisplayName())
+
+      -- Draw Toggle Button
+      ProjectNukeCoreGUIUtil.AddToggleButton(serviceName, "NO", 2, 10 + i, 5, 1)
+    end
+  end
+end
+
 -- Advance the Application Page forward
 function ApplicationPageForward()
   if (ApplicationSelectionPageNumber < ApplicationSelectionPageNumberMaximum) then
@@ -158,7 +211,28 @@ end
 function ApplicationPageBack()
   if (ApplicationSelectionPageNumber > 1) then
     ApplicationSelectionPageNumber = ApplicationSelectionPageNumber - 1
-    
+
+    DrawConfigurationMenu(ConfigurationPageNumber)
+    return
+  end
+
+  ProjectNukeCoreGUIUtil.StartEventListener()
+end
+
+-- Advance the Services Page forward
+function ServicePageForward()
+  if (ServiceSelectionPageNumber < ServiceSelectionPageNumberMaximum) then
+    ServiceSelectionPageNumber = ServiceSelectionPageNumber + 1
+  end
+
+  DrawConfigurationMenu(ConfigurationPageNumber)
+end
+
+-- Advance the Services Page backwards
+function ServicePageBack()
+  if (ServiceSelectionPageNumber > 1) then
+    ServiceSelectionPageNumber = ServiceSelectionPageNumber - 1
+
     DrawConfigurationMenu(ConfigurationPageNumber)
     return
   end
@@ -169,6 +243,7 @@ end
 -- Configuration menu page continue
 function ConfigurationMenuContinue()
   if (ConfigurationPageNumber == 1) then
+    -- ===== Application Selection Page =====
     -- Inventory the selected buttons
     ToggleButtons = ProjectNukeCoreGUIUtil.GetToggleButtons();
     EnabledApplications = {}
@@ -184,23 +259,47 @@ function ConfigurationMenuContinue()
       ProjectNukeCoreGUIUtil.DrawErrorMessages({[10] = "Error: Please select applications to install."}, 3)
 	    ProjectNukeCoreGUIUtil.StartEventListener()
       return nil
-    else
-      -- Proceed to Step 2
-      LoadedConfiguration.enabledApplications = EnabledApplications
-      SaveConfiguration()
-
-      DrawConfigurationMenu(2)
-      ConfigurationPageNumber = 2
     end
+
+    -- Proceed to Step 2
+    LoadedConfiguration.enabledApplications = EnabledApplications
+    SaveConfiguration()
+
+    DrawConfigurationMenu(2)
   elseif (ConfigurationPageNumber == 2) then
-      -- Store value from EncryptionKey textbox
-      EncryptionKeyTextbox = ProjectNukeCoreGUIUtil.GetClickableItemByID("EncryptionKeyInput");
+    -- ===== Service Selection Page =====
+    -- Inventory the selected buttons
+    ToggleButtons = ProjectNukeCoreGUIUtil.GetToggleButtons();
+    EnabledServices = {}
+
+    for i, v in pairs(ToggleButtons) do
+      if (v:getValue() == "YES") then
+        table.insert(EnabledServices, v:getID())
+      end
+    end
+
+    if (#EnabledServices > 1) then
+      -- Throw an error message on the screen, then throw back to the selection menu
+      -- If the GUI Handler is working, this should never actually happen... famous last words
+      ProjectNukeCoreGUIUtil.DrawErrorMessages({[10] = "Error: Please only select one service."}, 3)
+	    ProjectNukeCoreGUIUtil.StartEventListener()
+      return nil
+    elseif (#EnabledServices == 1) then
+      -- Save and continue
+      LoadedConfiguration.enabledService = EnabledServices[1]
+      SaveConfiguration()
+    end
+
+    DrawConfigurationMenu(3)
+  elseif (ConfigurationPageNumber == 3) then
+    -- ===== Encryption Key =====
+    -- Store value from EncryptionKey textbox
+    EncryptionKeyTextbox = ProjectNukeCoreGUIUtil.GetClickableItemByID("EncryptionKeyInput");
 
 	  if (EncryptionKeyTextbox == nil) then
 	    ProjectNukeCoreGUIUtil.DrawErrorMessages({[10] = "Error: Please enter a Encryption Key."}, 3)
 	    ProjectNukeCoreGUIUtil.StartEventListener()
-
-		return nil
+		  return nil
 	  end
 
 	  EncryptionKey = EncryptionKeyTextbox:getValue()
@@ -208,15 +307,13 @@ function ConfigurationMenuContinue()
 	  if (EncryptionKey == nil or EncryptionKey == "") then
 	    ProjectNukeCoreGUIUtil.DrawErrorMessages({[10] = "Error: Please enter a Encryption Key."}, 3)
 	    ProjectNukeCoreGUIUtil.StartEventListener()
-
-		return nil
+		  return nil
 	  end
 
-      LoadedConfiguration.encryptionKey = EncryptionKey
-      SaveConfiguration()
+    LoadedConfiguration.encryptionKey = EncryptionKey
+    SaveConfiguration()
 
-      DrawConfigurationMenu(3)
-      ConfigurationPageNumber = 3
+    DrawConfigurationMenu(4)
   end
 end
 
