@@ -15,7 +15,7 @@ local ConfigurationPath = "/ProjectNuke/config"
 local ConfigurationPageNumber = 0
 
 local ApplicationSelectionPageNumber = 1
-local ApplicationSelectionPageNumberMaximum = math.ceil(#ProjectNukeCoreApplicationHandler:GetRegisteredApplications() / 5)
+local ApplicationSelectionPageNumberMaximum = math.ceil(#ProjectNukeCoreApplicationHandler:getApplicationsDatabase() / 5)
 
 local ServiceSelectionPageNumber = 1
 local ServiceSelectionPageNumberMaximum = math.ceil(#ProjectNukeCoreServiceHandler:getServicesDatabase() / 5)
@@ -28,14 +28,13 @@ function LoadConfiguration()
     configTable = ProjectNukeCoreFileUtil.LoadTable(ConfigurationPath)
 
     if (configTable ~= nil) then
-      LoadedConfiguration = ProjectNukeCoreClasses.Config.new(configTable['encryptionKey'], configTable['enabledApplications'], configTable['enabledService'])
+      LoadedConfiguration = ProjectNukeCoreClasses.Config.new(configTable['encryptionKey'], configTable['enabledApplication'], configTable['enabledService'])
     end
   end
 
   if (LoadedConfiguration ~= nil and
     (LoadedConfiguration.encryptionKey ~= null and
-    LoadedConfiguration.enabledApplications ~= null and
-    LoadedConfiguration.enabledService ~= null and
+    LoadedConfiguration.enabledApplication ~= null and
     LoadedConfiguration.encryptionKey ~= "")) then
     return true;
   end
@@ -62,7 +61,7 @@ function DrawConfigurationMenu(pageNumber)
 
     -- Create GUI
     ProjectNukeCoreGUIUtil.DrawBaseGUI("Project Nuke Configuration (Step 1/4)", "Welcome to Project Nuke!")
-	  ProjectNukeCoreGUIUtil.DrawStatus("Please select which applications to install.")
+	  ProjectNukeCoreGUIUtil.DrawStatus("Please select an application to install.")
 
     -- Draw Application Buttons
     DrawApplicationSelectionPage(ApplicationSelectionPageNumber)
@@ -108,9 +107,9 @@ function DrawConfigurationMenu(pageNumber)
     window.setCursorPos(2,11)
     window.write("Shared Encryption Key:")
 	  window.setCursorPos(2,14)
-    window.write("All applications in Project Nuke use Rednet to")
+    window.write("All applications in Project Nuke use REDNET to")
 	  window.setCursorPos(2,15)
-    window.write("communicate. Project Nuke implements AES 128")
+    window.write("communicate. Project Nuke implements SHA256")
 	  window.setCursorPos(2,16)
     window.write("encryption ensure system security.")
 
@@ -150,13 +149,13 @@ end
 
 function DrawApplicationSelectionPage(pageNumber)
   -- Index All Applications
-  allApplications = ProjectNukeCoreApplicationHandler:GetRegisteredApplications()
+  applicationsDatabase = ProjectNukeCoreApplicationHandler:getApplicationsDatabase()
 
   -- Attempt to draw up to 5 Applications depending on the pageNumber
   baseIndex = (pageNumber - 1) * 5
 
   for i = 1, 5, 1 do
-    application = allApplications[i + baseIndex]
+    application = applicationsDatabase[i + baseIndex]
 
     if (application ~= nil) then
       -- Application entry is valid
@@ -165,10 +164,11 @@ function DrawApplicationSelectionPage(pageNumber)
 
       -- Draw Label
       window.setCursorPos(8, 10 + i)
-      window.write(application:getName())
+      print(application)
+      window.write(_G[application]:getDisplayName())
 
       -- Draw Toggle Button
-      ProjectNukeCoreGUIUtil.AddToggleButton(application:getID(), "NO", 2, 10 + i, 5, 1)
+      ProjectNukeCoreGUIUtil.AddToggleButton(application, "NO", 2, 10 + i, 5, 1)
     end
   end
 end
@@ -181,19 +181,19 @@ function DrawServiceSelectionPage(pageNumber)
   baseIndex = (pageNumber - 1) * 5
 
   for i = 1, 5, 1 do
-    serviceName = servicesDatabase[i + baseIndex]
+    service = servicesDatabase[i + baseIndex]
 
-    if (serviceName ~= nil) then
+    if (service ~= nil) then
       -- Service entry is valid
       window.setTextColor(colours.grey)
       window.setBackgroundColor(colours.lightGrey)
 
       -- Draw Label
       window.setCursorPos(8, 10 + i)
-      window.write(_G[serviceName]:getDisplayName())
+      window.write(_G[service]:getDisplayName())
 
       -- Draw Toggle Button
-      ProjectNukeCoreGUIUtil.AddToggleButton(serviceName, "NO", 2, 10 + i, 5, 1)
+      ProjectNukeCoreGUIUtil.AddToggleButton(service, "NO", 2, 10 + i, 5, 1)
     end
   end
 end
@@ -254,16 +254,17 @@ function ConfigurationMenuContinue()
       end
     end
 
-    if (#EnabledApplications == 0) then
+    if (#EnabledApplications > 1) then
       -- Throw an error message on the screen, then throw back to the selection menu
-      ProjectNukeCoreGUIUtil.DrawErrorMessages({[10] = "Error: Please select applications to install."}, 3)
+      -- If the GUI Handler is working, this should never actually happen... famous last words
+      ProjectNukeCoreGUIUtil.DrawErrorMessages({[10] = "Error: Please only select one application."}, 3)
 	    ProjectNukeCoreGUIUtil.StartEventListener()
       return nil
+    elseif (#EnabledApplications == 1) then
+      -- Save and continue
+      LoadedConfiguration.enabledApplication = EnabledApplications[1]
+      SaveConfiguration()
     end
-
-    -- Proceed to Step 2
-    LoadedConfiguration.enabledApplications = EnabledApplications
-    SaveConfiguration()
 
     DrawConfigurationMenu(2)
   elseif (ConfigurationPageNumber == 2) then

@@ -17,14 +17,14 @@ local enabledService = nil
 
 -- Download Services to Disk
 function downloadServices()
-  -- Clear local service files
+  -- Clear local files
   fs.delete("/ProjectNuke/Services/")
 
   -- Download services to disk
-  for i, serviceClassName in ipairs(servicesDatabase) do
-    print("Downloading "..serviceClassName)
+  for i, service in ipairs(servicesDatabase) do
+    print("Downloading "..service)
     
-    local fileName = serviceClassName..".lua"
+    local fileName = service..".lua"
     local fullURL = "https://raw.githubusercontent.com/stuntguy3000/ProjectNuke/master/v2.0/Services/"..fileName
     local fullPath = servicesFolderBasePath..fileName
     
@@ -38,7 +38,6 @@ function loadServices()
   for i, service in ipairs(servicesDatabase) do
     local loaded = os.loadAPI(servicesFolderBasePath..service..".lua")
 
-    -- Loading Error Handling
     if (loaded == false) then
       error("Service "..service.." could not be loaded!")
       return
@@ -49,7 +48,7 @@ function loadServices()
 end
 
 -- Run Services
-function tryRunService()
+function tryRunServices()
   -- Identify the services to enable
   for i, service in ipairs(servicesDatabase) do
     -- Enable the service if specified in the configuration

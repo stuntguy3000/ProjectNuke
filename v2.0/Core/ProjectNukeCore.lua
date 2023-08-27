@@ -121,7 +121,7 @@ end
 function RunApplication()
   if (doRun) then
     term.clear()
-    parallel.waitForAll(ProjectNukeCoreServiceHandler.tryRunService, ProjectNukeCoreApplicationHandler.RunApplications)
+    parallel.waitForAll(ProjectNukeCoreServiceHandler.tryRunServices, ProjectNukeCoreApplicationHandler.tryRunApplications)
 
     sleep(5)
     print("Execution completed. Rebooting")
@@ -160,7 +160,7 @@ if (doDownload) then
   tryLoadAPI(Handler, CoreHandlerFolderPath .. HandlersMap["ApplicationHandler"])
   tryLoadAPI(Handler, CoreHandlerFolderPath .. HandlersMap["ServiceHandler"])
 
-  ProjectNukeCoreApplicationHandler.DownloadApplications()
+  ProjectNukeCoreApplicationHandler.downloadApplications()
   ProjectNukeCoreServiceHandler.downloadServices()
 end
 
@@ -172,8 +172,6 @@ LoadUtil()
 
 -- Initalize Handlers
 LoadCoreHandlers()
-
-ProjectNukeCoreApplicationHandler.LoadApplications()
 
 -- Launch!
 print(" >> Launching ProjectNuke <<")

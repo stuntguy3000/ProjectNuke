@@ -10,6 +10,12 @@
   Author: stuntguy3000
 
 --]]
-function Run()
+function run()
+  ProjectNukeCoreGUIUtil.DrawBaseGUI(getDisplayName(), nil)
 
+  ProjectNukeCoreGUIUtil.StartEventListener()
+end
+
+function getDisplayName()
+  return "Authentication Server"
 end

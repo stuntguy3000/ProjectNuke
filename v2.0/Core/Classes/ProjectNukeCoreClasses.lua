@@ -11,36 +11,6 @@
 
 --]]
 
--- Application Object
-Application = {}
-Application.__index = Application
-
-function Application.new(applicationName, applicationID, applicationFileName, applicationLaunchFunction)
-  local self = setmetatable({}, Application)
-  self.applicationName = applicationName
-  self.applicationID = applicationID
-  self.applicationFileName = applicationFileName
-  self.applicationLaunchFunction = applicationLaunchFunction
-  return self
-end
-
-function Application.getName(self)
-  return self.applicationName
-end
-
-function Application.getID(self)
-  return self.applicationID
-end
-
-function Application.getFileName(self)
-  return self.applicationFileName
-end
-
-function Application.getLaunchFunction(self)
-  return self.applicationLaunchFunction
-end
--- Application Object End
-
 -- Clickable Item Object
 ClickableItem = {}
 ClickableItem.__index = ClickableItem
@@ -132,11 +102,11 @@ end
 Config = {}
 Config.__index = Config
 
-function Config.new(encryptionKey, enabledApplications, enabledService)
+function Config.new(encryptionKey, enabledApplication, enabledService)
   local self = setmetatable({}, Config)
 
   self.encryptionKey = encryptionKey
-  self.enabledApplications = enabledApplications
+  self.enabledApplication = enabledApplication
   self.enabledService = enabledService
 
   return self

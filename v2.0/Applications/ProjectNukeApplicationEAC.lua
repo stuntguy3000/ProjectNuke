@@ -10,9 +10,9 @@
   Author: stuntguy3000
 
 --]]
-function Run()
+function run()
   -- Draw base GUI
-  ProjectNukeCoreGUIUtil.DrawBaseGUI("Emergency Alert Controller v0.1", "Use this interface to send emergency alerts.")
+  ProjectNukeCoreGUIUtil.DrawBaseGUI(getDisplayName(), "Use this interface to send emergency alerts.")
 
   ProjectNukeCoreGUIUtil.AddButton("btnALERT", "ALERT", "Send ALERT", colours.white, colours.red, 2, 11, 23, 6, SendAlert)
   ProjectNukeCoreGUIUtil.AddButton("btnALLCLEAR", "ALLCLEAR", "Send ALL CLEAR", colours.white, colours.green, 27, 11, 23, 6, SendClear)
@@ -34,4 +34,8 @@ function SendClear()
 
   ProjectNukeCoreGUIUtil.DrawStatus("ALL CLEAR message sent.")
   ProjectNukeCoreGUIUtil.StartEventListener()
+end
+
+function getDisplayName()
+  return "Emergency Alert Controller"
 end

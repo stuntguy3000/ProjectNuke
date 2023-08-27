@@ -12,10 +12,7 @@
   Author: stuntguy3000
 
 --]]
-
-
-
-function Run()
+function run()
   term.clear()
   term.setCursorPos(0, 1)
 
@@ -37,4 +34,8 @@ function Run()
       print(decryptedMessage)
     end
   end
+end
+
+function getDisplayName()
+  return "REDNET Monitor"
 end
