@@ -23,14 +23,14 @@ function run()
 end
 
 function SendAlert()
-  ProjectNukeEmergencyService.SendState("ALERT")
+  ProjectNukeServiceEMRG.sendState("ALERT")
 
   ProjectNukeCoreGUIUtil.DrawStatus("ALERT message sent.")
   ProjectNukeCoreGUIUtil.StartEventListener()
 end
 
 function SendClear()
-  ProjectNukeEmergencyService.SendState("ALLCLEAR")
+  ProjectNukeServiceEMRG.sendState("ALLCLEAR")
 
   ProjectNukeCoreGUIUtil.DrawStatus("ALL CLEAR message sent.")
   ProjectNukeCoreGUIUtil.StartEventListener()
