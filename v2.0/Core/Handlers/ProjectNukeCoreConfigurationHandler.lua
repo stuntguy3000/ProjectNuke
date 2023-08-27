@@ -179,7 +179,7 @@ function ConfigurationMenuContinue()
       end
     end
 
-    if (table.getn(EnabledApplications) == 0) then
+    if (#EnabledApplications == 0) then
       -- Throw an error message on the screen, then throw back to the selection menu
       ProjectNukeCoreGUIUtil.DrawErrorMessages({[10] = "Error: Please select applications to install."}, 3)
 	    ProjectNukeCoreGUIUtil.StartEventListener()
