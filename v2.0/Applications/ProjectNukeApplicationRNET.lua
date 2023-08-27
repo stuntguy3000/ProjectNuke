@@ -12,11 +12,17 @@
   Author: stuntguy3000
 
 --]]
+
+
+
 function Run()
-  term.write("===== REDNET Monitor v0.1 =====")
-  term.write("Incoming messages will be printed below.")
-  term.write("==========================")
-  term.write("")
+  term.clear()
+  term.setCursorPos(0, 1)
+
+  print("========== REDNET Monitor v0.1 ==========")
+  print("Incoming messages will be printed below.")
+  print("========================================")
+  print("")
 
   while true do
     -- Custom Copypasta from REDNET Handler
@@ -26,9 +32,9 @@ function Run()
     decryptedMessage = ProjectNukeCoreEncryptionUtil.decrypt(ProjectNukeCoreConfigurationHandler.LoadedConfiguration.encryptionKey, message)
 
     if (decryptedMessage == nil) then
-      term.write("Recieved message, but unable to decrypt. Ignoring...")
+      print("Recieved message, but unable to decrypt. Ignoring...")
     else
-      term.write(decryptedMessage)
+      print(decryptedMessage)
     end
   end
 end

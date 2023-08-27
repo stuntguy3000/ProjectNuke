@@ -160,8 +160,11 @@ function Run()
 
     term.clear()
     print("We done here. Relaunching... = "..WhoFinished)
+
     -- In normal operation the application handler will NEVER finish executing. This is assumed so when Parallel finishes, a RunServices service has terminated and needs priority, so now it's time to run the services again.
-    ProjectNukeCoreServiceHandler.RunServices()
+    Run()
+
+    -- TODO: Validate this behavior as intended
   end
 end
 
