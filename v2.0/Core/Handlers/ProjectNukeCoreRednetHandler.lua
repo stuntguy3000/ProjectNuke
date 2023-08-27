@@ -3,16 +3,20 @@
 ================================================================================
 
   ProjectNukeCoreRednetHandler
-    Provides utilities for receiving and sending of communication messages using Rednet
+    Provides utilities for receiving and sending of communication messages using REDNET
     
-  Messages recieved on the REDNET_PROTOCOL_ID channel are encrypted, and contain serialized PACKET data.
-    
-  Applications can request to recieve any MESSAGES addressed to them.
+    REDNET is used for all ProjectNuke communications. All communications are encrypted with a shared key using SHA256 encryption.
+    All ProjectNuke computers must share the same key to particiate in the network.
 
-  Packet Map:
-    ID    USAGE
-    0     REDNET Communication Wrapper
-    1     REDNET Emergency Service Protocol
+    The protocol is clearly defined and broken down into packets with individual uses. See ProjectNukeCorePackets.
+
+    All computers using REDNET subscribed to the ProjectNuke Protocol, including other power stations, will receieve these communications.
+    HOWEVER, due to the encryption, they are not readable. ProjectNuke ignores all packets it cannot decrypt, even from other ProjectNuke installations.
+
+    It is unclear if this is vulvernable to network flood attacks or other simliar network concerns. 
+    In future we can evaluate a hardwire communication backhaul if required.
+
+    However, for now - this will suit. It's fast, it's simple, and it works flawlessly.
 
 ================================================================================
 
@@ -22,14 +26,16 @@
 
 REDNET_PROTOCOL_ID = "ProjectNuke"
 
-function Initalize()
+-- Initalize REDNET Communications
+function init()
   rednet.close()
 
-  if (peripheral.getType("back") ~= "modem") then
-    ProjectNukeCoreGUIUtil.DrawCriticalError({[8] = "No modem installed on back side.", [12] = "Please install one and click Reboot."})
-  end
+  -- Try to locate a modem
+  peripheral.find("modem", rednet.open)
 
-  rednet.open("back")
+  if (not rednet.isOpen()) then
+    ProjectNukeCoreGUIUtil.DrawCriticalError({[8] = "No wireless modem detected.", [12] = "Please install one and click Reboot."})
+  end
 end
 
 function WaitForPacket(PacketID)
@@ -78,4 +84,4 @@ function BroadcastPacket(Packet)
   return rednet.broadcast(encryptedPacket, REDNET_PROTOCOL_ID)
 end
 
-Initalize()
+init()
