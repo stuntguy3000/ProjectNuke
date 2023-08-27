@@ -121,6 +121,8 @@ end
 function RunApplication()
   if (doRun) then
     term.clear()
+    term.setCursorPos(1,1)
+
     parallel.waitForAll(ProjectNukeCoreServiceHandler.tryRunServices, ProjectNukeCoreApplicationHandler.tryRunApplications)
 
     sleep(5)
@@ -147,7 +149,7 @@ end
 
 -- Terminal Setup
 term.clear()
-term.setCursorPos(0,1)
+term.setCursorPos(1,1)
 
 -- Download content, if needed
 if (doDownload) then
