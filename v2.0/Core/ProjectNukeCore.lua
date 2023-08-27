@@ -155,6 +155,11 @@ if (doDownload) then
   DownloadClasses()
   DownloadUtil()
   DownloadCoreHandlers()
+
+  -- Hijack and load these services
+  tryLoadAPI(Handler, CoreHandlerFolderPath..HandlersMap["ApplicationHandler"])
+  tryLoadAPI(Handler, CoreHandlerFolderPath..HandlersMap["ServiceHandler"])
+
   ProjectNukeCoreApplicationHandler.DownloadApplications()
   ProjectNukeCoreServiceHandler.downloadServices()
 end
