@@ -71,7 +71,7 @@ function LoadApplications()
   RegisterApplication("Reactor Controller", "RC", "ProjectNukeApplicationRC.lua", ProjectNukeApplicationRC.Run)
   RegisterApplication("Reactor Monitor", "RM", "ProjectNukeApplicationRM.lua", ProjectNukeApplicationRM.Run)
   RegisterApplication("Alert & Siren Monitor", "ALRT", "ProjectNukeApplicationALRT.lua", ProjectNukeApplicationALRT.Run)
-  RegisterApplication("Dummy Application", "DUMMY", nil, nil)
+  RegisterApplication("REDNET Monitor", "RNET", "ProjectNukeApplicationRNET.lua", ProjectNukeApplicationRNET.Run)
   
   -- Add in enabled applications
   for i,applicationName in pairs(ProjectNukeCoreConfigurationHandler.LoadedConfiguration.enabledApplications) do
@@ -113,4 +113,4 @@ RegisterApplication("Emergency Alert Controller", "EAC", "ProjectNukeApplication
 RegisterApplication("Reactor Controller", "RC", "ProjectNukeApplicationRC.lua", nil)
 RegisterApplication("Reactor Monitor", "RM", "ProjectNukeApplicationRM.lua", nil)
 RegisterApplication("Alert & Siren Monitor", "ALRT", "ProjectNukeApplicationALRT.lua", nil)
-RegisterApplication("Dummy Application", "DUMMY", nil, nil)
+RegisterApplication("REDNET Monitor", "RNET", "ProjectNukeApplicationRNET.lua", nil)
