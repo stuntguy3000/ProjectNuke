@@ -46,7 +46,7 @@ function WaitForPacket(PacketID)
   -- Attempt to unserialize the message
   decodedObject = ProjectNukeCoreFileUtil.Unserialize(decryptedMessage)
   
-  --print(decryptedMessage)
+  print(decryptedMessage)
   --print(decodedObject["id"])
   --print(decodedObject["data"])
   
@@ -67,7 +67,7 @@ function WaitForPacket(PacketID)
   return decodedData
 end
 
-function SendPacket(Packet)
+function BroadcastPacket(Packet)
   -- Validation checks
   if (Packet == nil) then
     term.write("S E1")
@@ -88,7 +88,7 @@ function SendPacket(Packet)
     return false
   end
   
-  -- Encapsulate it
+  -- Encapsulate it (why?)
   communicationPacket = ProjectNukeCorePackets.GeneralCommunicationPacket
   communicationPacket:setData(encodedData)
   

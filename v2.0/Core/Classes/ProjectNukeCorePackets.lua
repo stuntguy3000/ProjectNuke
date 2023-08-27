@@ -3,6 +3,7 @@
 ================================================================================
 
   ProjectNukeCorePackets
+    A global registry of all packets that can be sent and recieved
 
 ================================================================================
 
@@ -10,6 +11,9 @@
 
 --]]
 
--- GeneralCommunicationPacket Object
+-- GeneralCommunicationPacket
 GeneralCommunicationPacket = ProjectNukeCoreClasses.Packet.new(0, nil)
--- End GeneralCommunicationPacket
+
+-- EmergencyStatePacket
+--    This packet represents an emergency state update, to be sent and recieved by ProjectNukeEmergencyService
+EmergencyStatePacket = ProjectNukeCoreClasses.Packet.new(1, nil)

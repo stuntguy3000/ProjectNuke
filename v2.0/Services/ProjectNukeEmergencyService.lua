@@ -16,26 +16,27 @@
 
 --]]
 
--- Service Packet Definitions
-local EmergencyServicePacket = ProjectNukeCoreClasses.Packet.new(1, nil)
--- End Service Packet Definitions
+local emergencyStatePacket = ProjectNukeCorePackets.EmergencyStatePacket
 
-local EmergencyState = "NONE"
+local emergencyState = "NONE"
 
-function SendState(EmergencyState)
-  EmergencyServicePacket:setData(EmergencyState)
-  ProjectNukeCoreRednetHandler.SendPacket(EmergencyServicePacket)
+function SendState(newEmergencyState)
+  emergencyStatePacket:setData(newEmergencyState)
+  ProjectNukeCoreRednetHandler.BroadcastPacket(emergencyStatePacket)
 end
 
 function Run()
-  if (EmergencyState == "ALERT") then
+  if (emergencyState == "ALERT") then
     RunAlertSequence()
-  elseif (EmergencyState == "ALLCLEAR") then
+  elseif (emergencyState == "ALLCLEAR") then
     RunAllClearSequence()
   else
     -- Wait for receipt of emergency service packet
-    Data = ProjectNukeCoreRednetHandler.WaitForPacket(EmergencyServicePacket:getId())
-    EmergencyState = EmergencyServicePacket.new(EmergencyServicePacket:getId(), Data['data']):getData()
+    packetData = ProjectNukeCoreRednetHandler.WaitForPacket(emergencyStatePacket:getId())
+
+    if (Data ~= nil) then
+      emergencyState = EmergencyServicePacket.new(emergencyStatePacket:getId(), packetData['data']):getData()
+    end
   end
 end
 
