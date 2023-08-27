@@ -11,7 +11,7 @@
 
 --]]
 
-NODOWNLOAD = true
+NODOWNLOAD = false
 LOADONLY = false
 
 function DownloadAndExecuteCore()
