@@ -17,6 +17,7 @@ local Services = {
   ["EmergencyService"] = "ProjectNukeEmergencyService.lua",
 }
 
+-- Download Services to Disk
 function DownloadServices()
   fs.delete("/ProjectNuke/Services/")
 
@@ -31,13 +32,18 @@ function DownloadServices()
   end
 end
 
+-- Load Services from Disk
 function LoadServices()
   for serviceName,fileName in pairs(Services) do
-    fullPath = ServiceBasePath..fileName
-    os.loadAPI(fullPath)  
+    local loaded = os.loadAPI(ServiceBasePath..fileName)
+
+    if (loaded == false) then
+      error("Service "..fileName.." could not be loaded!")
+    end
   end
 end
 
+-- Run Services
 function RunServices()
   ProjectNukeEmergencyService.Run()
 end

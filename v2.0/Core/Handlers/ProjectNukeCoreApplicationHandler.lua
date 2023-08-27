@@ -57,8 +57,11 @@ end
 function LoadApplications()
   -- Load all files in ApplicationBasePath
   for i,fileName in pairs(fs.list(ApplicationBasePath)) do
-    print("Loading "..fileName)
-    os.loadAPI(ApplicationBasePath .. fileName)
+    local loaded = os.loadAPI(ApplicationBasePath .. fileName)
+
+    if (loaded == false) then
+      error("Application "..fileName.." could not be loaded!")
+    end
   end
   
   -- Re-Register known applications now with run functions
