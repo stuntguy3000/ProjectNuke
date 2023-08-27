@@ -12,8 +12,36 @@ Author: stuntguy3000
 --]]
 
 --- Window Objects for 
-MainWindow = window.create(term.current(),1,1,51,21) -- The main window for drawing graphic elements
-MessageWindow = window.create(term.current(),1,1,51,21) -- A window designed to overlay popup messages
+MainWindow = window.create(term.current(), 1, 1, 51 ,21) -- The main window for drawing graphic elements
+MessageWindow = window.create(term.current(), 1, 1, 51, 21) -- A window designed to overlay popup messages
+
+--[[function init()
+   -- Use an attached monitor if present
+   local monitors = { peripheral.find("monitor") }
+
+   if (monitors ~= nil and #monitors > 0) then
+      local monitor = monitors[1]
+
+      -- Is it the right size?
+      monitorSize = {monitor.getSize()} -- Width/Height Respectively
+
+      if (monitorSize[1] == 50 and monitorSize[2] == 19) then
+         -- Fill the computer terminal with a generic message.
+         FillWindow(colours.lightGrey, MessageWindow)
+         DrawCenteredText("See monitor for output.", 9, colours.grey, colours.lightGrey, MessageWindow)
+         MessageWindow.setCursorPos(1,1)
+
+         -- Recreate the windows using the monitor
+         MainWindow = window.create(monitor, 1, 1, 51, 21)
+         MessageWindow = window.create(monitor, 1, 1, 51, 21)
+         term.redirect(monitor)
+      else
+         DrawErrorMessages({[8] = "Attached monitors are not compatible.", [12] = "Only a monitor that is 5x3 in size can be used."}, 5)
+      end
+   end
+end]] 
+
+-- Barring this code for now, need to decide on an approach for monitor support.
 
 -- Basic drawing items
 function DrawBlackSquares(xStart, y)
@@ -366,3 +394,5 @@ end
 function RebootButtonCommandHandler()
    shell.run("reboot")
 end
+
+-- init()

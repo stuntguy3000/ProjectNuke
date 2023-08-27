@@ -13,9 +13,6 @@
 
 --]]
 function run()
-  term.clear()
-  term.setCursorPos(0, 1)
-
   print("========== REDNET Monitor v0.1 ==========")
   print("Incoming messages will be printed below.")
   print("========================================")
