@@ -13,6 +13,8 @@
 
 --]]
 function run()
+  ProjectNukeCoreGUIUtil.tryAttachMonitor()
+
   print("========== REDNET Monitor v0.1 ==========")
   print("Incoming messages will be printed below.")
   print("========================================")

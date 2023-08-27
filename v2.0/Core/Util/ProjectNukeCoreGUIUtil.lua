@@ -15,7 +15,7 @@ Author: stuntguy3000
 MainWindow = window.create(term.current(), 1, 1, 51 ,21) -- The main window for drawing graphic elements
 MessageWindow = window.create(term.current(), 1, 1, 51, 21) -- A window designed to overlay popup messages
 
---[[function init()
+function tryAttachMonitor()
    -- Use an attached monitor if present
    local monitors = { peripheral.find("monitor") }
 
@@ -39,7 +39,7 @@ MessageWindow = window.create(term.current(), 1, 1, 51, 21) -- A window designed
          DrawErrorMessages({[8] = "Attached monitors are not compatible.", [12] = "Only a monitor that is 5x3 in size can be used."}, 5)
       end
    end
-end]] 
+end
 
 -- Barring this code for now, need to decide on an approach for monitor support.
 
