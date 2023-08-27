@@ -16,7 +16,7 @@ LOADONLY = false
 
 function DownloadAndExecuteCore()
   print(" > Downloading core...")
-  
+
   if (NODOWNLOAD) then
     shell.run("/ProjectNuke/Core/ProjectNukeCore.lua NODOWNLOAD")
   elseif (LOADONLY) then

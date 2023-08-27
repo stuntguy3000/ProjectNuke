@@ -68,50 +68,50 @@ ClickableItem.__index = ClickableItem
 
 function ClickableItem.new(id, value, text, textColour, backgroundColour, xStart, yStart, width, height, actionFunction)
   local self = setmetatable({}, ClickableItem)
-  
+
   self.enabled = true
   self.id = id
   self.value = value
   self.text = text
-  
+
   self.textColour = textColour
   self.backgroundColour = backgroundColour
-  
+
   self.xStart = xStart
   self.yStart = yStart
-  
+
   self.actionFunction = actionFunction
-  
+
   width = width - 1
   height = height - 1
-  
+
   if (width < 0) then
     width = 0
   end
-  
+
   if (height < 0) then
     height = 0
   end
-  
+
   self.width = width
   self.height = height
-  
+
   return self
 end
 
 function ClickableItem.render(self)
   window = ProjectNukeCoreGUIUtil.ProjectNukeGUI
   ProjectNukeCoreGUIUtil.DrawFilledBoxInWindow(self.backgroundColour, self.xStart, self.yStart, self.xStart + self.width, self.yStart + self.height, window)
-  
+
   window.setBackgroundColor(self.backgroundColour)
   window.setTextColor(self.textColour)
-  
+
   -- Cursor Position = xStart + half the button width minus half the text width
   cursorX = math.ceil(self.xStart + (self.width / 2) - (string.len(self.text) / 2))
   cursorY = (self.yStart + (self.height / 2))
   window.setCursorPos(cursorX, cursorY)
   window.write(self.text)
-  
+
   window.setCursorPos(self.xStart, self.yStart + self.height + 1)
 end
 
@@ -155,10 +155,10 @@ Config.__index = Config
 
 function Config.new(encryptionKey, enabledApplications)
   local self = setmetatable({}, Config)
-  
+
   self.encryptionKey = encryptionKey
   self.enabledApplications = enabledApplications
-  
+
   return self
 end
 -- Config Object End
@@ -169,21 +169,21 @@ Packet.__index = Packet
 
 function Packet.new(id, data)
   local self = setmetatable({}, Packet)
-  
+
   self.id = id
   self.data = data
-  
+
   return self
 end
-  
+
 function Packet.getId(self)
   return self.id
 end
-  
+
 function Packet.getData(self)
   return self.data
 end
-  
+
 function Packet.setData(self, data)
   self.data = data
 end

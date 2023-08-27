@@ -30,7 +30,7 @@ if fs.exists("/projectnuke.startup") == true then
   end
 
   fs.move("/projectnuke.startup", "/startup")
-  
+
   print(" > Running launcher...")
   shell.run("/startup")
 else
