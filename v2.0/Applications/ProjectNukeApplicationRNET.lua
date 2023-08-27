@@ -28,7 +28,10 @@ function run()
     if (decryptedMessage == nil) then
       print("Recieved message, but unable to decrypt. Ignoring...")
     else
+      print("------------------------------")
       print(decryptedMessage)
+      
+      term.scroll(2)
     end
   end
 end
