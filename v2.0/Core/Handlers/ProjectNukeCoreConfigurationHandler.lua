@@ -12,9 +12,11 @@
 --]]
 
 local ConfigurationPath = "/ProjectNuke/config"
+local ConfigurationPageNumber = 0
+local ApplicationSelectionPageNumber = 1
+local ApplicationSelectionPageNumberMaximum = math.ceil(#ProjectNukeCoreApplicationHandler:GetRegisteredApplications() / 5)
 
 LoadedConfiguration = nil
-local CurrentMenuPageNumber = 0
 
 -- Returns true if a valid configuration was found, false if one was created.
 function LoadConfiguration()
@@ -42,44 +44,36 @@ function SaveConfiguration()
   ProjectNukeCoreFileUtil.SaveTable(LoadedConfiguration, ConfigurationPath)
 end
 
-function LaunchConfigurationMenu(nextPageNumber)
+function DrawConfigurationMenu(pageNumber)
+  -- Init GUI
   window = ProjectNukeCoreGUIUtil.ProjectNukeGUI
   ProjectNukeCoreGUIUtil.ClearGUI(window)
 
-  if (nextPageNumber == 1) then
-    CurrentMenuPageNumber = 1
+  if (pageNumber == 1) then
+    ConfigurationPageNumber = 1
 
     -- Create GUI
-    ProjectNukeCoreGUIUtil.DrawBaseGUI("Project Nuke Installer - Step 1/3", "Welcome to Project Nuke!")
+    ProjectNukeCoreGUIUtil.DrawBaseGUI("Project Nuke Configuration (Step 1/3)", "Welcome to Project Nuke!")
 	  ProjectNukeCoreGUIUtil.DrawStatus("Please select which applications to install.")
 
-    -- Labels
-    window.setTextColor(colours.grey)
-    window.setBackgroundColor(colours.lightGrey)
+    -- Draw Application Buttons
+    DrawApplicationSelectionPage(ApplicationSelectionPageNumber)
 
-    window.setCursorPos(8,11)
-    window.write("Access Control Server (ACS)")
-    window.setCursorPos(8,12)
-    window.write("Emergency Alert Controller (EAC)")
-    window.setCursorPos(8,13)
-    window.write("Reactor Monitor (RM)")
-    window.setCursorPos(8,14)
-    window.write("Reactor Controller (RC)")
-
-    -- Buttons
-    ProjectNukeCoreGUIUtil.AddToggleButton("ACS", "NO", 2, 11, 5, 1)
-    ProjectNukeCoreGUIUtil.AddToggleButton("EAC", "NO", 2, 12, 5, 1)
-    ProjectNukeCoreGUIUtil.AddToggleButton("RM", "NO",  2, 13, 5, 1)
-    ProjectNukeCoreGUIUtil.AddToggleButton("RC", "NO",  2, 14, 5, 1)
-
+    -- Draw Buttons
     ProjectNukeCoreGUIUtil.AddButton("Continue", nil, "Continue", colours.white, colours.blue, 41, 17, 10, 1, ConfigurationMenuContinue)
 
+    if (ApplicationSelectionPageNumberMaximum > 1) then
+      ProjectNukeCoreGUIUtil.AddButton("AppPageBack", nil, "<", colours.white, colours.grey, 2, 17, 3, 1, ApplicationPageBack)
+      ProjectNukeCoreGUIUtil.AddButton("AppPageNumber", nil, ApplicationSelectionPageNumber, colours.white, colours.lightGrey, 5, 17, 3, 1, nil)
+      ProjectNukeCoreGUIUtil.AddButton("AppPageForward", nil, ">", colours.white, colours.grey, 8, 17, 3, 1, ApplicationPageForward)
+    end
+
     ProjectNukeCoreGUIUtil.StartEventListener()
-  elseif (nextPageNumber == 2) then
-    CurrentMenuPageNumber = 2
+  elseif (pageNumber == 2) then
+    ConfigurationPageNumber = 2
 
     -- Create GUI
-    ProjectNukeCoreGUIUtil.DrawBaseGUI("Project Nuke Installer - Step 2/3", "Welcome to Project Nuke!")
+    ProjectNukeCoreGUIUtil.DrawBaseGUI("Project Nuke Configuration (Step 2/3)", "Welcome to Project Nuke!")
 	  ProjectNukeCoreGUIUtil.DrawStatus("Please enter the shared encryption key.")
 
     -- Labels
@@ -97,11 +91,11 @@ function LaunchConfigurationMenu(nextPageNumber)
     ProjectNukeCoreGUIUtil.UpdateTextbox(ProjectNukeCoreGUIUtil.AddTextbox("EncryptionKeyInput", 2, 12, 48))
 
     ProjectNukeCoreGUIUtil.StartEventListener()
-  elseif (nextPageNumber == 3) then
-    CurrentMenuPageNumber = 3
+  elseif (pageNumber == 3) then
+    ConfigurationPageNumber = 3
 
     -- Create GUI
-    ProjectNukeCoreGUIUtil.DrawBaseGUI("Project Nuke Installer - Step 3/3", "Welcome to Project Nuke!")
+    ProjectNukeCoreGUIUtil.DrawBaseGUI("Project Nuke Configuration (Step 3/3)", "Welcome to Project Nuke!")
 	  ProjectNukeCoreGUIUtil.DrawStatus("Installation completed.")
 
     -- Labels
@@ -116,7 +110,6 @@ function LaunchConfigurationMenu(nextPageNumber)
 	  window.setCursorPos(2,15)
     window.write("safe, clean and efficient nuclear power!")
 
-
 	  window.setCursorPos(2,17)
     window.write("To begin, click Finish.")
 
@@ -127,34 +120,79 @@ function LaunchConfigurationMenu(nextPageNumber)
   end
 end
 
+function DrawApplicationSelectionPage(pageNumber)
+  -- Index All Applications
+  allApplications = ProjectNukeCoreApplicationHandler:GetRegisteredApplications()
+
+  -- Attempt to draw up to 5 Applications depending on the pageNumber
+  baseIndex = (pageNumber - 1) * 5
+
+  for i = 1, 5, 1 do
+    application = allApplications[i + baseIndex]
+
+    if (application ~= nil) then
+      -- Application entry is valid
+      window.setTextColor(colours.grey)
+      window.setBackgroundColor(colours.lightGrey)
+
+      -- Draw Label
+      window.setCursorPos(8, 10 + i)
+      window.write(application:getName())
+
+      -- Draw Toggle Button
+      ProjectNukeCoreGUIUtil.AddToggleButton(application:getID(), "NO", 2, 10 + i, 5, 1)
+    end
+  end
+end
+
+-- Advance the Application Page forward
+function ApplicationPageForward()
+  if (ApplicationSelectionPageNumber < ApplicationSelectionPageNumberMaximum) then
+    ApplicationSelectionPageNumber = ApplicationSelectionPageNumber + 1
+  end
+
+  DrawConfigurationMenu(ConfigurationPageNumber)
+end
+
+-- Advance the Application Page backwards
+function ApplicationPageBack()
+  if (ApplicationSelectionPageNumber > 1) then
+    ApplicationSelectionPageNumber = ApplicationSelectionPageNumber - 1
+    
+    DrawConfigurationMenu(ConfigurationPageNumber)
+    return
+  end
+
+  ProjectNukeCoreGUIUtil.StartEventListener()
+end
+
 -- Configuration menu page continue
 function ConfigurationMenuContinue()
-  if (CurrentMenuPageNumber == 1) then
-    -- Validate applications are actually selected
+  if (ConfigurationPageNumber == 1) then
+    -- Inventory the selected buttons
     ToggleButtons = ProjectNukeCoreGUIUtil.GetToggleButtons();
-    DisabledApplications = {}
     EnabledApplications = {}
 
     for i, v in pairs(ToggleButtons) do
       if (v:getValue() == "YES") then
         table.insert(EnabledApplications, v:getID())
-      else
-        table.insert(DisabledApplications, v:getID())
       end
     end
 
     if (table.getn(EnabledApplications) == 0) then
+      -- Throw an error message on the screen, then throw back to the selection menu
       ProjectNukeCoreGUIUtil.DrawErrorMessages({[10] = "Error: Please select applications to install."}, 3)
 	    ProjectNukeCoreGUIUtil.StartEventListener()
       return nil
     else
+      -- Proceed to Step 2
       LoadedConfiguration.enabledApplications = EnabledApplications
       SaveConfiguration()
 
-      LaunchConfigurationMenu(2)
-      CurrentMenuPageNumber = 2
+      DrawConfigurationMenu(2)
+      ConfigurationPageNumber = 2
     end
-  elseif (CurrentMenuPageNumber == 2) then
+  elseif (ConfigurationPageNumber == 2) then
       -- Store value from EncryptionKey textbox
       EncryptionKeyTextbox = ProjectNukeCoreGUIUtil.GetClickableItemByID("EncryptionKeyInput");
 
@@ -177,13 +215,14 @@ function ConfigurationMenuContinue()
       LoadedConfiguration.encryptionKey = EncryptionKey
       SaveConfiguration()
 
-      LaunchConfigurationMenu(3)
-      CurrentMenuPageNumber = 3
+      DrawConfigurationMenu(3)
+      ConfigurationPageNumber = 3
   end
 end
 
 -- Attempt to load the configuration, but if one is not detected, run the installer GUI
 if (LoadConfiguration() == false) then
   print("New configuration detected, launching installer.")
-  LaunchConfigurationMenu(1)
+
+  DrawConfigurationMenu(1)
 end

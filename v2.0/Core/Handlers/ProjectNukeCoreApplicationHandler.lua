@@ -66,10 +66,12 @@ function LoadApplications()
   
   -- Re-Register known applications now with run functions
   RegisteredApplications = {}
-  RegisterApplication("Access Control Server", "ACS", "ProjectNukeApplicationACS.lua", ProjectNukeApplicationACS.Run)
+  RegisterApplication("Authentication Server", "AUTH", "ProjectNukeApplicationAUTH.lua", ProjectNukeApplicationAUTH.Run)
   RegisterApplication("Emergency Alert Controller", "EAC", "ProjectNukeApplicationEAC.lua", ProjectNukeApplicationEAC.Run)
-  RegisterApplication("Reactor Monitor", "RM", "ProjectNukeApplicationRM.lua", ProjectNukeApplicationRM.Run)
   RegisterApplication("Reactor Controller", "RC", "ProjectNukeApplicationRC.lua", ProjectNukeApplicationRC.Run)
+  RegisterApplication("Reactor Monitor", "RM", "ProjectNukeApplicationRM.lua", ProjectNukeApplicationRM.Run)
+  RegisterApplication("Alert & Siren Monitor", "ALRT", "ProjectNukeApplicationALRT.lua", ProjectNukeApplicationALRT.Run)
+  RegisterApplication("Dummy Application", "DUMMY", nil, nil)
   
   -- Add in enabled applications
   for i,applicationName in pairs(ProjectNukeCoreConfigurationHandler.LoadedConfiguration.enabledApplications) do
@@ -87,13 +89,13 @@ function GetRegisteredApplications()
 end
 
 function RunApplications()
-    if (table.getn(LoadedApplications) == 1) then
+    if (#LoadedApplications == 1) then
       -- Run the single registered application
       print("Launching application!")
       RunApplication(LoadedApplications[1])
     else 
       -- Menu, coming later
-      print(table.getn(LoadedApplications))
+      print(#LoadedApplications)
       sleep(10000)
     end
 end
@@ -106,7 +108,9 @@ end
 
 -- Register the applications, to trigger them to be downloaded.
 -- Todo: Change this to be pulled dynamically
-RegisterApplication("Access Control Server", "ACS", "ProjectNukeApplicationACS.lua", nil)
+RegisterApplication("Authentication Server", "ACS", "ProjectNukeApplicationAUTH.lua", nil)
 RegisterApplication("Emergency Alert Controller", "EAC", "ProjectNukeApplicationEAC.lua",nil)
-RegisterApplication("Reactor Monitor", "RM", "ProjectNukeApplicationRM.lua", nil)
 RegisterApplication("Reactor Controller", "RC", "ProjectNukeApplicationRC.lua", nil)
+RegisterApplication("Reactor Monitor", "RM", "ProjectNukeApplicationRM.lua", nil)
+RegisterApplication("Alert & Siren Monitor", "ALRT", "ProjectNukeApplicationALRT.lua", nil)
+RegisterApplication("Dummy Application", "DUMMY", nil, nil)

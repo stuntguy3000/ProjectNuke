@@ -84,6 +84,7 @@ function LoadCoreHandlers()
   ]]
 
   for i, Handler in ipairs(HandlersLoadOrder) do
+    print("Loading Handler "..Handler)
     LoadAPI(Handler, CoreHandlerFolderPath..HandlersMap[Handler])
   end
 end

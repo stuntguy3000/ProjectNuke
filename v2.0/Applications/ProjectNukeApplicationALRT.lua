@@ -2,8 +2,8 @@
 
 ================================================================================
 
-  ProjectNukeApplicarionRC
-    Application: Reactor Controller
+  ProjectNukeApplicarionALRT
+    Application: Alert & Siren Monitor
 
 ================================================================================
 
