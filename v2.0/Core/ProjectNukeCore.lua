@@ -135,8 +135,9 @@ end
 -- Executes ProjectNukeCore
 _G["shell"] = shell
 
+-- Arguments Processing
 doRun = true
-
+doDownload = true
 if (arg[1] == "NODOWNLOAD") then
   doDownload = false
 elseif (arg[1] == "LOADONLY") then
@@ -144,6 +145,7 @@ elseif (arg[1] == "LOADONLY") then
   doRun = false
 end
 
+-- Terminal Setup
 term.clear()
 term.setCursorPos(0,1)
 
@@ -168,5 +170,6 @@ LoadCoreHandlers()
 
 ProjectNukeCoreApplicationHandler.LoadApplications()
 
+-- Launch!
 print(" >> Launching ProjectNuke <<")
 RunApplication()
