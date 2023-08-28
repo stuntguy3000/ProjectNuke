@@ -37,6 +37,7 @@ function tryLoadServices()
   -- Process the Services Database for all Service Classes
   for i, service in ipairs(servicesDatabase) do
     filePath = servicesBasePath .. service .. ".lua"
+    print("Trying to load " .. filePath)
 
     if (fs.exists(filePath)) then
       local loaded = os.loadAPI(filePath)

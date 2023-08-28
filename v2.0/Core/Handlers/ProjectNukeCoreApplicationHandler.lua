@@ -41,7 +41,8 @@ end
 function tryLoadApplications()
   for i, application in ipairs(applicationsDatabase) do
     filePath = applicationBasePath .. application .. ".lua"
-
+    print("Trying to load " .. filePath)
+    
     if (fs.exists(filePath)) then
       local loaded = os.loadAPI(filePath)
 
