@@ -56,6 +56,8 @@ function DrawConfigurationMenu(pageNumber)
   ProjectNukeCoreGUIUtil.initGui(false)
   ProjectNukeCoreGUIUtil.clearGUI()
 
+  window = ProjectNukeCoreGUIUtil.MainWindow
+
   if (pageNumber == 1) then
     ConfigurationPageNumber = 1
 
