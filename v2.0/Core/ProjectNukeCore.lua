@@ -19,28 +19,24 @@
 
 -- Maps classes to source locations
 local ClassMap = {
-    ["CoreClasses"] = "ProjectNukeCoreClasses.lua",
-    ["CorePackets"] = "ProjectNukeCorePackets.lua",
+  "ProjectNukeCoreClasses.lua",
+  "ProjectNukeCorePackets.lua",
 }
 
 -- Maps handlers to source locations
 local HandlersMap = {
-  ["ApplicationHandler"] = "ProjectNukeCoreApplicationHandler.lua",
-  ["ConfigurationHandler"] = "ProjectNukeCoreConfigurationHandler.lua",
-  ["RednetHandler"] = "ProjectNukeCoreRednetHandler.lua",
-  ["ServiceHandler"] = "ProjectNukeCoreServiceHandler.lua",
+  "ProjectNukeCoreApplicationHandler.lua",
+  "ProjectNukeCoreServiceHandler.lua",
+  "ProjectNukeCoreConfigurationHandler.lua",
+  "ProjectNukeCoreRednetHandler.lua",
 }
 
 -- Maps utility functions to source locations
 local UtilMap = {
-  ["FileUtil"] = "ProjectNukeCoreFileUtil.lua",
-  ["EncryptionUtil"] = "ProjectNukeCoreEncryptionUtil.lua",
-  ["GUIUtil"] = "ProjectNukeCoreGUIUtil.lua",
+  "ProjectNukeCoreFileUtil.lua",
+  "ProjectNukeCoreEncryptionUtil.lua",
+  "ProjectNukeCoreGUIUtil.lua",
 }
-
--- Defines the order to load class and handlers
-local ClassLoadOrder = {"CoreClasses", "CorePackets"}
-local HandlersLoadOrder = {"ApplicationHandler", "ServiceHandler", "ConfigurationHandler", "RednetHandler"}
 
 -- Core settings 
 local CoreHandlerFolderPath = "/ProjectNuke/Core/Handlers/"
@@ -55,7 +51,7 @@ function DownloadCoreHandlers()
   fs.delete(CoreHandlerFolderPath)
 
   -- Download the core Handlers to disk
-  for handlerID, fileName in pairs(HandlersMap) do
+  for i, fileName in ipairs(HandlersMap) do
     fullURL = "https://raw.githubusercontent.com/stuntguy3000/ProjectNuke/master/v2.0/Core/Handlers/" .. fileName
 
     -- Execute
@@ -65,12 +61,8 @@ end
 
 -- Loads the Handlers
 function LoadCoreHandlers()
-  for i, handlerID in ipairs(HandlersLoadOrder) do
-    print("")
-    print("Loading Handler "..handlerID)
-    print(CoreHandlerFolderPath .. HandlersMap[handlerID])
-    print("")
-    tryLoadAPI(Handler, CoreHandlerFolderPath .. HandlersMap[handlerID])
+  for i, fileName in ipairs(HandlersMap) do
+    tryLoadAPI(CoreHandlerFolderPath .. fileName)
   end
 end
 
@@ -79,7 +71,7 @@ function DownloadClasses()
   fs.delete(CoreClassFolderPath)
 
   -- Download the core classes to disk
-  for className, fileName in pairs(ClassMap) do
+  for i, fileName in ipairs(ClassMap) do
     fullURL = "https://raw.githubusercontent.com/stuntguy3000/ProjectNuke/master/v2.0/Core/Classes/" .. fileName
 
     -- Execute
@@ -88,8 +80,8 @@ function DownloadClasses()
 end
 
 function LoadClasses()
-  for i, Class in ipairs(ClassLoadOrder) do
-    tryLoadAPI(Class, CoreClassFolderPath..ClassMap[Class])
+  for i, fileName in ipairs(ClassMap) do
+    tryLoadAPI(CoreClassFolderPath  .. fileName)
   end
 end
 
@@ -98,7 +90,7 @@ function DownloadUtil()
   fs.delete(CoreUtilFolderPath)
 
   -- Download the core classes to disk
-  for utilID, fileName in pairs(UtilMap) do
+  for i, fileName in ipairs(UtilMap) do
     fullURL = "https://raw.githubusercontent.com/stuntguy3000/ProjectNuke/master/v2.0/Core/Util/" .. fileName
 
     shell.run("wget "..fullURL.." "..CoreUtilFolderPath..fileName)
@@ -107,18 +99,21 @@ end
 
 -- Downloads and loads external util
 function LoadUtil()
-  for utilID, fileName in pairs(UtilMap) do
-    tryLoadAPI(utilID, CoreUtilFolderPath..fileName)
+  for i, fileName in ipairs(UtilMap) do
+    tryLoadAPI(CoreUtilFolderPath  ..  fileName)
   end
 end
 
 -- Attempt to load an API File into the OS
-function tryLoadAPI(friendlyName, filepath)
-  local loaded = os.loadAPI(filepath)
+function tryLoadAPI(filePath)
+  local loaded = os.loadAPI(filePath)
 
   if (loaded == false) then
-    error("API "..friendlyName.." could not be loaded!")
+    error("API ".. filePath .." could not be loaded!")
+  else
+    print("API " .. filePath .. " loaded.")
   end
+    
 end
 
 function RunApplication()
@@ -162,8 +157,8 @@ if (doDownload) then
   DownloadCoreHandlers()
 
   -- Hijack and load these services
-  tryLoadAPI(Handler, CoreHandlerFolderPath .. HandlersMap["ApplicationHandler"])
-  tryLoadAPI(Handler, CoreHandlerFolderPath .. HandlersMap["ServiceHandler"])
+  tryLoadAPI(CoreHandlerFolderPath .. HandlersMap[1]) -- Application Handler
+  tryLoadAPI(CoreHandlerFolderPath .. HandlersMap[2]) -- Service Handler
 
   ProjectNukeCoreApplicationHandler.downloadApplications()
   ProjectNukeCoreServiceHandler.downloadServices()
