@@ -12,31 +12,37 @@ Author: stuntguy3000
 --]]
 
 --- Window Objects for 
-MainWindow = window.create(term.current(), 1, 1, 51 ,21) -- The main window for drawing graphic elements
-MessageWindow = window.create(term.current(), 1, 1, 51, 21) -- A window designed to overlay popup messages
+MainWindow = nil -- The main window for drawing graphic elements
+MessageWindow = nil -- A window designed to overlay popup messages
 
-function tryAttachMonitor()
-   -- Use an attached monitor if present
-   local monitors = { peripheral.find("monitor") }
+function initGui(connectMonitor)
+   MainWindow = window.create(term.native(), 1, 1, 51, 21)
+   MessageWindow = window.create(term.native(), 1, 1, 51, 21)
 
-   if (monitors ~= nil and #monitors > 0) then
-      local monitor = monitors[1]
+   if (connectMonitor) then
+      -- Use an attached monitor if present
+      local monitors = { peripheral.find("monitor") }
 
-      -- Is it the right size?
-      monitorSize = {monitor.getSize()} -- Width/Height Respectively
+      if (monitors ~= nil and #monitors > 0) then
+         local monitor = monitors[1]
 
-      if (monitorSize[1] == 50 and monitorSize[2] == 19) then
-         -- Fill the computer terminal with a generic message.
-         FillWindow(colours.lightGrey, MessageWindow)
-         DrawCenteredText("See monitor for output.", 9, colours.grey, colours.lightGrey, MessageWindow)
-         MessageWindow.setCursorPos(1,1)
+         -- Is it the right size?
+         monitorSize = {monitor.getSize()} -- Width/Height Respectively
 
-         -- Recreate the windows using the monitor
-         MainWindow = window.create(monitor, 1, 1, 51, 21)
-         MessageWindow = window.create(monitor, 1, 1, 51, 21)
-         term.redirect(monitor)
-      else
-         DrawErrorMessages({[8] = "Attached monitors are not compatible.", [12] = "Only a monitor that is 5x3 in size can be used."}, 5)
+         if (monitorSize[1] == 50 and monitorSize[2] == 19) then
+            -- Fill the computer terminal with a generic message.
+            FillWindow(colours.lightGrey, MessageWindow)
+            DrawCenteredText("See monitor for output.", 9, colours.grey, colours.lightGrey, MessageWindow)
+            MessageWindow.setCursorPos(1,1)
+
+            -- Recreate the windows using the monitor
+            MainWindow = window.create(monitor, 1, 1, 50, 19)
+            MessageWindow = window.create(monitor, 1, 1, 50, 19)
+            term.redirect(monitor)
+            return
+         else
+            DrawErrorMessages({[8] = "Attached monitors are not compatible.", [12] = "Only a monitor that is 5x3 in size can be used."}, 5)
+         end
       end
    end
 end
@@ -51,7 +57,7 @@ function DrawBlackSquares(xStart, y)
 end
 
 function DrawBaseGUI(title, subHeading)
-   ClearGUI(nil)
+   clearGUI()
 
    -- nil santiy check
    title = title or ""
@@ -160,11 +166,10 @@ end
 -- Clickable Items
 local ClickableItems = {}
 
-function ClearGUI(window)
-   window = window or MainWindow
-
-   window.clear()
-   window.setCursorBlink(false)
+function clearGUI()
+   MainWindow.clear()
+   MainWindow.setCursorBlink(false)
+   MainWindow.setCursorPos(1,1)
 
    ClickableItems = {}
 end
@@ -283,7 +288,7 @@ end
 function StartEventListener()
    local event, p1, p2, p3 = os.pullEvent()
 
-   if (event == "mouse_click") then
+   if (event == "mouse_click" or event == "monitor_touch") then
       clickableItem = GetClickableItemAtPos(p2, p3)
 
       if (clickableItem ~= nil) then
@@ -395,4 +400,4 @@ function RebootButtonCommandHandler()
    shell.run("reboot")
 end
 
--- init()
+initGui(true)
