@@ -70,3 +70,5 @@ end
 function getServicesDatabase()
   return servicesDatabase
 end
+
+loadServices()

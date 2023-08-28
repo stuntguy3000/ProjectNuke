@@ -74,3 +74,5 @@ end
 function getApplicationsDatabase()
   return applicationsDatabase
 end
+
+loadApplications()
