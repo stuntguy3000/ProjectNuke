@@ -38,16 +38,20 @@ function downloadApplications()
   end
 end
 
-function loadApplications()
+function tryLoadApplications()
   for i, application in ipairs(applicationsDatabase) do
-    local loaded = os.loadAPI(applicationBasePath..application..".lua")
+    filePath = applicationBasePath .. application .. ".lua"
 
-    if (loaded == false) then
-      error("Application "..application.." could not be loaded!")
-      return
+    if (fs.exists(filePath)) then
+      local loaded = os.loadAPI(filePath)
+
+      if (loaded == false) then
+        error("Application " ..  application .. " could not be loaded!")
+        return
+      end
+
+      print("Application " .. application .. " loaded.")
     end
-
-    print("Application "..application.." loaded.")
   end
 end
 
@@ -75,4 +79,4 @@ function getApplicationsDatabase()
   return applicationsDatabase
 end
 
-loadApplications()
+tryLoadApplications()

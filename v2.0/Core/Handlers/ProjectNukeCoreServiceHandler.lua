@@ -11,7 +11,7 @@
 
 --]]
 
-local servicesFolderBasePath = "/ProjectNuke/Services/"
+local servicesBasePath = "/ProjectNuke/Services/"
 local servicesDatabase = { "ProjectNukeServiceEMRG" }
 local enabledService = nil
 
@@ -26,24 +26,28 @@ function downloadServices()
     
     local fileName = service..".lua"
     local fullURL = "https://raw.githubusercontent.com/stuntguy3000/ProjectNuke/master/v2.0/Services/"..fileName
-    local fullPath = servicesFolderBasePath..fileName
+    local fullPath = servicesBasePath..fileName
     
     shell.run("wget "..fullURL.." "..fullPath)
   end
 end
 
 -- Load all services into the OS
-function loadServices()
+function tryLoadServices()
   -- Process the Services Database for all Service Classes
   for i, service in ipairs(servicesDatabase) do
-    local loaded = os.loadAPI(servicesFolderBasePath..service..".lua")
+    filePath = servicesBasePath .. service .. ".lua"
 
-    if (loaded == false) then
-      error("Service "..service.." could not be loaded!")
-      return
+    if (fs.exists(filePath)) then
+      local loaded = os.loadAPI(filePath)
+
+      if (loaded == false) then
+        error("Service " ..  service .. " could not be loaded!")
+        return
+      end
+
+      print("Service " .. service .. " loaded.")
     end
-
-    print("Service "..service.." loaded.")
   end
 end
 
