@@ -16,7 +16,6 @@ LOADONLY = false
 
 function DownloadAndExecuteCore()
   print(" > Downloading core...")
-  sleep(5)
 
   if (NODOWNLOAD) then
     shell.run("/ProjectNuke/Core/ProjectNukeCore.lua NODOWNLOAD")
@@ -25,6 +24,7 @@ function DownloadAndExecuteCore()
     shell.run("wget https://raw.githubusercontent.com/stuntguy3000/ProjectNuke/master/v2.0/Core/ProjectNukeCore.lua /ProjectNuke/Core/ProjectNukeCore.lua")
     shell.run("/ProjectNuke/Core/ProjectNukeCore.lua LOADONLY")
   else
+    sleep(5)
     fs.delete("/ProjectNuke/Core/ProjectNukeCore.lua")
     shell.run("wget https://raw.githubusercontent.com/stuntguy3000/ProjectNuke/master/v2.0/Core/ProjectNukeCore.lua /ProjectNuke/Core/ProjectNukeCore.lua")
     shell.run("/ProjectNuke/Core/ProjectNukeCore.lua")
