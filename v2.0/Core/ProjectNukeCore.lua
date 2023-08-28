@@ -178,9 +178,6 @@ LoadUtil()
 -- Initalize Handlers
 LoadCoreHandlers()
 
---ProjectNukeCoreApplicationHandler.loadApplications()
---ProjectNukeCoreServiceHandler.loadServices()
-
 -- Launch!
 print(" >> Launching ProjectNuke <<")
 RunApplication()
