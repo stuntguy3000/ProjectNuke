@@ -75,4 +75,4 @@ function getServicesDatabase()
   return servicesDatabase
 end
 
-loadServices()
+tryLoadServices()
