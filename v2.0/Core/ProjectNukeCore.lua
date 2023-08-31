@@ -100,6 +100,7 @@ end
 -- Downloads and loads external util
 function LoadUtil()
   for i, fileName in ipairs(UtilMap) do
+    print("Loading " .. fileName)
     tryLoadAPI(CoreUtilFolderPath  ..  fileName)
   end
 end
@@ -118,9 +119,6 @@ end
 
 function RunApplication()
   if (doRun) then
-    term.clear()
-    term.setCursorPos(1,1)
-
     parallel.waitForAll(ProjectNukeCoreServiceHandler.tryRunServices, ProjectNukeCoreApplicationHandler.tryRunApplications)
 
     print("Execution completed. Rebooting")
@@ -167,7 +165,10 @@ end
 print(" >> Loading... <<")
 
 -- Load Classes
+print("Loading Classes...")
 LoadClasses()
+
+print("Loading Util...")
 LoadUtil()
 
 -- Initalize Handlers

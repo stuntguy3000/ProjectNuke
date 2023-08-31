@@ -11,6 +11,7 @@
 
 --]]
 function run()
+  ProjectNukeCoreGUIUtil.initGui(true)
   ProjectNukeCoreGUIUtil.DrawBaseGUI(getDisplayName(), nil)
 
   ProjectNukeCoreGUIUtil.StartEventListener()

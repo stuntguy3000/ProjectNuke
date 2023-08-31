@@ -15,14 +15,12 @@ Author: stuntguy3000
 MainWindow = nil -- The main window for drawing graphic elements
 MessageWindow = nil -- A window designed to overlay popup messages
 
+local monitors = { peripheral.find("monitor") }
+
 function initGui(connectMonitor)
-   MainWindow = window.create(term.native(), 1, 1, 51, 21)
-   MessageWindow = window.create(term.native(), 1, 1, 51, 21)
-
-   if (connectMonitor) then
+   if (connectMonitor == true) then
       -- Use an attached monitor if present
-      local monitors = { peripheral.find("monitor") }
-
+      
       if (monitors ~= nil and #monitors > 0) then
          local monitor = monitors[1]
 
@@ -44,6 +42,9 @@ function initGui(connectMonitor)
             DrawErrorMessages({[8] = "Attached monitors are not compatible.", [12] = "Only a monitor that is 5x3 in size can be used."}, 5)
          end
       end
+   else
+      MainWindow = window.create(term.current(), 1, 1, 51, 21)
+      MessageWindow = window.create(term.current(), 1, 1, 51, 21)
    end
 end
 
@@ -167,9 +168,27 @@ end
 local ClickableItems = {}
 
 function clearGUI()
-   MainWindow.clear()
-   MainWindow.setCursorBlink(false)
-   MainWindow.setCursorPos(1,1)
+   if (MainWindow ~= nil) then
+      MainWindow.clear()
+      MainWindow.setCursorBlink(false)
+      MainWindow.setCursorPos(1,1)
+   end
+
+   if (MessageWindow ~= nil) then
+      MessageWindow.clear()
+      MessageWindow.setCursorBlink(false)
+      MessageWindow.setCursorPos(1,1)
+   end
+
+   term.clear()
+   term.setCursorBlink(false)
+   term.setCursorPos(1,1)
+
+   if (monitors ~= nil and #monitors > 0) then
+      for i, monitor in ipairs(monitors) do
+         monitor.clear()
+      end
+   end
 
    ClickableItems = {}
 end
@@ -177,7 +196,7 @@ end
 function AddButton(buttonID, buttonValue, buttonText, buttonTextColour, buttonColour, xStart, yStart, width, height, actionFunction)
    -- Draw the button
    button = ProjectNukeCoreClasses.ClickableItem.new(buttonID, buttonValue, buttonText, buttonTextColour, buttonColour, xStart, yStart, width, height, actionFunction)
-   button:render()
+   button:render(MainWindow)
 
    -- Save the button to memory for future reference
    table.insert(ClickableItems, button)
@@ -245,7 +264,7 @@ end
 function AddTextbox(textboxID, xStart, yStart, width)
    -- Draw the textbox
    textbox = ProjectNukeCoreClasses.ClickableItem.new(textboxID, "", "", colours.white, colours.white, xStart, yStart, width, 1, TextboxClickHandler)
-   textbox:render()
+   textbox:render(MainWindow)
 
    table.insert(ClickableItems, textbox)
 
@@ -400,4 +419,4 @@ function RebootButtonCommandHandler()
    shell.run("reboot")
 end
 
-initGui(true)
+initGui(false)

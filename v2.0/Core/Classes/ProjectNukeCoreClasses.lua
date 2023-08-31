@@ -48,8 +48,7 @@ function ClickableItem.new(id, value, text, textColour, backgroundColour, xStart
   return self
 end
 
-function ClickableItem.render(self)
-  window = ProjectNukeCoreGUIUtil.MainWindow
+function ClickableItem.render(self, window)
   ProjectNukeCoreGUIUtil.DrawFilledBoxInWindow(self.backgroundColour, self.xStart, self.yStart, self.xStart + self.width, self.yStart + self.height, window)
 
   window.setBackgroundColor(self.backgroundColour)

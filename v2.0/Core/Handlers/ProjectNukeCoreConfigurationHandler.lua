@@ -53,7 +53,6 @@ end
 
 function DrawConfigurationMenu(pageNumber)
   -- Init GUI
-  ProjectNukeCoreGUIUtil.initGui(false)
   ProjectNukeCoreGUIUtil.clearGUI()
 
   window = ProjectNukeCoreGUIUtil.MainWindow

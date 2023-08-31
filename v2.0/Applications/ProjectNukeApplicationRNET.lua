@@ -13,6 +13,7 @@
 
 --]]
 function run()
+  ProjectNukeCoreGUIUtil.initGui(true)
   ProjectNukeCoreGUIUtil.DrawBaseGUI(getDisplayName(), nil)
 
   -- Draw GUI Elements

@@ -12,6 +12,7 @@
 --]]
 function run()
   -- Draw base GUI
+  ProjectNukeCoreGUIUtil.initGui(true)
   ProjectNukeCoreGUIUtil.DrawBaseGUI(getDisplayName(), "Use this interface to send emergency alerts.")
 
   ProjectNukeCoreGUIUtil.AddButton("btnALERT", "ALERT", "Send ALERT", colours.white, colours.red, 2, 11, 23, 6, SendAlert)
