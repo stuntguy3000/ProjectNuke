@@ -32,13 +32,18 @@ function run()
 end
 
 function printMessage(message)
+  -- Sanity Checks
+  if (message == nil) then
+    return
+  end
+
   -- Reset
   ProjectNukeCoreGUIUtil.DrawFilledBoxInWindow(colors.gray, 2, 8, windowSize[1] - 1, 17, window)
   window.setBackgroundColour(colors.gray)
   window.setTextColour(colors.white)
 
   -- Sanitize Message
-  message = string.gsub(message, "n", "")
+  message = string.gsub(message, "\n", "")
 
   -- Split into chunks & add to buffer
   messageSplit = ProjectNukeCoreStringUtil.split(message, windowSize[1] - 2, 17)
