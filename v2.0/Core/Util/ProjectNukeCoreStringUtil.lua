@@ -12,22 +12,31 @@
 --]]
 
 function split(input, maxLength)
-   local lines = {}
+  local lines = {}
    
-   -- Split every maxLength characters
-   while (string.len(input) >= maxLength) do
+  -- Split every maxLength characters
+  while (string.len(input) >= maxLength) do
       -- Split & Add
       splitString = string.sub(input, 1, maxLength)
       table.insert(lines, splitString)
 
       -- Substring Remainder
       input = string.sub(input, maxLength, string.len(input))
-   end
+  end
 
-   -- Add the remainder
-   if (input ~= nil and input ~= "") then
+  -- Add the remainder
+  if (input ~= nil and input ~= "") then
       table.insert(lines, input)
-   end
+  end
 
-   return lines
- end
+  return lines
+end
+
+-- Author: http://lua-users.org/wiki/StringTrim
+function trim(s)
+  if (s == nil) then
+    return nil
+  end
+
+  return s:match "^%s*(.-)%s*$"
+end

@@ -3,12 +3,7 @@
 ================================================================================
 
   ProjectNukeServiceEMRG
-    Provides a listener and action response to an emergency alarms and incidents.
-    
-    Three emergency states:
-      ALERT
-      CLEAR
-      NONE
+    Provides a listener and action response to an emergency messages.
 
 ================================================================================
 
@@ -17,8 +12,11 @@
 --]]
 
 local emergencyStatePacket = ProjectNukeCorePackets.EmergencyStatePacket
-
 local emergencyState = "NONE"
+
+function getDisplayName()
+  return "Emergency Alert Service"
+end
 
 function sendState(newEmergencyState)
   emergencyStatePacket:setData(newEmergencyState)
@@ -76,8 +74,4 @@ function run()
   end
 
   run()
-end
-
-function getDisplayName()
-  return "Emergency Alert Service"
 end

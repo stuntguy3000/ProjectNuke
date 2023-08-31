@@ -106,7 +106,7 @@ function DrawConfigurationMenu(pageNumber)
 
     -- Labels
     window.setCursorPos(2,11)
-    window.write("Shared Encryption Key:")
+    window.write("Shared Encryption Key (Alphanumeric Chars ):")
 	  window.setCursorPos(2,14)
     window.write("All applications in Project Nuke use REDNET to")
 	  window.setCursorPos(2,15)
@@ -297,17 +297,10 @@ function ConfigurationMenuContinue()
     -- ===== Encryption Key =====
     -- Store value from EncryptionKey textbox
     EncryptionKeyTextbox = ProjectNukeCoreGUIUtil.GetClickableItemByID("EncryptionKeyInput");
+    EncryptionKey = EncryptionKeyTextbox:getValue()
 
-	  if (EncryptionKeyTextbox == nil) then
-	    ProjectNukeCoreGUIUtil.DrawErrorMessages({[10] = "Error: Please enter a Encryption Key."}, 3)
-	    ProjectNukeCoreGUIUtil.StartEventListener()
-		  return nil
-	  end
-
-	  EncryptionKey = EncryptionKeyTextbox:getValue()
-
-	  if (EncryptionKey == nil or EncryptionKey == "") then
-	    ProjectNukeCoreGUIUtil.DrawErrorMessages({[10] = "Error: Please enter a Encryption Key."}, 3)
+	  if (EncryptionKey == nil or EncryptionKey == "" or EncryptionKey:match("%W")) then
+	    ProjectNukeCoreGUIUtil.DrawErrorMessages({[10] = "Error: Please enter a valid Encryption Key."}, 3)
 	    ProjectNukeCoreGUIUtil.StartEventListener()
 		  return nil
 	  end
