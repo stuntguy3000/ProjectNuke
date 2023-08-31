@@ -106,7 +106,7 @@ function DrawConfigurationMenu(pageNumber)
 
     -- Labels
     window.setCursorPos(2,11)
-    window.write("Shared Encryption Key (Alphanumeric Chars ):")
+    window.write("Shared Encryption Key (Alphanumeric Chars):")
 	  window.setCursorPos(2,14)
     window.write("All applications in Project Nuke use REDNET to")
 	  window.setCursorPos(2,15)
