@@ -12,21 +12,18 @@
   Author: stuntguy3000
 
 --]]
+local messageBuffer = {}
+
 function run()
   ProjectNukeCoreGUIUtil.initGui(true)
   ProjectNukeCoreGUIUtil.DrawBaseGUI(getDisplayName(), nil)
+  ProjectNukeCoreGUIUtil.DrawStatus("Listening for messages...")
 
   -- Draw GUI Elements
-  window = ProjectNukeCoreGUIUtil.MainWindow
+  window = ProjectNukeCoreGUIUtil.getMainWindow()
   windowSize = {window.getSize()}
 
-  ProjectNukeCoreGUIUtil.DrawFilledBoxInWindow(colors.gray, 2, 9, windowSize[1] - 1, 18, window)
-
-  -- Draw Labels
-  window.setCursorPos(2, 8)
-  window.setBackgroundColour(colors.lightGray)
-  window.setTextColour(colors.gray)
-  window.write("Last Recieved Message:")
+  ProjectNukeCoreGUIUtil.DrawFilledBoxInWindow(colors.gray, 2, 8, windowSize[1] - 1, 17, window)
 
   -- Await Message
   while true do
@@ -36,16 +33,31 @@ end
 
 function printMessage(message)
   -- Reset
-  ProjectNukeCoreGUIUtil.DrawFilledBoxInWindow(colors.gray, 2, 9, windowSize[1] - 1, 18, window)
+  ProjectNukeCoreGUIUtil.DrawFilledBoxInWindow(colors.gray, 2, 8, windowSize[1] - 1, 17, window)
   window.setBackgroundColour(colors.gray)
-  window.setTextColour(colors.black)
+  window.setTextColour(colors.white)
 
   -- Sanitize Message
   message = string.gsub(message, "n", "")
 
-  -- Print
-  window.setCursorPos(2, 3)
-  print(message)
+  -- Split into chunks & add to buffer
+  messageSplit = ProjectNukeCoreStringUtil.split(message, windowSize[1] - 2, 17)
+
+  table.insert(messageBuffer, textutils.formatTime(os.time(), false) .. " (World Time):")
+  for i, msg in ipairs(messageSplit) do
+    table.insert(messageBuffer, msg)
+  end
+
+  -- Trim Message Buffer to the last 10 lines
+  while (#messageBuffer > 10) do
+    table.remove(messageBuffer, 1)
+  end
+
+  -- Print Message Buffer
+  for i, msg in ipairs(messageBuffer) do
+    window.setCursorPos(2, 7 + i)
+    window.write(msg)
+  end
 end
 
 function awaitMessage()

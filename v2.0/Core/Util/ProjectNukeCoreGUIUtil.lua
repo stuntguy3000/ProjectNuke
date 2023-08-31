@@ -12,8 +12,8 @@ Author: stuntguy3000
 --]]
 
 --- Window Objects for 
-MainWindow = nil -- The main window for drawing graphic elements
-MessageWindow = nil -- A window designed to overlay popup messages
+local mainWindow = nil -- The main window for drawing graphic elements
+local messageWindow = nil -- A window designed to overlay popup messages
 
 local monitors = { peripheral.find("monitor") }
 
@@ -29,22 +29,21 @@ function initGui(connectMonitor)
 
          if (monitorSize[1] == 50 and monitorSize[2] == 19) then
             -- Fill the computer terminal with a generic message.
-            FillWindow(colours.lightGrey, MessageWindow)
-            DrawCenteredText("See monitor for output.", 9, colours.grey, colours.lightGrey, MessageWindow)
-            MessageWindow.setCursorPos(1,1)
+            FillWindow(colours.lightGrey, messageWindow)
+            DrawCenteredText("See monitor for output.", 9, colours.grey, colours.lightGrey, messageWindow)
+            messageWindow.setCursorPos(1,1)
 
             -- Recreate the windows using the monitor
-            MainWindow = window.create(monitor, 1, 1, 50, 19)
-            MessageWindow = window.create(monitor, 1, 1, 50, 19)
-            term.redirect(monitor)
+            mainWindow = window.create(monitor, 1, 1, 50, 19)
+            messageWindow = window.create(monitor, 1, 1, 50, 19)
             return
          else
             DrawErrorMessages({[8] = "Attached monitors are not compatible.", [12] = "Only a monitor that is 5x3 in size can be used."}, 5)
          end
       end
    else
-      MainWindow = window.create(term.current(), 1, 1, 51, 21)
-      MessageWindow = window.create(term.current(), 1, 1, 51, 21)
+      mainWindow = window.create(term.current(), 1, 1, 51, 21)
+      messageWindow = window.create(term.current(), 1, 1, 51, 21)
    end
 end
 
@@ -87,7 +86,7 @@ function DrawBaseGUI(title, subHeading)
 end
 
 function DrawCenteredText(text, yVal, textcolour, backgroundcolour, window)
-   window = window or MainWindow
+   window = window or mainWindow
 
    local length = string.len(text)
    local width = window.getSize()
@@ -102,7 +101,7 @@ function DrawCenteredText(text, yVal, textcolour, backgroundcolour, window)
 end
 
 function DrawStatus(message, window)
-   window = window or MainWindow
+   window = window or mainWindow
 
    DrawCenteredText("                                                   ", 19, colours.grey, colours.lightGrey, window)
    DrawCenteredText(message, 19, colours.grey, colours.lightGrey, window)
@@ -112,49 +111,49 @@ end
 -- Message is assumed to be a table
 --  Table: yValue messageText
 function DrawSuccessMessages(messageLines, timeout)
-   MessageWindow.clear()
+   messageWindow.clear()
 
-   FillWindow(colours.green, MessageWindow)
-   MessageWindow.setTextColour(colours.black)
+   FillWindow(colours.green, messageWindow)
+   messageWindow.setTextColour(colours.black)
 
    for yValue, message in pairs(messageLines) do
-      DrawCenteredText(message, yValue, colours.white, colours.green, MessageWindow)
+      DrawCenteredText(message, yValue, colours.white, colours.green, messageWindow)
    end
 
-   MessageWindow.redraw()
+   messageWindow.redraw()
    sleep(timeout)
-   MainWindow.redraw(true)
+   mainWindow.redraw(true)
 end
 
 -- Used to draw error messages
 -- Message is assumed to be a table
 --  Table: yValue messageText
 function DrawErrorMessages(messageLines, timeout)
-   MessageWindow.clear()
+   messageWindow.clear()
 
-   FillWindow(colours.red, MessageWindow)
-   MessageWindow.setTextColour(colours.black)
+   FillWindow(colours.red, messageWindow)
+   messageWindow.setTextColour(colours.black)
 
    for yValue, message in pairs(messageLines) do
-      DrawCenteredText(message, yValue, colours.white, colours.red, MessageWindow)
+      DrawCenteredText(message, yValue, colours.white, colours.red, messageWindow)
    end
 
-   MessageWindow.redraw()
+   messageWindow.redraw()
    sleep(timeout)
-   MainWindow.redraw(true)
+   mainWindow.redraw(true)
 end
 
 function DrawCriticalError(messageLines)
-   MainWindow.clear()
-   FillWindow(colours.red, MainWindow)
+   mainWindow.clear()
+   FillWindow(colours.red, mainWindow)
 
    -- Inject Header
    messageLines[3] = "»»»»» CRITICAL SYSTEM ERROR «««««"
 
    -- Draw Text   
-   MainWindow.setTextColour(colours.black)
+   mainWindow.setTextColour(colours.black)
    for yValue, message in pairs(messageLines) do
-      DrawCenteredText(message, yValue, colours.white, colours.red, MainWindow)
+      DrawCenteredText(message, yValue, colours.white, colours.red, mainWindow)
    end
 
    -- Add Reboot Button
@@ -168,21 +167,21 @@ end
 local ClickableItems = {}
 
 function clearGUI()
-   if (MainWindow ~= nil) then
-      MainWindow.clear()
-      MainWindow.setCursorBlink(false)
-      MainWindow.setCursorPos(1,1)
+   if (mainWindow ~= nil) then
+      mainWindow.clear()
+      mainWindow.setCursorBlink(false)
+      mainWindow.setCursorPos(1,1)
    end
 
-   if (MessageWindow ~= nil) then
-      MessageWindow.clear()
-      MessageWindow.setCursorBlink(false)
-      MessageWindow.setCursorPos(1,1)
+   if (messageWindow ~= nil) then
+      messageWindow.clear()
+      messageWindow.setCursorBlink(false)
+      messageWindow.setCursorPos(1,1)
    end
 
-   term.clear()
-   term.setCursorBlink(false)
-   term.setCursorPos(1,1)
+   --term.clear()
+   --term.setCursorBlink(false)
+   --term.setCursorPos(1,1)
 
    if (monitors ~= nil and #monitors > 0) then
       for i, monitor in ipairs(monitors) do
@@ -196,7 +195,7 @@ end
 function AddButton(buttonID, buttonValue, buttonText, buttonTextColour, buttonColour, xStart, yStart, width, height, actionFunction)
    -- Draw the button
    button = ProjectNukeCoreClasses.ClickableItem.new(buttonID, buttonValue, buttonText, buttonTextColour, buttonColour, xStart, yStart, width, height, actionFunction)
-   button:render(MainWindow)
+   button:render(mainWindow)
 
    -- Save the button to memory for future reference
    table.insert(ClickableItems, button)
@@ -264,7 +263,7 @@ end
 function AddTextbox(textboxID, xStart, yStart, width)
    -- Draw the textbox
    textbox = ProjectNukeCoreClasses.ClickableItem.new(textboxID, "", "", colours.white, colours.white, xStart, yStart, width, 1, TextboxClickHandler)
-   textbox:render(MainWindow)
+   textbox:render(mainWindow)
 
    table.insert(ClickableItems, textbox)
 
@@ -272,7 +271,7 @@ function AddTextbox(textboxID, xStart, yStart, width)
 end
 
 function UpdateTextbox(clickableItem, window)
-   window = window or MainWindow
+   window = window or mainWindow
 
    -- Determine where the cursor goes
    x,y = clickableItem:getPosition()
@@ -319,7 +318,7 @@ function StartEventListener()
          end
       end
    elseif (event == "key" or event == "char") then
-      cursorX,cursorY = MainWindow.getCursorPos()
+      cursorX,cursorY = mainWindow.getCursorPos()
       TextboxAtLocation = GetClickableItemAtPos(cursorX,cursorY)
       pressedKey = p1
 
@@ -351,10 +350,10 @@ function StartEventListener()
 
                      -- Blank over previous character or current one if last character
                      if (cursorX == (textboxX+width)) then
-                        DrawFilledBoxInWindow(colours.white, cursorX, cursorY, cursorX, cursorY, MainWindow)
+                        DrawFilledBoxInWindow(colours.white, cursorX, cursorY, cursorX, cursorY, mainWindow)
                      end
 
-                     DrawFilledBoxInWindow(colours.white, cursorX-1, cursorY, cursorX-1, cursorY, MainWindow)
+                     DrawFilledBoxInWindow(colours.white, cursorX-1, cursorY, cursorX-1, cursorY, mainWindow)
 
                      UpdateTextbox(TextboxAtLocation)
                   end
@@ -395,7 +394,7 @@ function table.indexOf(t, object)
 end
 
 function FillWindow(colour, window)
-   window = window or MainWindow
+   window = window or mainWindow
    window.clear()
 
    x,y = window.getPosition()
@@ -405,7 +404,7 @@ function FillWindow(colour, window)
 end
 
 function DrawFilledBoxInWindow(colour, x1, y1, x2, y2, window)
-   window = window or MainWindow
+   window = window or mainWindow
    window.setBackgroundColour(colour)
    for xLoop = x1, x2 do
       for yLoop = y1, y2 do
@@ -417,6 +416,10 @@ end
 
 function RebootButtonCommandHandler()
    shell.run("reboot")
+end
+
+function getMainWindow()
+   return mainWindow
 end
 
 initGui(false)

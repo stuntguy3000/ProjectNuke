@@ -35,6 +35,7 @@ local HandlersMap = {
 local UtilMap = {
   "ProjectNukeCoreFileUtil.lua",
   "ProjectNukeCoreEncryptionUtil.lua",
+  "ProjectNukeCoreStringUtil.lua",
   "ProjectNukeCoreGUIUtil.lua",
 }
 
