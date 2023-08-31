@@ -258,7 +258,7 @@ function ConfigurationMenuContinue()
     if (#EnabledApplications > 1) then
       -- Throw an error message on the screen, then throw back to the selection menu
       -- If the GUI Handler is working, this should never actually happen... famous last words
-      ProjectNukeCoreGUIUtil.DrawErrorMessages({[10] = "Error: Please only select one application."}, 3)
+      ProjectNukeCoreGUIUtil.drawPopupMessage({"Error: Please only select one application."}, colours.red, 3)
 	    ProjectNukeCoreGUIUtil.StartEventListener()
       return nil
     elseif (#EnabledApplications == 1) then
@@ -283,7 +283,7 @@ function ConfigurationMenuContinue()
     if (#EnabledServices > 1) then
       -- Throw an error message on the screen, then throw back to the selection menu
       -- If the GUI Handler is working, this should never actually happen... famous last words
-      ProjectNukeCoreGUIUtil.DrawErrorMessages({[10] = "Error: Please only select one service."}, 3)
+      ProjectNukeCoreGUIUtil.drawPopupMessage({"Error: Please only select one service."}, colours.red, 3)
 	    ProjectNukeCoreGUIUtil.StartEventListener()
       return nil
     elseif (#EnabledServices == 1) then
@@ -300,7 +300,7 @@ function ConfigurationMenuContinue()
     EncryptionKey = EncryptionKeyTextbox:getValue()
 
 	  if (EncryptionKey == nil or EncryptionKey == "" or EncryptionKey:match("%W")) then
-	    ProjectNukeCoreGUIUtil.DrawErrorMessages({[10] = "Error: Please enter a valid Encryption Key."}, 3)
+	    ProjectNukeCoreGUIUtil.drawPopupMessage({"Error: Please enter a valid Encryption Key."}, colours.red, 3)
 	    ProjectNukeCoreGUIUtil.StartEventListener()
 		  return nil
 	  end

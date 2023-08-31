@@ -98,7 +98,7 @@ function sendCustomMessage()
   customMessage = ProjectNukeCoreStringUtil.trim(customMessageTextbox:getValue())
 
   if (customMessage == nil or customMessage == "") then
-    ProjectNukeCoreGUIUtil.DrawErrorMessages({[10] = "Error: Please enter a valid message."}, 3)
+    ProjectNukeCoreGUIUtil.drawPopupMessage({"Error: Please enter a valid message."}, colors.red, 3)
     run()
     return
   end

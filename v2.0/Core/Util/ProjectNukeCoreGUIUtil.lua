@@ -30,7 +30,7 @@ function initGui(connectMonitor)
          if (monitorSize[1] == 50 and monitorSize[2] == 19) then
             -- Fill the computer terminal with a generic message.
             FillWindow(colours.lightGrey, messageWindow)
-            DrawCenteredText("See monitor for output.", 9, colours.grey, colours.lightGrey, messageWindow)
+            DrawCenteredText("See monitor for output.", 10, colours.grey, colours.lightGrey, messageWindow)
             messageWindow.setCursorPos(1,1)
 
             -- Recreate the windows using the monitor
@@ -38,7 +38,7 @@ function initGui(connectMonitor)
             messageWindow = window.create(monitor, 1, 1, 50, 19)
             return
          else
-            DrawErrorMessages({[8] = "Attached monitors are not compatible.", [12] = "Only a monitor that is 5x3 in size can be used."}, 5)
+            drawPopupMessage({"Attached monitors are not compatible.", "Only a monitor that is 5x3 in size can be used."}, colours.red, 5)
          end
       end
    else
@@ -107,17 +107,20 @@ function DrawStatus(message, window)
    DrawCenteredText(message, 19, colours.grey, colours.lightGrey, window)
 end
 
--- Used to draw success messages
--- Message is assumed to be a table
---  Table: yValue messageText
-function DrawSuccessMessages(messageLines, timeout)
+-- Used to draw a status message
+function drawPopupMessage(messageLines, backgroundColour, timeout)
    messageWindow.clear()
 
-   FillWindow(colours.green, messageWindow)
+   -- Setup GUI
+   FillWindow(backgroundColour, messageWindow)
    messageWindow.setTextColour(colours.black)
 
-   for yValue, message in pairs(messageLines) do
-      DrawCenteredText(message, yValue, colours.white, colours.green, messageWindow)
+   -- Find Middle Y Value
+   messageWindowWidth, messageWindowHeight = messageWindow.getSize()
+   yValue = math.ceil(messageWindowHeight / 2) - #messageLines
+
+   for i, message in ipairs(messageLines) do
+      DrawCenteredText(message, yValue + i, colours.white, backgroundColour, messageWindow)
    end
 
    messageWindow.redraw()
@@ -125,24 +128,7 @@ function DrawSuccessMessages(messageLines, timeout)
    mainWindow.redraw(true)
 end
 
--- Used to draw error messages
--- Message is assumed to be a table
---  Table: yValue messageText
-function DrawErrorMessages(messageLines, timeout)
-   messageWindow.clear()
-
-   FillWindow(colours.red, messageWindow)
-   messageWindow.setTextColour(colours.black)
-
-   for yValue, message in pairs(messageLines) do
-      DrawCenteredText(message, yValue, colours.white, colours.red, messageWindow)
-   end
-
-   messageWindow.redraw()
-   sleep(timeout)
-   mainWindow.redraw(true)
-end
-
+-- Todo, refactor into drawPopupMessage
 function DrawCriticalError(messageLines)
    mainWindow.clear()
    FillWindow(colours.red, mainWindow)
