@@ -2,8 +2,8 @@
 
 ================================================================================
 
-  ProjectNukeFileUtil
-    Provides common file utilities & table encoding/decoding
+  ProjectNukeTableUtil
+    Provides common table manipulation utilities
 
 ================================================================================
 
