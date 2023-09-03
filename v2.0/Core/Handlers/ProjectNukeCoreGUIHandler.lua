@@ -26,7 +26,7 @@ local clickableItems = {}
 ]]--
 
 -- Used to initalise the Window objects, optionally connecting to a monitor if one is attached.
-function initGui(tryConnectMonitor)
+function initGUI(tryConnectMonitor)
    if (tryConnectMonitor and ProjectNukeCoreConfigurationHandler.getConfig().monitorSupport) then
       -- Use an attached monitor if present
       
@@ -445,4 +445,4 @@ function GetClickableItemAtPos(x, y)
 end
 
 -- Init GUI without monitors when the GUIHandler is loaded.
-initGui(false)
+initGUI(false)
