@@ -157,8 +157,8 @@ if (doDownload) then
   DownloadCoreHandlers()
 
   -- Hijack and load these services
-  tryLoadAPI(CoreHandlerFolderPath .. HandlersMap[1]) -- Application Handler
-  tryLoadAPI(CoreHandlerFolderPath .. HandlersMap[2]) -- Service Handler
+  tryLoadAPI(CoreHandlerFolderPath .. HandlersMap[2]) -- Application Handler
+  tryLoadAPI(CoreHandlerFolderPath .. HandlersMap[3]) -- Service Handler
 
   ProjectNukeCoreApplicationHandler.downloadApplications()
   ProjectNukeCoreServiceHandler.downloadServices()
