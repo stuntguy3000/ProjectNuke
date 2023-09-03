@@ -20,7 +20,11 @@ local ApplicationSelectionPageNumberMaximum = math.ceil(#ProjectNukeCoreApplicat
 local ServiceSelectionPageNumber = 1
 local ServiceSelectionPageNumberMaximum = math.ceil(#ProjectNukeCoreServiceHandler:getServicesDatabase() / 5)
 
-LoadedConfiguration = nil
+local config = nil
+
+function getConfig()
+  return config
+end
 
 -- Returns true if a valid configuration was found, false if one was created.
 function LoadConfiguration()
@@ -28,18 +32,18 @@ function LoadConfiguration()
     configTable = ProjectNukeCoreFileUtil.LoadTable(ConfigurationPath)
 
     if (configTable ~= nil) then
-      LoadedConfiguration = ProjectNukeCoreClasses.Config.new(configTable['encryptionKey'], configTable['enabledApplication'], configTable['enabledService'])
+      config = ProjectNukeCoreClasses.Config.new(configTable['encryptionKey'], configTable['enabledApplication'], configTable['enabledService'])
     end
   end
 
-  if (LoadedConfiguration ~= nil and
-    (LoadedConfiguration.encryptionKey ~= null and
-    LoadedConfiguration.enabledApplication ~= null and
-    LoadedConfiguration.encryptionKey ~= "")) then
+  if (config ~= nil and
+    (config.encryptionKey ~= null and
+    config.enabledApplication ~= null and
+    config.encryptionKey ~= "")) then
     return true;
   end
 
-  LoadedConfiguration = ProjectNukeCoreClasses.Config.new("", {})
+  config = ProjectNukeCoreClasses.Config.new("", {})
   SaveConfiguration()
 
   return false
@@ -48,13 +52,12 @@ end
 function SaveConfiguration()
   fs.delete(ConfigurationPath)
 
-  ProjectNukeCoreFileUtil.SaveTable(LoadedConfiguration, ConfigurationPath)
+  ProjectNukeCoreFileUtil.SaveTable(config, ConfigurationPath)
 end
 
-function DrawConfigurationMenu(pageNumber)
+function drawConfigurationMenu(pageNumber)
   -- Init GUI
   ProjectNukeCoreGUIUtil.clearGUI()
-
   window = ProjectNukeCoreGUIUtil.getMainWindow()
 
   if (pageNumber == 1) then
@@ -122,6 +125,8 @@ function DrawConfigurationMenu(pageNumber)
   elseif (pageNumber == 4) then
     ConfigurationPageNumber = 4
 
+    SaveConfiguration()
+
     -- Create GUI
     ProjectNukeCoreGUIUtil.DrawBaseGUI("Project Nuke Configuration (Step 4/4)", "Welcome to Project Nuke!")
 	  ProjectNukeCoreGUIUtil.DrawStatus("Installation completed.")
@@ -139,6 +144,7 @@ function DrawConfigurationMenu(pageNumber)
     window.write("safe, clean and efficient nuclear power!")
 
 	  window.setCursorPos(2,17)
+    window.setTextColor(colours.black)
     window.write("To begin, click Finish.")
 
     -- Buttons
@@ -205,7 +211,7 @@ function ApplicationPageForward()
     ApplicationSelectionPageNumber = ApplicationSelectionPageNumber + 1
   end
 
-  DrawConfigurationMenu(ConfigurationPageNumber)
+  drawConfigurationMenu(ConfigurationPageNumber)
 end
 
 -- Advance the Application Page backwards
@@ -213,7 +219,7 @@ function ApplicationPageBack()
   if (ApplicationSelectionPageNumber > 1) then
     ApplicationSelectionPageNumber = ApplicationSelectionPageNumber - 1
 
-    DrawConfigurationMenu(ConfigurationPageNumber)
+    drawConfigurationMenu(ConfigurationPageNumber)
     return
   end
 
@@ -226,7 +232,7 @@ function ServicePageForward()
     ServiceSelectionPageNumber = ServiceSelectionPageNumber + 1
   end
 
-  DrawConfigurationMenu(ConfigurationPageNumber)
+  drawConfigurationMenu(ConfigurationPageNumber)
 end
 
 -- Advance the Services Page backwards
@@ -234,7 +240,7 @@ function ServicePageBack()
   if (ServiceSelectionPageNumber > 1) then
     ServiceSelectionPageNumber = ServiceSelectionPageNumber - 1
 
-    DrawConfigurationMenu(ConfigurationPageNumber)
+    drawConfigurationMenu(ConfigurationPageNumber)
     return
   end
 
@@ -263,11 +269,10 @@ function ConfigurationMenuContinue()
       return nil
     elseif (#EnabledApplications == 1) then
       -- Save and continue
-      LoadedConfiguration.enabledApplication = EnabledApplications[1]
-      SaveConfiguration()
+      config.enabledApplication = EnabledApplications[1]
     end
 
-    DrawConfigurationMenu(2)
+    drawConfigurationMenu(2)
   elseif (ConfigurationPageNumber == 2) then
     -- ===== Service Selection Page =====
     -- Inventory the selected buttons
@@ -288,11 +293,13 @@ function ConfigurationMenuContinue()
       return nil
     elseif (#EnabledServices == 1) then
       -- Save and continue
-      LoadedConfiguration.enabledService = EnabledServices[1]
-      SaveConfiguration()
+      config.enabledService = EnabledServices[1]
+    elseif (#EnabledServices == 0) then
+      -- Save and continue
+      config.enabledService = nil
     end
 
-    DrawConfigurationMenu(3)
+    drawConfigurationMenu(3)
   elseif (ConfigurationPageNumber == 3) then
     -- ===== Encryption Key =====
     -- Store value from EncryptionKey textbox
@@ -305,16 +312,9 @@ function ConfigurationMenuContinue()
 		  return nil
 	  end
 
-    LoadedConfiguration.encryptionKey = EncryptionKey
-    SaveConfiguration()
-
-    DrawConfigurationMenu(4)
+    config.encryptionKey = EncryptionKey
+    drawConfigurationMenu(4)
+  elseif (ConfigurationPageNumber == 4) then
+    os.reboot()
   end
-end
-
--- Attempt to load the configuration, but if one is not detected, run the installer GUI
-if (LoadConfiguration() == false) then
-  print("New configuration detected, launching installer.")
-
-  DrawConfigurationMenu(1)
 end

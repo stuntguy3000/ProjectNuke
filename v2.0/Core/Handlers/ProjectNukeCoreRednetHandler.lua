@@ -42,7 +42,7 @@ function WaitForPacket(PacketID)
   senderId, message, protocol = rednet.receive(REDNET_PROTOCOL_ID)
 
   -- Attempt to decrypt the message
-  decryptedMessage = ProjectNukeCoreEncryptionUtil.decrypt(ProjectNukeCoreConfigurationHandler.LoadedConfiguration.encryptionKey, message)
+  decryptedMessage = ProjectNukeCoreEncryptionUtil.decrypt(ProjectNukeCoreConfigurationHandler.getConfig().encryptionKey, message)
 
   if (decryptedMessage == nil) then
     return nil
@@ -78,7 +78,7 @@ function BroadcastPacket(Packet)
   end
 
   -- Encrypt the packet
-  encryptedPacket = ProjectNukeCoreEncryptionUtil.encrypt(ProjectNukeCoreConfigurationHandler.LoadedConfiguration.encryptionKey, encodedPacket)
+  encryptedPacket = ProjectNukeCoreEncryptionUtil.encrypt(ProjectNukeCoreConfigurationHandler.getConfig().encryptionKey, encodedPacket)
 
   -- Broadcast!
   return rednet.broadcast(encryptedPacket, REDNET_PROTOCOL_ID)

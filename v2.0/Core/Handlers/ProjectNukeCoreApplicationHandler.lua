@@ -61,7 +61,7 @@ function tryRunApplications()
   -- Identify the applications to enable
   for i, application in ipairs(applicationsDatabase) do
     -- Enable the application if specified in the configuration
-    local configEnabledApplication = ProjectNukeCoreConfigurationHandler.LoadedConfiguration.enabledApplication
+    local configEnabledApplication = ProjectNukeCoreConfigurationHandler.getConfig().enabledApplication
 
     if (configEnabledApplication ~= nil and configEnabledApplication == application) then
       -- Store as our enabled application

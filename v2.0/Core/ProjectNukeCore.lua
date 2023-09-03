@@ -28,6 +28,7 @@ local HandlersMap = {
   "ProjectNukeCoreApplicationHandler.lua",
   "ProjectNukeCoreServiceHandler.lua",
   "ProjectNukeCoreConfigurationHandler.lua",
+  "ProjectNukeCoreBootHandler.lua",
   "ProjectNukeCoreRednetHandler.lua",
 }
 

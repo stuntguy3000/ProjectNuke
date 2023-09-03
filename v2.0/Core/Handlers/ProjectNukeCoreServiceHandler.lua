@@ -57,7 +57,7 @@ function tryRunServices()
   -- Identify the services to enable
   for i, service in ipairs(servicesDatabase) do
     -- Enable the service if specified in the configuration
-    local configEnabledService = ProjectNukeCoreConfigurationHandler.LoadedConfiguration.enabledService
+    local configEnabledService = ProjectNukeCoreConfigurationHandler.getConfig().enabledService
 
     if (configEnabledService ~= nil and configEnabledService == service) then
       -- Store as our enabled service

@@ -70,7 +70,7 @@ function awaitMessage()
   senderId, message, protocol = rednet.receive(ProjectNukeCoreRednetHandler.REDNET_PROTOCOL_ID) 
 
   -- Attempt to decrypt the message
-  decryptedMessage = ProjectNukeCoreEncryptionUtil.decrypt(ProjectNukeCoreConfigurationHandler.LoadedConfiguration.encryptionKey, message)
+  decryptedMessage = ProjectNukeCoreEncryptionUtil.decrypt(ProjectNukeCoreConfigurationHandler.getConfig().encryptionKey, message)
 
   if (decryptedMessage ~= nil) then
     return decryptedMessage
