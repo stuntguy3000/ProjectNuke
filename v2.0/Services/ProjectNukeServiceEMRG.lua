@@ -11,13 +11,13 @@
 
 --]]
 
-local emergencyStatePacket = ProjectNukeCorePackets.EmergencyStatePacket
-
 function getDisplayName()
   return "Emergency Alert Service"
 end
 
 function sendState(newEmergencyState)
+  local emergencyStatePacket = ProjectNukeCorePackets.EmergencyStatePacket
+
   emergencyStatePacket:setData(newEmergencyState)
   ProjectNukeCoreRednetHandler.BroadcastPacket(emergencyStatePacket)
 end
@@ -28,6 +28,8 @@ end
 
 -- Standard Functions
 function run()
+  local emergencyStatePacket = ProjectNukeCorePackets.EmergencyStatePacket
+
   -- Await Incoming Emergency Packet
   packetData = ProjectNukeCoreRednetHandler.WaitForPacket(emergencyStatePacket:getId())
 
