@@ -130,7 +130,7 @@ end
 
 -- Todo, refactor into drawPopupMessage
 function DrawCriticalError(messageLines)
-   mainWindow.clear()
+   clearGUI()
    FillWindow(colours.red, mainWindow)
 
    -- Inject Header
@@ -401,7 +401,7 @@ function DrawFilledBoxInWindow(colour, x1, y1, x2, y2, window)
 end
 
 function RebootButtonCommandHandler()
-   shell.run("reboot")
+   os.reboot()
 end
 
 function getMainWindow()
