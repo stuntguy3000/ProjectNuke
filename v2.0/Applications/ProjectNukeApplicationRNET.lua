@@ -17,13 +17,13 @@ local messageBuffer = {}
 function run()
   ProjectNukeCoreGUIHandler.initGui(true)
   ProjectNukeCoreGUIHandler.DrawBaseGUI(getDisplayName(), nil)
-  ProjectNukeCoreGUIHandler.DrawStatus("Listening for messages...")
+  ProjectNukeCoreGUIHandler.WriteStatus("Listening for messages...")
 
   -- Draw GUI Elements
   window = ProjectNukeCoreGUIHandler.getMainWindow()
   windowSize = {window.getSize()}
 
-  ProjectNukeCoreGUIHandler.DrawFilledBoxInWindow(colors.gray, 2, 8, windowSize[1] - 1, 17, window)
+  ProjectNukeCoreGUIHandler.DrawBox(colors.gray, 2, 8, windowSize[1] - 1, 17, window)
 
   -- Await Message
   while true do
@@ -38,7 +38,7 @@ function printMessage(message)
   end
 
   -- Reset
-  ProjectNukeCoreGUIHandler.DrawFilledBoxInWindow(colors.gray, 2, 8, windowSize[1] - 1, 17, window)
+  ProjectNukeCoreGUIHandler.DrawBox(colors.gray, 2, 8, windowSize[1] - 1, 17, window)
   window.setBackgroundColour(colors.gray)
   window.setTextColour(colors.white)
 
@@ -46,7 +46,7 @@ function printMessage(message)
   message = string.gsub(message, "\n", "")
 
   -- Split into chunks & add to buffer
-  messageSplit = ProjectNukeCoreStringUtil.split(message, windowSize[1] - 2, 17)
+  messageSplit = string.split(message, windowSize[1] - 2, 17)
 
   table.insert(messageBuffer, textutils.formatTime(os.time(), false) .. " (World Time):")
   for i, msg in ipairs(messageSplit) do
@@ -70,7 +70,7 @@ function awaitMessage()
   senderId, message, protocol = rednet.receive(ProjectNukeCoreRednetHandler.REDNET_PROTOCOL_ID) 
 
   -- Attempt to decrypt the message
-  decryptedMessage = ProjectNukeCoreEncryptionUtil.decrypt(ProjectNukeCoreConfigurationHandler.getConfig().encryptionKey, message)
+  decryptedMessage = ProjectNukeEncryptionUtil.decrypt(ProjectNukeCoreConfigurationHandler.getConfig().encryptionKey, message)
 
   if (decryptedMessage ~= nil) then
     return decryptedMessage

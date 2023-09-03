@@ -26,12 +26,13 @@ function run()
   window.setBackgroundColor(colours.lightGrey)
   window.write("Status Alerts:")
 
-  ProjectNukeCoreGUIHandler.AddButton("btnALERT", "ALRT", "Send ALRT", colours.white, colours.orange, 3, 12, 11, 3, sendAlert)
-  ProjectNukeCoreGUIHandler.AddButton("btnEVAC", "EVAC", "Send EVAC", colours.white, colours.red, 15, 12, 11, 3, sendEvac)
-  ProjectNukeCoreGUIHandler.AddButton("btnOKAY", "OKAY", "Send OKAY", colours.white, colours.green, 27, 12, 11, 3, sendOkay)
-  ProjectNukeCoreGUIHandler.AddButton("btnTEST", "TEST", "Send TEST", colours.white, colours.blue, 39, 12, 11, 3, sendTest)
+  ProjectNukeCoreGUIHandler.AddButton("btnALERT", "ALRT", "Send ALRT", colours.white, colours.orange, 3, 12, 11, 3, sendAlert, window)
 
-  ProjectNukeCoreGUIHandler.AddButton("btnSENDCUSTOM", nil, "Send", colours.white, colours.purple, 44, 17, 6, 1, sendCustomMessage)
+  ProjectNukeCoreGUIHandler.AddButton("btnEVAC", "EVAC", "Send EVAC", colours.white, colours.red, 15, 12, 11, 3, sendEvac, window)
+  ProjectNukeCoreGUIHandler.AddButton("btnOKAY", "OKAY", "Send OKAY", colours.white, colours.green, 27, 12, 11, 3, sendOkay, window)
+  ProjectNukeCoreGUIHandler.AddButton("btnTEST", "TEST", "Send TEST", colours.white, colours.blue, 39, 12, 11, 3, sendTest, window)
+
+  ProjectNukeCoreGUIHandler.AddButton("btnSENDCUSTOM", nil, "Send", colours.white, colours.purple, 44, 17, 6, 1, sendCustomMessage, window)
   
   -- Message
   window.setCursorPos(3, 16)
@@ -39,10 +40,10 @@ function run()
   window.setBackgroundColor(colours.lightGrey)
 
   window.write("Custom Message:")
-  ProjectNukeCoreGUIHandler.UpdateTextbox(ProjectNukeCoreGUIHandler.AddTextbox("EmergencyMessageInput", 3, 17, 40))
+  ProjectNukeCoreGUIHandler.FocusTextbox(ProjectNukeCoreGUIHandler.AddTextbox("EmergencyMessageInput", 3, 17, 40, window))
 
   -- Status
-  ProjectNukeCoreGUIHandler.DrawStatus("Ready to send an alert.")
+  ProjectNukeCoreGUIHandler.WriteStatus("Ready to send an alert.")
 
   -- Reset Cursor
   window.setCursorBlink(true)
@@ -54,11 +55,11 @@ end
 function sleepGUI()
   window.setCursorBlink(false)
 
-  ProjectNukeCoreGUIHandler.AddButton("btnALERT", "ALRT", "Send ALRT", colours.white, colours.grey, 3, 12, 11, 3, nil)
-  ProjectNukeCoreGUIHandler.AddButton("btnEVAC", "EVAC", "Send EVAC", colours.white, colours.grey, 15, 12, 11, 3, nil)
-  ProjectNukeCoreGUIHandler.AddButton("btnOKAY", "OKAY", "Send OKAY", colours.white, colours.grey, 27, 12, 11, 3, nil)
-  ProjectNukeCoreGUIHandler.AddButton("btnTEST", "TEST", "Send TEST", colours.white, colours.grey, 39, 12, 11, 3, nil)
-  ProjectNukeCoreGUIHandler.AddButton("btnSENDCUSTOM", nil, "Send", colours.white, colours.grey, 44, 17, 6, 1, nil)
+  ProjectNukeCoreGUIHandler.AddButton("btnALERT", "ALRT", "Send ALRT", colours.white, colours.grey, 3, 12, 11, 3, nil, window)
+  ProjectNukeCoreGUIHandler.AddButton("btnEVAC", "EVAC", "Send EVAC", colours.white, colours.grey, 15, 12, 11, 3, nil, window)
+  ProjectNukeCoreGUIHandler.AddButton("btnOKAY", "OKAY", "Send OKAY", colours.white, colours.grey, 27, 12, 11, 3, nil, window)
+  ProjectNukeCoreGUIHandler.AddButton("btnTEST", "TEST", "Send TEST", colours.white, colours.grey, 39, 12, 11, 3, nil, window)
+  ProjectNukeCoreGUIHandler.AddButton("btnSENDCUSTOM", nil, "Send", colours.white, colours.grey, 44, 17, 6, 1, nil, window)
 
   sleep(2)
 
@@ -67,44 +68,44 @@ end
 
 function sendAlert()
   ProjectNukeServiceEMRG.sendState("STATUS_ALRT")
-  ProjectNukeCoreGUIHandler.DrawStatus("ALRT message sent.")
+  ProjectNukeCoreGUIHandler.WriteStatus("ALRT message sent.")
 
   sleepGUI()
 end
 
 function sendEvac()
   ProjectNukeServiceEMRG.sendState("STATUS_EVAC")
-  ProjectNukeCoreGUIHandler.DrawStatus("EVAC message sent.")
+  ProjectNukeCoreGUIHandler.WriteStatus("EVAC message sent.")
 
   sleepGUI()
 end
 
 function sendOkay()
   ProjectNukeServiceEMRG.sendState("STATUS_OKAY")
-  ProjectNukeCoreGUIHandler.DrawStatus("OKAY message sent.")
+  ProjectNukeCoreGUIHandler.WriteStatus("OKAY message sent.")
 
   sleepGUI()
 end
 
 function sendTest()
   ProjectNukeServiceEMRG.sendState("STATUS_TEST")
-  ProjectNukeCoreGUIHandler.DrawStatus("TEST message sent.")
+  ProjectNukeCoreGUIHandler.WriteStatus("TEST message sent.")
 
   sleepGUI()
 end
 
 function sendCustomMessage()
   customMessageTextbox = ProjectNukeCoreGUIHandler.GetClickableItemByID("EmergencyMessageInput");
-  customMessage = ProjectNukeCoreStringUtil.trim(customMessageTextbox:getValue())
+  customMessage = string.trim(customMessageTextbox:getValue())
 
   if (customMessage == nil or customMessage == "") then
-    ProjectNukeCoreGUIHandler.drawPopupMessage({"Error: Please enter a valid message."}, colors.red, 3)
+    ProjectNukeCoreGUIHandler.DrawPopupMessage({"Error: Please enter a valid message."}, colors.red, 3)
     run()
     return
   end
 
   ProjectNukeServiceEMRG.sendState("MSG_" .. customMessage)
-  ProjectNukeCoreGUIHandler.DrawStatus("Custom message sent.")
+  ProjectNukeCoreGUIHandler.WriteStatus("Custom message sent.")
 
   sleepGUI()
 end

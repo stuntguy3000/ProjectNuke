@@ -2,7 +2,7 @@
 
 ================================================================================
 
-  ProjectNukeCoreStringUtil
+  ProjectNukeStringUtil
     Provides common String manipulation utilities
 
 ================================================================================
@@ -11,7 +11,7 @@
 
 --]]
 
-function split(input, maxLength)
+function string.split(input, maxLength)
   local lines = {}
    
   -- Split every maxLength characters
@@ -33,7 +33,7 @@ function split(input, maxLength)
 end
 
 -- Author: http://lua-users.org/wiki/StringTrim
-function trim(s)
+function string.trim(s)
   if (s == nil) then
     return nil
   end

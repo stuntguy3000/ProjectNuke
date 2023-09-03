@@ -29,7 +29,7 @@ end
 -- Returns true if a valid configuration was found, false if one was created.
 function LoadConfiguration()
   if (fs.exists(ConfigurationPath) == true) then
-    configTable = ProjectNukeCoreFileUtil.LoadTable(ConfigurationPath)
+    configTable = ProjectNukeFileUtil.LoadTable(ConfigurationPath)
 
     if (configTable ~= nil) then
       config = ProjectNukeCoreClasses.Config.new(configTable['encryptionKey'], configTable['enabledApplication'], configTable['enabledService'], configTable['monitorSupport'])
@@ -52,7 +52,7 @@ end
 function SaveConfiguration()
   fs.delete(ConfigurationPath)
 
-  ProjectNukeCoreFileUtil.SaveTable(config, ConfigurationPath)
+  ProjectNukeFileUtil.SaveTable(config, ConfigurationPath)
 end
 
 function drawConfigurationMenu(pageNumber)
@@ -66,41 +66,41 @@ function drawConfigurationMenu(pageNumber)
 
   if (pageNumber == 1) then
     -- Create GUI
-    ProjectNukeCoreGUIHandler.DrawStatus("Please select an application to install.")
+    ProjectNukeCoreGUIHandler.WriteStatus("Please select an application to install.", window)
 
     -- Draw Application Buttons
     DrawApplicationSelectionPage(ApplicationSelectionPageNumber)
 
     -- Draw Buttons
-    ProjectNukeCoreGUIHandler.AddButton("Continue", nil, "Continue", colours.white, colours.blue, 41, 17, 10, 1, ConfigurationMenuContinue)
+    ProjectNukeCoreGUIHandler.AddButton("Continue", nil, "Continue", colours.white, colours.blue, 41, 17, 10, 1, ConfigurationMenuContinue, window)
 
     if (ApplicationSelectionPageNumberMaximum > 1) then
-      ProjectNukeCoreGUIHandler.AddButton("AppPageBack", nil, "<", colours.white, colours.grey, 2, 17, 3, 1, ApplicationPageBack)
-      ProjectNukeCoreGUIHandler.AddButton("AppPageNumber", nil, ApplicationSelectionPageNumber, colours.white, colours.lightGrey, 5, 17, 3, 1, nil)
-      ProjectNukeCoreGUIHandler.AddButton("AppPageForward", nil, ">", colours.white, colours.grey, 8, 17, 3, 1, ApplicationPageForward)
+      ProjectNukeCoreGUIHandler.AddButton("AppPageBack", nil, "<", colours.white, colours.grey, 2, 17, 3, 1, ApplicationPageBack, window)
+      ProjectNukeCoreGUIHandler.AddButton("AppPageNumber", nil, ApplicationSelectionPageNumber, colours.white, colours.lightGrey, 5, 17, 3, 1, nil, window)
+      ProjectNukeCoreGUIHandler.AddButton("AppPageForward", nil, ">", colours.white, colours.grey, 8, 17, 3, 1, ApplicationPageForward, window)
     end
 
     ProjectNukeCoreGUIHandler.StartEventListener()
   elseif (pageNumber == 2) then
     -- Create GUI
-	  ProjectNukeCoreGUIHandler.DrawStatus("Please (optionally) select a service to enable.")
+	  ProjectNukeCoreGUIHandler.WriteStatus("Please (optionally) select a service to enable.")
 
     -- Draw Service Buttons
     DrawServiceSelectionPage(ServiceSelectionPageNumber)
 
     -- Draw Buttons
-    ProjectNukeCoreGUIHandler.AddButton("Continue", nil, "Continue", colours.white, colours.blue, 41, 17, 10, 1, ConfigurationMenuContinue)
+    ProjectNukeCoreGUIHandler.AddButton("Continue", nil, "Continue", colours.white, colours.blue, 41, 17, 10, 1, ConfigurationMenuContinue, window)
 
     if (ServiceSelectionPageNumberMaximum > 1) then
-      ProjectNukeCoreGUIHandler.AddButton("ServicePageBack", nil, "<", colours.white, colours.grey, 2, 17, 3, 1, ServicePageBack)
-      ProjectNukeCoreGUIHandler.AddButton("ServicePageNumber", nil, ServiceSelectionPageNumber, colours.white, colours.lightGrey, 5, 17, 3, 1, nil)
-      ProjectNukeCoreGUIHandler.AddButton("ServicePageForward", nil, ">", colours.white, colours.grey, 8, 17, 3, 1, ServicePageForward)
+      ProjectNukeCoreGUIHandler.AddButton("ServicePageBack", nil, "<", colours.white, colours.grey, 2, 17, 3, 1, ServicePageBack, window)
+      ProjectNukeCoreGUIHandler.AddButton("ServicePageNumber", nil, ServiceSelectionPageNumber, colours.white, colours.lightGrey, 5, 17, 3, 1, nil, window)
+      ProjectNukeCoreGUIHandler.AddButton("ServicePageForward", nil, ">", colours.white, colours.grey, 8, 17, 3, 1, ServicePageForward, window)
     end
 
     ProjectNukeCoreGUIHandler.StartEventListener()
   elseif (pageNumber == 3) then
     -- Create GUI
-	  ProjectNukeCoreGUIHandler.DrawStatus("Please enter the shared encryption key.")
+	  ProjectNukeCoreGUIHandler.WriteStatus("Please enter the shared encryption key.")
 
     -- Labels
     window.setCursorPos(2,11)
@@ -113,28 +113,28 @@ function drawConfigurationMenu(pageNumber)
     window.write("encryption ensure system security.")
 
     -- Buttons
-    ProjectNukeCoreGUIHandler.AddButton("Continue", nil, "Continue", colours.white, colours.blue, 41, 17, 10, 1, ConfigurationMenuContinue)
-    ProjectNukeCoreGUIHandler.UpdateTextbox(ProjectNukeCoreGUIHandler.AddTextbox("EncryptionKeyInput", 2, 12, 48))
+    ProjectNukeCoreGUIHandler.AddButton("Continue", nil, "Continue", colours.white, colours.blue, 41, 17, 10, 1, ConfigurationMenuContinue, window)
+    ProjectNukeCoreGUIHandler.FocusTextbox(ProjectNukeCoreGUIHandler.AddTextbox("EncryptionKeyInput", 2, 12, 48, window))
 
     ProjectNukeCoreGUIHandler.StartEventListener()
   elseif (pageNumber == 4) then
     -- Create GUI
-	  ProjectNukeCoreGUIHandler.DrawStatus("Specify any optional settings.")
+	  ProjectNukeCoreGUIHandler.WriteStatus("Specify any optional settings.")
 
     -- Labels
     window.setCursorPos(8,11)
     window.write("Application External Monitor Support")
 
     -- Buttons
-    ProjectNukeCoreGUIHandler.AddToggleButton("MonitorSupport", "YES", 2, 11, 5, 1)
-    ProjectNukeCoreGUIHandler.AddButton("Continue", nil, "Continue", colours.white, colours.blue, 41, 17, 10, 1, ConfigurationMenuContinue)
+    ProjectNukeCoreGUIHandler.AddToggleButton("MonitorSupport", "YES", 2, 11, 5, 1, window)
+    ProjectNukeCoreGUIHandler.AddButton("Continue", nil, "Continue", colours.white, colours.blue, 41, 17, 10, 1, ConfigurationMenuContinue, window)
 
     ProjectNukeCoreGUIHandler.StartEventListener()
   elseif (pageNumber == 5) then
     SaveConfiguration()
 
     -- Create GUI
-	  ProjectNukeCoreGUIHandler.DrawStatus("Installation completed.")
+	  ProjectNukeCoreGUIHandler.WriteStatus("Installation completed.")
 
     -- Labels
     window.setCursorPos(2,11)
@@ -153,7 +153,7 @@ function drawConfigurationMenu(pageNumber)
     window.write("To begin, click Finish.")
 
     -- Buttons
-    ProjectNukeCoreGUIHandler.AddButton("Finish", nil, "Finish", colours.white, colours.green, 41, 17, 10, 1, ConfigurationMenuContinue)
+    ProjectNukeCoreGUIHandler.AddButton("Finish", nil, "Finish", colours.white, colours.green, 41, 17, 10, 1, ConfigurationMenuContinue, window)
 
     ProjectNukeCoreGUIHandler.StartEventListener()
   end
@@ -180,7 +180,7 @@ function DrawApplicationSelectionPage(pageNumber)
       window.write(_G[application]:getDisplayName())
 
       -- Draw Toggle Button
-      ProjectNukeCoreGUIHandler.AddToggleButton(application, "NO", 2, 10 + i, 5, 1)
+      ProjectNukeCoreGUIHandler.AddToggleButton(application, "NO", 2, 10 + i, 5, 1, window)
     end
   end
 end
@@ -205,7 +205,7 @@ function DrawServiceSelectionPage(pageNumber)
       window.write(_G[service]:getDisplayName())
 
       -- Draw Toggle Button
-      ProjectNukeCoreGUIHandler.AddToggleButton(service, "NO", 2, 10 + i, 5, 1)
+      ProjectNukeCoreGUIHandler.AddToggleButton(service, "NO", 2, 10 + i, 5, 1, window)
     end
   end
 end
@@ -271,7 +271,7 @@ function ConfigurationMenuContinue()
       config.enabledApplication = enabledApplications[1]
     else
       -- Throw an error message on the screen, then throw back to the selection menu
-      ProjectNukeCoreGUIHandler.drawPopupMessage({"Error: Please select an application."}, colours.red, 3)
+      ProjectNukeCoreGUIHandler.DrawPopupMessage({"Error: Please select an application."}, colours.red, 3)
 	    ProjectNukeCoreGUIHandler.StartEventListener()
       return nil
     end
@@ -292,7 +292,7 @@ function ConfigurationMenuContinue()
     if (#enabledServices > 1) then
       -- Throw an error message on the screen, then throw back to the selection menu
       -- If the GUI Handler is working, this should never actually happen... famous last words
-      ProjectNukeCoreGUIHandler.drawPopupMessage({"Error: Please only select one service."}, colours.red, 3)
+      ProjectNukeCoreGUIHandler.DrawPopupMessage({"Error: Please only select one service."}, colours.red, 3)
 	    ProjectNukeCoreGUIHandler.StartEventListener()
       return nil
     elseif (#enabledServices == 1) then
@@ -311,7 +311,7 @@ function ConfigurationMenuContinue()
     local encryptionKey = encryptionKeyTextbox:getValue()
 
 	  if (encryptionKey == nil or encryptionKey == "" or encryptionKey:match("%W")) then
-	    ProjectNukeCoreGUIHandler.drawPopupMessage({"Error: Please enter a valid Encryption Key."}, colours.red, 3)
+	    ProjectNukeCoreGUIHandler.DrawPopupMessage({"Error: Please enter a valid Encryption Key."}, colours.red, 3)
 	    ProjectNukeCoreGUIHandler.StartEventListener()
 		  return nil
 	  end

@@ -2,7 +2,7 @@
 
 ================================================================================
 
-  ProjectNukeCoreEncryptionUtil
+  ProjectNukeEncryptionUtil
     Provides SHA256 Encryption abilities.
 
 ================================================================================

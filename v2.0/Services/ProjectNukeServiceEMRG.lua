@@ -23,7 +23,7 @@ function sendState(newEmergencyState)
 end
 
 function displayEmergencyMessage(message)
-  ProjectNukeCoreGUIHandler.drawPopupMessage({message}, colours.purple, 10)
+  ProjectNukeCoreGUIHandler.DrawPopupMessage({message}, colours.purple, 10)
 end
 
 -- Standard Functions

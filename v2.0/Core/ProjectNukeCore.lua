@@ -35,15 +35,17 @@ local HandlersMap = {
 
 -- Maps utility functions to source locations
 local UtilMap = {
-  "ProjectNukeCoreFileUtil.lua",
-  "ProjectNukeCoreEncryptionUtil.lua",
-  "ProjectNukeCoreStringUtil.lua",
+  "ProjectNukeFileUtil.lua",
+  "ProjectNukeEncryptionUtil.lua",
+  "ProjectNukeStringUtil.lua",
+  "ProjectNukeTableUtil.lua"
 }
 
 -- Core settings 
 local CoreHandlerFolderPath = "/ProjectNuke/Core/Handlers/"
-local CoreUtilFolderPath = "/ProjectNuke/Core/Util/"
 local CoreClassFolderPath = "/ProjectNuke/Core/Classes/"
+
+local UtilFolderPath = "/ProjectNuke/Util/"
 
 -- ===== START FUNCTIONS =====
 
@@ -88,14 +90,14 @@ function LoadClasses()
 end
 
 function DownloadUtil()
-  -- Delete existing core util
-  fs.delete(CoreUtilFolderPath)
+  -- Delete existing util
+  fs.delete(UtilFolderPath)
 
   -- Download the core classes to disk
   for i, fileName in ipairs(UtilMap) do
-    fullURL = "https://raw.githubusercontent.com/stuntguy3000/ProjectNuke/master/v2.0/Core/Util/" .. fileName
+    fullURL = "https://raw.githubusercontent.com/stuntguy3000/ProjectNuke/master/v2.0/Util/" .. fileName
 
-    shell.run("wget "..fullURL.." "..CoreUtilFolderPath..fileName)
+    shell.run("wget "..fullURL.." "..UtilFolderPath..fileName)
   end
 end
 
@@ -103,7 +105,7 @@ end
 function LoadUtil()
   for i, fileName in ipairs(UtilMap) do
     print("Loading " .. fileName)
-    tryLoadAPI(CoreUtilFolderPath  ..  fileName)
+    tryLoadAPI(UtilFolderPath  ..  fileName)
   end
 end
 
@@ -157,6 +159,7 @@ if (doDownload) then
   DownloadCoreHandlers()
 
   -- Hijack and load these services
+  -- This is a horrific way to do this. :-(
   tryLoadAPI(CoreHandlerFolderPath .. HandlersMap[2]) -- Application Handler
   tryLoadAPI(CoreHandlerFolderPath .. HandlersMap[3]) -- Service Handler
 

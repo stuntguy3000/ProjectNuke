@@ -15,7 +15,7 @@
 ClickableItem = {}
 ClickableItem.__index = ClickableItem
 
-function ClickableItem.new(id, value, text, textColour, backgroundColour, xStart, yStart, width, height, actionFunction)
+function ClickableItem.new(id, value, text, textColour, backgroundColour, xStart, yStart, width, height, actionFunction, window)
   local self = setmetatable({}, ClickableItem)
 
   self.enabled = true
@@ -30,6 +30,8 @@ function ClickableItem.new(id, value, text, textColour, backgroundColour, xStart
   self.yStart = yStart
 
   self.actionFunction = actionFunction
+
+  self.window = window
 
   width = width - 1
   height = height - 1
@@ -48,19 +50,19 @@ function ClickableItem.new(id, value, text, textColour, backgroundColour, xStart
   return self
 end
 
-function ClickableItem.render(self, window)
-  ProjectNukeCoreGUIHandler.DrawFilledBoxInWindow(self.backgroundColour, self.xStart, self.yStart, self.xStart + self.width, self.yStart + self.height, window)
+function ClickableItem.render(self)
+  ProjectNukeCoreGUIHandler.DrawBox(self.backgroundColour, self.xStart, self.yStart, self.xStart + self.width, self.yStart + self.height, self.window)
 
-  window.setBackgroundColor(self.backgroundColour)
-  window.setTextColor(self.textColour)
+  self.window.setBackgroundColor(self.backgroundColour)
+  self.window.setTextColor(self.textColour)
 
   -- Cursor Position = xStart + half the button width minus half the text width
   cursorX = math.ceil(self.xStart + (self.width / 2) - (string.len(self.text) / 2))
   cursorY = (self.yStart + (self.height / 2))
-  window.setCursorPos(cursorX, cursorY)
-  window.write(self.text)
+  self.window.setCursorPos(cursorX, cursorY)
+  self.window.write(self.text)
 
-  window.setCursorPos(self.xStart, self.yStart + self.height + 1)
+  self.window.setCursorPos(self.xStart, self.yStart + self.height + 1)
 end
 
 function ClickableItem.isEnabled(self)
@@ -73,6 +75,10 @@ end
 
 function ClickableItem.getValue(self)
   return self.value
+end
+
+function ClickableItem.getWindow(self)
+  return self.window
 end
 
 function ClickableItem.setValue(self, value)

@@ -60,7 +60,7 @@ function drawBootMenu()
   end
 
   -- Buttons
-  ProjectNukeCoreGUIHandler.AddButton("Open Configuration Menu", nil, "Open Configuration Menu", colours.white, colours.blue, 12, 17, 29, 1, setLaunchConfiguration)
+  ProjectNukeCoreGUIHandler.AddButton("Open Configuration Menu", nil, "Open Configuration Menu", colours.white, colours.blue, 12, 17, 29, 1, setLaunchConfiguration, window)
   parallel.waitForAny(updateStatus, ProjectNukeCoreGUIHandler.StartEventListener)
 
   if (launchConfiguration) then
@@ -90,7 +90,7 @@ end
 function updateStatus()
   -- Countdown Timer
   for i = 3, 1, -1 do
-    ProjectNukeCoreGUIHandler.DrawStatus("Starting in " .. i .. "...")
+    ProjectNukeCoreGUIHandler.WriteStatus("Starting in " .. i .. "...")
     sleep(1)
   end
 end

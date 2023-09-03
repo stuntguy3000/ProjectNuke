@@ -34,7 +34,7 @@ function init()
   peripheral.find("modem", rednet.open)
 
   if (not rednet.isOpen()) then
-    ProjectNukeCoreGUIHandler.DrawCriticalError({[8] = "No wireless modem detected.", [12] = "Please install one and click Reboot."})
+    ProjectNukeCoreGUIHandler.DrawPopupMessage({"No wireless modem detected.", "","", "Please install one and click Reboot."}, colours.red, -1)
   end
 end
 
@@ -42,14 +42,14 @@ function WaitForPacket(PacketID)
   senderId, message, protocol = rednet.receive(REDNET_PROTOCOL_ID)
 
   -- Attempt to decrypt the message
-  decryptedMessage = ProjectNukeCoreEncryptionUtil.decrypt(ProjectNukeCoreConfigurationHandler.getConfig().encryptionKey, message)
+  decryptedMessage = ProjectNukeEncryptionUtil.decrypt(ProjectNukeCoreConfigurationHandler.getConfig().encryptionKey, message)
 
   if (decryptedMessage == nil) then
     return nil
   end
 
   -- Attempt to unserialize the message
-  decodedObject = ProjectNukeCoreFileUtil.Unserialize(decryptedMessage)
+  decodedObject = ProjectNukeFileUtil.Unserialize(decryptedMessage)
 
   -- Does it smell like a packet?
   if (decodedObject == nil or decodedObject["id"] == nil or decodedObject["id"] ~= PacketID) then
@@ -71,14 +71,14 @@ function BroadcastPacket(Packet)
   end
 
   -- Encode the data
-  encodedPacket = ProjectNukeCoreFileUtil.Serialize(Packet)
+  encodedPacket = ProjectNukeFileUtil.Serialize(Packet)
 
   if (encodedPacket == nil) then
     return false
   end
 
   -- Encrypt the packet
-  encryptedPacket = ProjectNukeCoreEncryptionUtil.encrypt(ProjectNukeCoreConfigurationHandler.getConfig().encryptionKey, encodedPacket)
+  encryptedPacket = ProjectNukeEncryptionUtil.encrypt(ProjectNukeCoreConfigurationHandler.getConfig().encryptionKey, encodedPacket)
 
   -- Broadcast!
   return rednet.broadcast(encryptedPacket, REDNET_PROTOCOL_ID)
