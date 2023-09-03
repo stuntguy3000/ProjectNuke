@@ -31,6 +31,7 @@ local HandlersMap = {
   "ProjectNukeCoreConfigurationHandler.lua",
   "ProjectNukeCoreBootHandler.lua",
   "ProjectNukeCoreRednetHandler.lua",
+  "ProjectNukeCoreAuthenticationHandler.lua",
 }
 
 -- Maps utility functions to source locations

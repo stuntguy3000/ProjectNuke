@@ -11,8 +11,9 @@ Author: stuntguy3000
 
 --]]
 
-local mainWindow = nil -- The main window for drawing graphic elements
-local messageWindow = nil -- A window designed to overlay popup messages
+local mainWindow = window.create(term.current(), 1, 1, 51, 21) -- The main window for drawing graphic elements
+local messageWindow = window.create(term.current(), 1, 1, 51, 21) -- A window designed to overlay popup messages
+local authenticationWindow = window.create(term.current(), 1, 1, 51, 21) -- A window designed for Authentication requests
 local monitors = { peripheral.find("monitor") }
 
 -- All Active clickableItems in the GUI
@@ -52,14 +53,19 @@ function initGUI(tryConnectMonitor)
             DrawPopupMessage({"Attached monitors are not compatible.", "Only a monitor that is 5x3 in size can be used."}, colours.red, 5)
          end
       end
-   else
-      mainWindow = window.create(term.current(), 1, 1, 51, 21)
-      messageWindow = window.create(term.current(), 1, 1, 51, 21)
+   --else
+   --   mainWindow = window.create(term.current(), 1, 1, 51, 21)
+   --   messageWindow = window.create(term.current(), 1, 1, 51, 21)
+   --   authenticationWindow = window.create(term.current(), 1, 1, 51, 21)
    end
 end
 
 function getMainWindow()
    return mainWindow
+end
+
+function getAuthenticationWindow()
+   return messageWindow
 end
 
 function clearGUI()
@@ -88,18 +94,21 @@ function clearGUI()
 end
 
 function StartEventListener()
-   local event, p1, p2, p3 = os.pullEvent()
+   local event, p1, p2, p3 = os.pullEvent("mouse_click", "monitor_touch", "key", "char")
 
+   clickableItem = GetClickableItemAtPos(p2, p3)
+
+   if (clickableItem == nil) then
+      StartEventListener()
+      return
+   end
+   
    if (event == "mouse_click" or event == "monitor_touch") then
-      clickableItem = GetClickableItemAtPos(p2, p3)
+      actionFunction = clickableItem:getActionFunction()
 
-      if (clickableItem ~= nil) then
-         actionFunction = clickableItem:getActionFunction()
-
-         if (actionFunction ~= nil) then
-            actionFunction(clickableItem)
-            return nil
-         end
+      if (actionFunction ~= nil) then
+         actionFunction(clickableItem)
+         return nil
       end
    elseif (event == "key" or event == "char") then
       local cursorX, cursorY = clickableItem:getWindow().getCursorPos()

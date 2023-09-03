@@ -12,8 +12,12 @@
 --]]
 function run()
   ProjectNukeCoreGUIHandler.initGUI(true)
-  ProjectNukeCoreGUIHandler.DrawBaseGUI(getDisplayName(), nil)
+  
+  -- Authentication Gateway
+  ProjectNukeCoreAuthenticationHandler.requestAuthentication(true)
 
+
+  ProjectNukeCoreGUIHandler.DrawBaseGUI(getDisplayName(), nil)
   ProjectNukeCoreGUIHandler.StartEventListener()
 end
 
