@@ -169,7 +169,7 @@ function clearGUI()
    --term.setCursorBlink(false)
    --term.setCursorPos(1,1)
 
-   if (monitors ~= nil and #monitors > 0) then
+   if (monitors ~= nil and #monitors > 0 and ProjectNukeCoreConfigurationHandler.getConfig().monitorSupport) then
       for i, monitor in ipairs(monitors) do
          monitor.clear()
       end
