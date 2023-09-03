@@ -15,7 +15,7 @@
 local messageBuffer = {}
 
 function run()
-  ProjectNukeCoreGUIHandler.initGui(true)
+  ProjectNukeCoreGUIHandler.initGUI(true)
   ProjectNukeCoreGUIHandler.DrawBaseGUI(getDisplayName(), nil)
   ProjectNukeCoreGUIHandler.WriteStatus("Listening for messages...")
 

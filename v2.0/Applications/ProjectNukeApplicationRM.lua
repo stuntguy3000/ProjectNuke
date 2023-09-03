@@ -11,7 +11,7 @@
 
 --]]
 function run()
-  ProjectNukeCoreGUIHandler.initGui(true)
+  ProjectNukeCoreGUIHandler.initGUI(true)
   ProjectNukeCoreGUIHandler.DrawBaseGUI(getDisplayName(), nil)
 
   ProjectNukeCoreGUIHandler.WriteStatus("Beep boop, I'm monitoring your shit")

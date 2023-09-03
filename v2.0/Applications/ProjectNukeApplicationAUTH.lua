@@ -12,7 +12,7 @@
 --]]
 function run()
   -- Init GUI
-  ProjectNukeCoreGUIHandler.initGui(false)
+  ProjectNukeCoreGUIHandler.initGUI(false)
   ProjectNukeCoreGUIHandler.DrawBaseGUI(getDisplayName(), nil)
 
 
