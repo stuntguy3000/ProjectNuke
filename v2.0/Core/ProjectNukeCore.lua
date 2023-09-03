@@ -25,6 +25,7 @@ local ClassMap = {
 
 -- Maps handlers to source locations
 local HandlersMap = {
+  "ProjectNukeCoreGUIHandler.lua",
   "ProjectNukeCoreApplicationHandler.lua",
   "ProjectNukeCoreServiceHandler.lua",
   "ProjectNukeCoreConfigurationHandler.lua",
@@ -37,7 +38,6 @@ local UtilMap = {
   "ProjectNukeCoreFileUtil.lua",
   "ProjectNukeCoreEncryptionUtil.lua",
   "ProjectNukeCoreStringUtil.lua",
-  "ProjectNukeCoreGUIUtil.lua",
 }
 
 -- Core settings 

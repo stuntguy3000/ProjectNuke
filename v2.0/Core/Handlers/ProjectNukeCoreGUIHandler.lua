@@ -2,8 +2,8 @@
 
 ================================================================================
 
-ProjectNukeCoreGUIUtil
-Provides common GUI utilities
+ProjectNukeCoreGUIHandler
+Provides common GUI handling functions and utilities
 
 ================================================================================
 
@@ -18,7 +18,7 @@ local messageWindow = nil -- A window designed to overlay popup messages
 local monitors = { peripheral.find("monitor") }
 
 function initGui(connectMonitor)
-   if (connectMonitor == true) then
+   if (connectMonitor == true and ProjectNukeCoreConfigurationHandler.getConfig().monitorSupport) then
       -- Use an attached monitor if present
       
       if (monitors ~= nil and #monitors > 0) then

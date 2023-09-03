@@ -49,7 +49,7 @@ function ClickableItem.new(id, value, text, textColour, backgroundColour, xStart
 end
 
 function ClickableItem.render(self, window)
-  ProjectNukeCoreGUIUtil.DrawFilledBoxInWindow(self.backgroundColour, self.xStart, self.yStart, self.xStart + self.width, self.yStart + self.height, window)
+  ProjectNukeCoreGUIHandler.DrawFilledBoxInWindow(self.backgroundColour, self.xStart, self.yStart, self.xStart + self.width, self.yStart + self.height, window)
 
   window.setBackgroundColor(self.backgroundColour)
   window.setTextColor(self.textColour)
@@ -101,12 +101,13 @@ end
 Config = {}
 Config.__index = Config
 
-function Config.new(encryptionKey, enabledApplication, enabledService)
+function Config.new(encryptionKey, enabledApplication, enabledService, monitorSupport)
   local self = setmetatable({}, Config)
 
   self.encryptionKey = encryptionKey
   self.enabledApplication = enabledApplication
   self.enabledService = enabledService
+  self.monitorSupport = monitorSupport
 
   return self
 end

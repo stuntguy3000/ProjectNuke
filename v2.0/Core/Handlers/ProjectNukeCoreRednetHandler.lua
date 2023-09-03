@@ -34,7 +34,7 @@ function init()
   peripheral.find("modem", rednet.open)
 
   if (not rednet.isOpen()) then
-    ProjectNukeCoreGUIUtil.DrawCriticalError({[8] = "No wireless modem detected.", [12] = "Please install one and click Reboot."})
+    ProjectNukeCoreGUIHandler.DrawCriticalError({[8] = "No wireless modem detected.", [12] = "Please install one and click Reboot."})
   end
 end
 

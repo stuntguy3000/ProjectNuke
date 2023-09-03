@@ -15,15 +15,15 @@
 local messageBuffer = {}
 
 function run()
-  ProjectNukeCoreGUIUtil.initGui(true)
-  ProjectNukeCoreGUIUtil.DrawBaseGUI(getDisplayName(), nil)
-  ProjectNukeCoreGUIUtil.DrawStatus("Listening for messages...")
+  ProjectNukeCoreGUIHandler.initGui(true)
+  ProjectNukeCoreGUIHandler.DrawBaseGUI(getDisplayName(), nil)
+  ProjectNukeCoreGUIHandler.DrawStatus("Listening for messages...")
 
   -- Draw GUI Elements
-  window = ProjectNukeCoreGUIUtil.getMainWindow()
+  window = ProjectNukeCoreGUIHandler.getMainWindow()
   windowSize = {window.getSize()}
 
-  ProjectNukeCoreGUIUtil.DrawFilledBoxInWindow(colors.gray, 2, 8, windowSize[1] - 1, 17, window)
+  ProjectNukeCoreGUIHandler.DrawFilledBoxInWindow(colors.gray, 2, 8, windowSize[1] - 1, 17, window)
 
   -- Await Message
   while true do
@@ -38,7 +38,7 @@ function printMessage(message)
   end
 
   -- Reset
-  ProjectNukeCoreGUIUtil.DrawFilledBoxInWindow(colors.gray, 2, 8, windowSize[1] - 1, 17, window)
+  ProjectNukeCoreGUIHandler.DrawFilledBoxInWindow(colors.gray, 2, 8, windowSize[1] - 1, 17, window)
   window.setBackgroundColour(colors.gray)
   window.setTextColour(colors.white)
 

@@ -11,13 +11,13 @@
 
 --]]
 function run()
-  ProjectNukeCoreGUIUtil.initGui(true)
-  ProjectNukeCoreGUIUtil.DrawBaseGUI(getDisplayName(), nil)
+  ProjectNukeCoreGUIHandler.initGui(true)
+  ProjectNukeCoreGUIHandler.DrawBaseGUI(getDisplayName(), nil)
 
-  ProjectNukeCoreGUIUtil.DrawStatus("Beep boop, I'm monitoring your shit")
-  ProjectNukeCoreGUIUtil.AddToggleButton("TOGGLE", "NO", 5, 12, 40, 5)
+  ProjectNukeCoreGUIHandler.DrawStatus("Beep boop, I'm monitoring your shit")
+  ProjectNukeCoreGUIHandler.AddToggleButton("TOGGLE", "NO", 5, 12, 40, 5)
 
-  ProjectNukeCoreGUIUtil.StartEventListener()
+  ProjectNukeCoreGUIHandler.StartEventListener()
 end
 
 function getDisplayName()
