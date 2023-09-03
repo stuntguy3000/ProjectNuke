@@ -15,10 +15,10 @@ function getDisplayName()
   return "Emergency Alert Service"
 end
 
-function sendState(newEmergencyState)
+function sendState(type, data)
   local emergencyStatePacket = ProjectNukeCorePackets.EmergencyStatePacket
 
-  emergencyStatePacket:setData(newEmergencyState)
+  emergencyStatePacket:setData({type, data})
   ProjectNukeCoreRednetHandler.BroadcastPacket(emergencyStatePacket)
 end
 
@@ -38,18 +38,20 @@ function run()
   end
 
   if (incomingMessage ~= nil and incomingMessage ~= "") then
-    if (string.find(incomingMessage, "STATUS_") ~= nil) then
+    type = incomingMessage[1]
+    data = incomingMessage[2]
+
+    if (type == "STATUS") then
       -- Process Status Update
-      emergencyStatus = string.sub(incomingMessage, 8, string.len(incomingMessage))
+      emergencyStatus = data
 
       -- TODO
-    elseif (string.find(incomingMessage, "MSG_") ~= nil) then
+      displayEmergencyMessage("Status: ".. type .."\nData: "..data)
+    elseif (type == "MSG") then
       -- Process Custom Message
-      emergencyMessage = string.sub(incomingMessage, 5, string.len(incomingMessage))
-
-      if (emergencyMessage ~= nil and displayEmergencyMessage ~= "") then
+      if (data ~= nil) then
         -- Sanity check
-        displayEmergencyMessage(emergencyMessage)
+        displayEmergencyMessage(data)
       end
     end
   end

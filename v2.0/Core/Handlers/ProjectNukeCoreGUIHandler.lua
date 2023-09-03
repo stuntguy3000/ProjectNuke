@@ -37,10 +37,12 @@ function initGUI(tryConnectMonitor)
          monitorSize = {monitor.getSize()} -- Width/Height Respectively
 
          if (monitorSize[1] == 50 and monitorSize[2] == 19) then
+            -- Create a message window for the message
+            messageWindow = window.create(term.current(), 1, 1, 51, 21)
+
             -- Fill the computer terminal with a generic message.
             Fill(colours.lightGrey, messageWindow)
             WriteCenteredText("See monitor for output.", 10, colours.grey, colours.lightGrey, messageWindow)
-            messageWindow.setCursorPos(1,1)
 
             -- Recreate the windows using the monitor
             mainWindow = window.create(monitor, 1, 1, 50, 19)

@@ -67,28 +67,28 @@ function sleepGUI()
 end
 
 function sendAlert()
-  ProjectNukeServiceEMRG.sendState("STATUS_ALRT")
+  ProjectNukeServiceEMRG.sendState("STATUS", "ALRT")
   ProjectNukeCoreGUIHandler.WriteStatus("ALRT message sent.")
 
   sleepGUI()
 end
 
 function sendEvac()
-  ProjectNukeServiceEMRG.sendState("STATUS_EVAC")
+  ProjectNukeServiceEMRG.sendState("STATUS", "EVAC")
   ProjectNukeCoreGUIHandler.WriteStatus("EVAC message sent.")
 
   sleepGUI()
 end
 
 function sendOkay()
-  ProjectNukeServiceEMRG.sendState("STATUS_OKAY")
+  ProjectNukeServiceEMRG.sendState("STATUS", "OKAY")
   ProjectNukeCoreGUIHandler.WriteStatus("OKAY message sent.")
 
   sleepGUI()
 end
 
 function sendTest()
-  ProjectNukeServiceEMRG.sendState("STATUS_TEST")
+  ProjectNukeServiceEMRG.sendState("STATUS", "TEST")
   ProjectNukeCoreGUIHandler.WriteStatus("TEST message sent.")
 
   sleepGUI()
@@ -104,7 +104,7 @@ function sendCustomMessage()
     return
   end
 
-  ProjectNukeServiceEMRG.sendState("MSG_" .. customMessage)
+  ProjectNukeServiceEMRG.sendState("MSG", customMessage)
   ProjectNukeCoreGUIHandler.WriteStatus("Custom message sent.")
 
   sleepGUI()
