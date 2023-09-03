@@ -38,7 +38,7 @@ function initGui(tryConnectMonitor)
 
          if (monitorSize[1] == 50 and monitorSize[2] == 19) then
             -- Fill the computer terminal with a generic message.
-            fill(colours.lightGrey, messageWindow)
+            Fill(colours.lightGrey, messageWindow)
             WriteCenteredText("See monitor for output.", 10, colours.grey, colours.lightGrey, messageWindow)
             messageWindow.setCursorPos(1,1)
 
