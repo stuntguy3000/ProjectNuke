@@ -22,9 +22,11 @@ else
   success = false
 
   while (not success) do
-    sleep(5)
     shell.run("wget https://raw.githubusercontent.com/stuntguy3000/ProjectNuke/master/v2.0/Core/ProjectNukeCore.lua /ProjectNuke/Core/ProjectNukeCore.lua")
     
     success = shell.run("/ProjectNuke/Core/ProjectNukeCore.lua")
+
+    print("Pausing for 15 seconds...")
+    sleep(15)
   end
 end
