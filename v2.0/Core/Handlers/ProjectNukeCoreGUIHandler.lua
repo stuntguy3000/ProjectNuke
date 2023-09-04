@@ -28,6 +28,9 @@ local clickableItems = {}
 
 -- Used to initalise the Window objects, optionally connecting to a monitor if one is attached.
 function initGUI(tryConnectMonitor)
+   authenticationWindow.print("ABC")
+   sleep(5)
+
    if (tryConnectMonitor and ProjectNukeCoreConfigurationHandler.getConfig().monitorSupport) then
       -- Use an attached monitor if present
       

@@ -123,14 +123,12 @@ function tryLoadAPI(filePath)
 end
 
 function RunApplication()
-  if (doRun) then
-    parallel.waitForAll(ProjectNukeCoreServiceHandler.tryRunServices, ProjectNukeCoreApplicationHandler.tryRunApplications)
+  parallel.waitForAll(ProjectNukeCoreServiceHandler.tryRunServices, ProjectNukeCoreApplicationHandler.tryRunApplications)
 
-    print("Execution completed. Rebooting")
-    sleep(5)
+  print("Execution completed. Rebooting")
+  sleep(5)
 
-    RunApplication() -- TODO: Validate this behavior as intended
-  end
+  RunApplication() -- TODO: Validate this behavior as intended
 end
 
 -- ===== END FUNCTIONS =====
@@ -139,13 +137,9 @@ end
 _G["shell"] = shell
 
 -- Arguments Processing
-doRun = true
 doDownload = true
 if (arg[1] == "NODOWNLOAD") then
   doDownload = false
-elseif (arg[1] == "LOADONLY") then
-  doDownload = false
-  doRun = false
 end
 
 -- Terminal Setup
