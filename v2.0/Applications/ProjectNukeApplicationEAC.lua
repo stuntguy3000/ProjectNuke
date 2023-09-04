@@ -16,9 +16,8 @@ end
 
 function run()
   -- Draw base GUI
-  ProjectNukeCoreGUIHandler.DrawBaseGUI(getDisplayName(), "Use this interface to send emergency alerts.")
-
   window = ProjectNukeCoreGUIHandler.getMainWindow()
+  ProjectNukeCoreGUIHandler.DrawBaseGUI(getDisplayName(), "Use this interface to send emergency alerts.", window)
 
   -- Buttons
   window.setCursorPos(3, 11)

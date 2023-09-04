@@ -16,11 +16,12 @@ local messageBuffer = {}
 
 function run()
   ProjectNukeCoreGUIHandler.initGUI(true)
-  ProjectNukeCoreGUIHandler.DrawBaseGUI(getDisplayName(), nil)
+  
+  window = ProjectNukeCoreGUIHandler.getMainWindow()
+  ProjectNukeCoreGUIHandler.DrawBaseGUI(getDisplayName(), nil, window)
   ProjectNukeCoreGUIHandler.WriteStatus("Listening for messages...")
 
   -- Draw GUI Elements
-  window = ProjectNukeCoreGUIHandler.getMainWindow()
   windowSize = {window.getSize()}
 
   ProjectNukeCoreGUIHandler.DrawBox(colors.gray, 2, 8, windowSize[1] - 1, 17, window)

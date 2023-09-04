@@ -12,7 +12,9 @@
 --]]
 function run()
   ProjectNukeCoreGUIHandler.initGUI(true)
-  ProjectNukeCoreGUIHandler.DrawBaseGUI(getDisplayName(), nil)
+
+  mainWindow = ProjectNukeCoreGUIHandler.getMainWindow()
+  ProjectNukeCoreGUIHandler.DrawBaseGUI(getDisplayName(), nil, mainWindow)
 
   ProjectNukeCoreGUIHandler.StartEventListener()
 end

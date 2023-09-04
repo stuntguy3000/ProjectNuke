@@ -27,8 +27,13 @@ function requestAuthentication(force)
     -- Request Authentication
     authenticationWindow = ProjectNukeCoreGUIHandler.getAuthenticationWindow()
     authenticationWindow.clear()
+    authenticationWindow.write("Abc")
     
     ProjectNukeCoreGUIHandler.DrawBaseGUI("Authentication Request", "Please enter your username and password.", authenticationWindow)
 
+    
+
+    -- Bring it together
+    authenticationWindow.setVisible(true)
     ProjectNukeCoreGUIHandler.StartEventListener()
 end

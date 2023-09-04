@@ -15,10 +15,10 @@ local launchConfiguration = false
 
 function drawBootMenu()
   -- Init GUI
-  ProjectNukeCoreGUIHandler.clearGUI()
+  ProjectNukeCoreGUIHandler.resetGUI()
   window = ProjectNukeCoreGUIHandler.getMainWindow()
 
-  ProjectNukeCoreGUIHandler.DrawBaseGUI("Project Nuke v2.0", "Loading...")
+  ProjectNukeCoreGUIHandler.DrawBaseGUI("Project Nuke v2.0", "Loading...", window)
 
   -- Labels
   window.setTextColor(colours.black)

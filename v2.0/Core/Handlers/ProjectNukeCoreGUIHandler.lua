@@ -28,9 +28,6 @@ local clickableItems = {}
 
 -- Used to initalise the Window objects, optionally connecting to a monitor if one is attached.
 function initGUI(tryConnectMonitor)
-   authenticationWindow.print("ABC")
-   sleep(5)
-
    if (tryConnectMonitor and ProjectNukeCoreConfigurationHandler.getConfig().monitorSupport) then
       -- Use an attached monitor if present
       
@@ -68,10 +65,18 @@ function getMainWindow()
 end
 
 function getAuthenticationWindow()
-   return messageWindow
+   return authenticationWindow
 end
 
-function clearGUI()
+function clearWindow(window)
+   window.clear()
+   window.setCursorBlink(false)
+   window.setCursorPos(1,1)
+
+   clickableItems = {}
+end
+
+function resetGUI()
    if (mainWindow ~= nil) then
       mainWindow.clear()
       mainWindow.setCursorBlink(false)
@@ -84,6 +89,12 @@ function clearGUI()
       messageWindow.setCursorPos(1,1)
    end
 
+   if (authenticationWindow ~= nil) then
+      authenticationWindow.clear()
+      authenticationWindow.setCursorBlink(false)
+      authenticationWindow.setCursorPos(1,1)
+   end
+
    if (monitors ~= nil and #monitors > 0 and ProjectNukeCoreConfigurationHandler.getConfig().monitorSupport) then
       for i, monitor in ipairs(monitors) do
          monitor.clear()
@@ -91,6 +102,7 @@ function clearGUI()
    end
 
    messageWindow.setVisible(false)
+   authenticationWindow.setVisible(false)
    mainWindow.setVisible(true)
 
    clickableItems = {}
@@ -172,39 +184,39 @@ end
 ]]--
 
 -- Draw 
-function DrawBaseGUI(title, subHeading)
-   clearGUI()
+function DrawBaseGUI(title, subHeading, window)
+   clearWindow(window)
 
    -- nil santiy check
    title = title or ""
    subHeading = subHeading or ""
 
    -- Draw Title/Subheading Backgrounds
-   DrawBox(colours.yellow, 1, 1, 51, 3, mainWindow)
-   DrawBox(colours.red, 1, 4, 51, 6, mainWindow)
-   DrawBox(colours.lightGrey, 1, 7, 51, 19, mainWindow)
+   DrawBox(colours.yellow,    1, 1, 51, 3,   window)
+   DrawBox(colours.red,       1, 4, 51, 6,   window)
+   DrawBox(colours.lightGrey, 1, 7, 51, 19,  window)
 
    if (subHeading ~= "") then
-      DrawBox(colours.orange, 1, 7, 51, 9, mainWindow)
+      DrawBox(colours.orange, 1, 7, 51, 9, window)
    end
 
    -- Draw Black Checker Pattern
    -- Gives us three rows of alternating black checkers.
-   mainWindowSize = {mainWindow.getSize()}
+   windowSize = {window.getSize()}
 
    for xStart = 0, 3, 1 do
       y = 3 - xStart
 
-      for x=0, mainWindowSize[1], 4 do
-         DrawBox(colours.black, xStart + x, y, xStart + x + 1, y, mainWindow)
+      for x=0, windowSize[1], 4 do
+         DrawBox(colours.black, (xStart + x), (y), (xStart + x + 1), (y), window)
       end
    end
 
    -- Title text
-   WriteCenteredText(title, 5, colours.white, colours.red, mainWindow)
+   WriteCenteredText(title, 5, colours.white, colours.red, window)
 
    if (subHeading ~= "") then
-      WriteCenteredText(subHeading, 8, colours.black, colours.orange, mainWindow)
+      WriteCenteredText(subHeading, 8, colours.black, colours.orange, window)
    end
 end
 
@@ -295,26 +307,6 @@ function DrawPopupMessage(messageLines, backgroundColour, timeout)
       mainWindow.setVisible(true)
    end
 end
-
--- Draw a Critical Error
---[[function DrawCriticalError(messageLines)
-   clearGUI()
-   Fill(colours.red, mainWindow)
-
-   -- Inject Header
-   messageLines[3] = "»»»»» CRITICAL SYSTEM ERROR «««««"
-
-   -- Draw Text   
-   mainWindow.setTextColour(colours.black)
-   for yValue, message in pairs(messageLines) do
-      WriteCenteredText(message, yValue, colours.white, colours.red, mainWindow)
-   end
-
-   -- Add Reboot Button
-   AddButton("Reboot", nil, "Reboot", colours.white, colours.blue, 21, 17, 10, 1, RebootButtonCommandHandler)
-
-   StartEventListener()
-end]]
 
 --[[
 ================================================================================

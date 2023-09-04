@@ -59,10 +59,10 @@ function drawConfigurationMenu(pageNumber)
   ConfigurationPageNumber = pageNumber
 
   -- Init GUI
-  ProjectNukeCoreGUIHandler.clearGUI()
   window = ProjectNukeCoreGUIHandler.getMainWindow()
+  ProjectNukeCoreGUIHandler.clearWindow(window)
 
-  ProjectNukeCoreGUIHandler.DrawBaseGUI("Project Nuke Configuration (Step " .. ConfigurationPageNumber .. "/5)", "Welcome to Project Nuke!")
+  ProjectNukeCoreGUIHandler.DrawBaseGUI("Project Nuke Configuration (Step " .. ConfigurationPageNumber .. "/5)", "Welcome to Project Nuke!", window)
 
   if (pageNumber == 1) then
     -- Create GUI

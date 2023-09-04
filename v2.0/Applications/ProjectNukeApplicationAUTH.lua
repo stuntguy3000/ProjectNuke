@@ -13,7 +13,9 @@
 function run()
   -- Init GUI
   ProjectNukeCoreGUIHandler.initGUI(false)
-  ProjectNukeCoreGUIHandler.DrawBaseGUI(getDisplayName(), nil)
+  
+  mainWindow = ProjectNukeCoreGUIHandler.getMainWindow()
+  ProjectNukeCoreGUIHandler.DrawBaseGUI(getDisplayName(), nil, mainWindow)
 
 
   -- Wrap it up
