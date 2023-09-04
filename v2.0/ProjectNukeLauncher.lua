@@ -12,20 +12,19 @@
 --]]
 
 term.clear()
+term.setCursorPos(1, 1)
 download = true
 
 if (not download) then
   shell.run("/ProjectNuke/Core/ProjectNukeCore.lua NODOWNLOAD")
 else
-  fs.delete("/ProjectNuke/Core/ProjectNukeCore.lua")
+  fs.delete("/ProjectNuke/")
+  success = false
 
-  successWget = false
-  successLaunch = false
-
-  while (not successWget and not successLaunch) do
-    successWget = shell.run("wget https://raw.githubusercontent.com/stuntguy3000/ProjectNuke/master/v2.0/Core/ProjectNukeCore.lua /ProjectNuke/Core/ProjectNukeCore.lua")
-    successLaunch = shell.run("/ProjectNuke/Core/ProjectNukeCore.lua")
-    
+  while (not success) do
     sleep(2)
+    shell.run("wget https://raw.githubusercontent.com/stuntguy3000/ProjectNuke/master/v2.0/Core/ProjectNukeCore.lua /ProjectNuke/Core/ProjectNukeCore.lua")
+    
+    success = shell.run("/ProjectNuke/Core/ProjectNukeCore.lua")
   end
 end
