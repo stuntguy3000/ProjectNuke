@@ -34,12 +34,16 @@ function init()
   peripheral.find("modem", rednet.open)
 
   if (not rednet.isOpen()) then
-    ProjectNukeCoreGUIHandler.DrawPopupMessage({"No wireless modem detected.", "","", "Please install one and click Reboot."}, colours.red, -1)
+    ProjectNukeCoreGUIHandler.DrawPopupMessage({"No Ender modem detected.", "","", "Please install one and click Reboot."}, colours.red, -1)
   end
 end
 
-function WaitForPacket(PacketID)
-  senderId, message, protocol = rednet.receive(REDNET_PROTOCOL_ID)
+function WaitForPacket(PacketID, Timeout)
+  if (Timeout == nil) then
+    senderId, message, protocol = rednet.receive(REDNET_PROTOCOL_ID)
+  else
+    senderId, message, protocol = rednet.receive(REDNET_PROTOCOL_ID, Timeout)
+  end
 
   -- Attempt to decrypt the message
   decryptedMessage = ProjectNukeEncryptionUtil.decrypt(ProjectNukeCoreConfigurationHandler.getConfig().encryptionKey, message)
