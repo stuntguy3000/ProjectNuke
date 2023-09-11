@@ -114,7 +114,7 @@ function drawConfigurationMenu(pageNumber)
 
     -- Buttons
     ProjectNukeCoreGUIHandler.AddButton("Continue", nil, "Continue", colours.white, colours.blue, 41, 17, 10, 1, ConfigurationMenuContinue, window)
-    ProjectNukeCoreGUIHandler.FocusTextbox(ProjectNukeCoreGUIHandler.AddTextbox("EncryptionKeyInput", 2, 12, 48, window))
+    ProjectNukeCoreGUIHandler.RefreshTextbox(ProjectNukeCoreGUIHandler.AddTextbox("EncryptionKeyInput", 2, 12, 48, window))
 
     ProjectNukeCoreGUIHandler.StartEventListener()
   elseif (pageNumber == 4) then

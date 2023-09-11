@@ -109,28 +109,24 @@ function resetGUI()
 end
 
 function StartEventListener()
-   local event, p1, p2, p3 = os.pullEvent("mouse_click", "monitor_touch", "key", "char")
+   local event, p1, p2, p3 = os.pullEvent() -- I can't get filtering to work :(
 
-   clickableItem = GetClickableItemAtPos(p2, p3)
-
-   if (clickableItem == nil) then
-      StartEventListener()
-      return
-   end
-   
    if (event == "mouse_click" or event == "monitor_touch") then
-      actionFunction = clickableItem:getActionFunction()
+      local clickableItem = GetClickableItemAtPos(p2, p3)
 
-      if (actionFunction ~= nil) then
-         actionFunction(clickableItem)
-         return nil
+      if (clickableItem ~= nil) then
+         actionFunction = clickableItem:getActionFunction()
+
+         if (actionFunction ~= nil) then
+            actionFunction(clickableItem)
+            return nil
+         end
       end
    elseif (event == "key" or event == "char") then
-      local cursorX, cursorY = clickableItem:getWindow().getCursorPos()
-      local textbox = GetClickableItemAtPos(cursorX,cursorY)
+      local visibleWindow = getVisibleWindow()
+      local cursorX, cursorY = visibleWindow.getCursorPos()
+      local textbox = GetClickableItemAtPos(cursorX, cursorY)
       local pressedKey = p1
-
-      clickableItem:getWindow().setTextColour(colours.green)
 
       if (textbox ~= nil) then
          actionFunction = textbox:getActionFunction()
@@ -145,7 +141,7 @@ function StartEventListener()
                   textbox:setValue(textboxValue)
 
                   textboxX, textboxY, width, height = textbox:getSize()
-                  FocusTextbox(textbox)
+                  RefreshTextbox(textbox)
                end
             elseif (event == "key") then
                if (pressedKey == keys.backspace) then
@@ -163,7 +159,7 @@ function StartEventListener()
                      end
 
                      DrawBox(colours.white, cursorX-1, cursorY, cursorX-1, cursorY, textbox:getWindow())
-                     FocusTextbox(textbox)
+                     RefreshTextbox(textbox)
                   end
                end
             end
@@ -172,6 +168,18 @@ function StartEventListener()
    end
 
    StartEventListener()
+end
+
+function getVisibleWindow()
+   if (authenticationWindow ~= nil and authenticationWindow.isVisible()) then
+      return authenticationWindow
+   elseif (messageWindow ~= nil and messageWindow.isVisible()) then
+      return messageWindow
+   elseif (mainWindow ~= nil and mainWindow.isVisible()) then
+      return mainWindow
+   end
+
+   return nil
 end
 
 --endregion
@@ -385,10 +393,11 @@ function AddTextbox(textboxID, xStart, yStart, width, window)
    return textbox
 end
 
-function FocusTextbox(clickableItem)
+function RefreshTextbox(clickableItem)
    -- Determine where the cursor goes
    x,y = clickableItem:getPosition()
    width = clickableItem:getWidth()
+   id = clickableItem:getID()
    value = clickableItem:getValue()
 
    window = clickableItem:getWindow()
@@ -398,7 +407,17 @@ function FocusTextbox(clickableItem)
    window.setTextColour(colors.black)
    window.setCursorPos(x,y)
 
-   value = clickableItem:getValue() or ""
+   -- Super Simple Password Shielding!
+   if (id == "password") then
+      value = ""
+
+      for i = 1, string.len(clickableItem:getValue()), 1 do
+         value = value .. "*"
+      end
+   else
+      value = clickableItem:getValue() or ""
+   end
+
    window.write(value)
 
    cursorPosX, cursorPosY = window.getCursorPos()
@@ -413,7 +432,7 @@ function FocusTextbox(clickableItem)
 end
 
 function TextboxClickHandler(clickableItem)
-   FocusTextbox(clickableItem)
+   RefreshTextbox(clickableItem)
 
    StartEventListener()
 end

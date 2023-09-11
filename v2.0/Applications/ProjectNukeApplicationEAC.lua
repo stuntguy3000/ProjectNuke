@@ -39,7 +39,7 @@ function run()
   window.setBackgroundColor(colours.lightGrey)
 
   window.write("Custom Message:")
-  ProjectNukeCoreGUIHandler.FocusTextbox(ProjectNukeCoreGUIHandler.AddTextbox("EmergencyMessageInput", 3, 17, 40, window))
+  ProjectNukeCoreGUIHandler.RefreshTextbox(ProjectNukeCoreGUIHandler.AddTextbox("EmergencyMessageInput", 3, 17, 40, window))
 
   -- Status
   ProjectNukeCoreGUIHandler.WriteStatus("Ready to send an alert.")

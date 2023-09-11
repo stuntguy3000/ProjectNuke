@@ -25,15 +25,40 @@ function requestAuthentication(force)
     end
 
     -- Request Authentication
-    authenticationWindow = ProjectNukeCoreGUIHandler.getAuthenticationWindow()
-    authenticationWindow.clear()
-    authenticationWindow.write("Abc")
-    
-    ProjectNukeCoreGUIHandler.DrawBaseGUI("Authentication Request", "Please enter your username and password.", authenticationWindow)
+    drawGUI()
+end
 
-    
+function drawGUI()
+  -- Setup GUI
+  authenticationWindow = ProjectNukeCoreGUIHandler.getAuthenticationWindow()
+  authenticationWindow.clear()
+  
+  ProjectNukeCoreGUIHandler.DrawBaseGUI("Please enter your username and password", "Use of this terminal is RESTRICTED.", authenticationWindow)
 
-    -- Bring it together
-    authenticationWindow.setVisible(true)
-    ProjectNukeCoreGUIHandler.StartEventListener()
+  -- Labels
+  authenticationWindow.setTextColor(colours.black)
+  authenticationWindow.setBackgroundColor(colours.lightGrey)
+
+  authenticationWindow.setCursorPos(5, 12)
+  authenticationWindow.write("Username:")
+  authenticationWindow.setCursorPos(5, 14)
+  authenticationWindow.write("Password:")
+
+  -- Textboxes
+  usernameTextbox = ProjectNukeCoreGUIHandler.AddTextbox("username", 16, 12, 32, authenticationWindow)
+  passwordTextbox = ProjectNukeCoreGUIHandler.AddTextbox("password", 16, 14, 32, authenticationWindow)
+
+  -- Buttons
+  ProjectNukeCoreGUIHandler.AddButton("login", "Login", "Login", colors.white, colours.green, 41, 17, 7, 1, handleLogin, authenticationWindow)
+  ProjectNukeCoreGUIHandler.AddButton("clear", "Clear", "Clear", colors.white, colours.red, 16, 17, 7, 1, handleClear, authenticationWindow)
+
+  ProjectNukeCoreGUIHandler.RefreshTextbox(usernameTextbox)
+
+  -- Bring it together
+  authenticationWindow.setVisible(true)
+  ProjectNukeCoreGUIHandler.StartEventListener()
+end
+
+function handleClear()
+  drawGUI()
 end
