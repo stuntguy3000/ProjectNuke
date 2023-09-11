@@ -18,7 +18,7 @@ download = true
 if (not download) then
   shell.run("/ProjectNuke/Core/ProjectNukeCore.lua NODOWNLOAD")
 else
-  fs.delete("/ProjectNuke/")
+  fs.delete("/ProjectNuke/Core/ProjectNukeCore.lua")
   success = false
 
   while (not success) do
