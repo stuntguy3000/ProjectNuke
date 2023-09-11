@@ -47,7 +47,7 @@ function printMessage(message)
   message = string.gsub(message, "\n", "")
 
   -- Split into chunks & add to buffer
-  messageSplit = string.split(message, windowSize[1] - 2, 17)
+  messageSplit = string.split(message, windowSize[1] - 2)
 
   table.insert(messageBuffer, textutils.formatTime(os.time(), false) .. " (World Time):")
   for i, msg in ipairs(messageSplit) do
