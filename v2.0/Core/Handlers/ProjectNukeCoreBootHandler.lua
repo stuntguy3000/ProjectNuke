@@ -80,6 +80,7 @@ function tryBoot()
 end
 
 function launchConfigurationMenu()
+  ProjectNukeCoreGUIHandler.resetGUI()
   ProjectNukeCoreConfigurationHandler.drawConfigurationMenu(1)
 end
 
