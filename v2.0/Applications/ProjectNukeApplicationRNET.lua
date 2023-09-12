@@ -19,13 +19,11 @@ function run()
   
   window = ProjectNukeCoreGUIHandler.getMainWindow()
   ProjectNukeCoreGUIHandler.DrawBaseGUI(getDisplayName(), nil, window)
-  ProjectNukeCoreGUIHandler.WriteStatus("Listening for messages...")
+  ProjectNukeCoreGUIHandler.WriteStatus("Listening on channel " .. ProjectNukeCoreRednetHandler.REDNET_PROTOCOL_ID)
 
   -- Draw GUI Elements
   windowSize = {window.getSize()}
   ProjectNukeCoreGUIHandler.DrawBox(colors.gray, 2, 8, windowSize[1] - 1, 17, window)
-
-  printMessage("Protocol: " .. ProjectNukeCoreRednetHandler.REDNET_PROTOCOL_ID)
 
   -- Await Message
   while true do
