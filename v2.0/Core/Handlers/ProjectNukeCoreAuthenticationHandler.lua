@@ -62,3 +62,38 @@ end
 function handleClear()
   drawGUI()
 end
+
+function handleLogin()
+  -- Disable GUI
+  ProjectNukeCoreGUIHandler.AddButton("login", "Login", "Login", colors.white, colours.grey, 41, 17, 7, 1, handleLogin, authenticationWindow)
+  ProjectNukeCoreGUIHandler.AddButton("clear", "Clear", "Clear", colors.white, colours.grey, 16, 17, 7, 1, handleClear, authenticationWindow)
+  authenticationWindow.setCursorBlink(false)
+
+  local username = ProjectNukeCoreGUIHandler.GetClickableItemByID("username"):getValue() or ""
+  local password = ProjectNukeCoreGUIHandler.GetClickableItemByID("password"):getValue() or ""
+
+  if (username == "" or password == "") then
+    -- Validation error
+    ProjectNukeCoreGUIHandler.DrawPopupMessage({"Error: Please enter a username and password."}, colors.red, 3)
+    drawGUI()
+    return
+  end
+
+  -- Send Authentication Request
+  local requestPacket = ProjectNukeCorePackets.AuthenticationRequestPacket
+  requestPacket:setData({username, password})
+
+  ProjectNukeCoreRednetHandler.SendPacket(requestPacket)
+
+  -- Await Reply from Authentication Server
+  local responsePacket = ProjectNukeCoreRednetHandler.WaitForPacket(ProjectNukeCorePackets.AuthenticationResponsePacket:getID(), 2)
+
+  if (responsePacket == nil) then
+    -- No reply from server
+    ProjectNukeCoreGUIHandler.DrawPopupMessage({"Error: No reply from server.", "", "Please try again shortly."}, colors.red, 3)
+    drawGUI()
+    return
+  else
+    -- Process Response
+  end
+end

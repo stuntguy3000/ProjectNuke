@@ -30,7 +30,7 @@ REDNET_PROTOCOL_ID = "ProjectNuke"
 function init()
   rednet.close()
 
-  -- Try to locate a modem
+  -- Try to locate and open a modem
   peripheral.find("modem", rednet.open)
 
   if (not rednet.isOpen()) then
@@ -39,10 +39,19 @@ function init()
 end
 
 function WaitForPacket(PacketID, Timeout)
+  local senderId = nil
+  local message = nil
+  local protocol = nil
+
   if (Timeout == nil) then
     senderId, message, protocol = rednet.receive(REDNET_PROTOCOL_ID)
   else
     senderId, message, protocol = rednet.receive(REDNET_PROTOCOL_ID, Timeout)
+  end
+
+  -- Nil Check
+  if (senderId == nil or message == nil or protocol == nil) then
+    return nil
   end
 
   -- Attempt to decrypt the message
@@ -63,7 +72,7 @@ function WaitForPacket(PacketID, Timeout)
   return decodedObject
 end
 
-function BroadcastPacket(Packet)
+function SendPacket(Packet)
   -- Validation checks
   if (Packet == nil) then
     return false
