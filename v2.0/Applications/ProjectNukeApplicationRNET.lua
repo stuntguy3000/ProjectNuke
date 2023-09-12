@@ -23,8 +23,9 @@ function run()
 
   -- Draw GUI Elements
   windowSize = {window.getSize()}
-
   ProjectNukeCoreGUIHandler.DrawBox(colors.gray, 2, 8, windowSize[1] - 1, 17, window)
+
+  printMessage("Protocol: " .. ProjectNukeCoreRednetHandler.REDNET_PROTOCOL_ID)
 
   -- Await Message
   while true do
