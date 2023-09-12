@@ -17,9 +17,6 @@ local ConfigurationPageNumber = 0
 local ApplicationSelectionPageNumber = 1
 local ApplicationSelectionPageNumberMaximum = math.ceil(#ProjectNukeCoreApplicationHandler:getApplicationsDatabase() / 5)
 
-local ServiceSelectionPageNumber = 1
-local ServiceSelectionPageNumberMaximum = math.ceil(#ProjectNukeCoreServiceHandler:getServicesDatabase() / 5)
-
 local config = nil
 
 function getConfig()
@@ -28,30 +25,30 @@ end
 
 -- Returns true if a valid configuration was found, false if one was created.
 function LoadConfiguration()
+  -- Attempt to load an existing configuration file
   if (fs.exists(ConfigurationPath) == true) then
     configTable = ProjectNukeFileUtil.LoadTable(ConfigurationPath)
 
     if (configTable ~= nil) then
-      config = ProjectNukeCoreClasses.Config.new(configTable['encryptionKey'], configTable['enabledApplication'], configTable['enabledService'], configTable['monitorSupport'])
+      config = ProjectNukeCoreClasses.Config.new(configTable['encryptionKey'], configTable['enabledApplication'], configTable['plantName'], configTable['monitorSupport'])
     end
   end
 
-  if (config ~= nil and
-    (config.encryptionKey ~= null and
-    config.enabledApplication ~= null and
-    config.encryptionKey ~= "")) then
+  -- If loaded, validate the config file and it's fields
+  if (config ~= nil and config.enabledApplication ~= nil and
+    config.plantName ~= nil and config.plantName ~= "" and
+    config.encryptionKey ~= nil and config.encryptionKey ~= "") then
     return true;
   end
 
+  -- Invalidate config and start again.
   config = ProjectNukeCoreClasses.Config.new("", {})
   SaveConfiguration()
-
   return false
 end
 
 function SaveConfiguration()
   fs.delete(ConfigurationPath)
-
   ProjectNukeFileUtil.SaveTable(config, ConfigurationPath)
 end
 
@@ -82,20 +79,21 @@ function drawConfigurationMenu(pageNumber)
 
     ProjectNukeCoreGUIHandler.StartEventListener()
   elseif (pageNumber == 2) then
-    -- Create GUI
-	  ProjectNukeCoreGUIHandler.WriteStatus("Please (optionally) select a service to enable.")
+    -- Plant Name
+	  ProjectNukeCoreGUIHandler.WriteStatus("Please enter the name of your power plant.")
 
-    -- Draw Service Buttons
-    DrawServiceSelectionPage(ServiceSelectionPageNumber)
+    window.setCursorPos(2,11)
+    window.write("Power Plant Name:")
+	  window.setCursorPos(2,14)
+    window.write("ProjectNuke computers only communicate")
+	  window.setCursorPos(2,15)
+    window.write("to those in the same power plant. As such,")
+	  window.setCursorPos(2,16)
+    window.write("please use the same name for all computers.")
 
-    -- Draw Buttons
+    -- Buttons
     ProjectNukeCoreGUIHandler.AddButton("Continue", nil, "Continue", colours.white, colours.blue, 41, 17, 10, 1, ConfigurationMenuContinue, window)
-
-    if (ServiceSelectionPageNumberMaximum > 1) then
-      ProjectNukeCoreGUIHandler.AddButton("ServicePageBack", nil, "<", colours.white, colours.grey, 2, 17, 3, 1, ServicePageBack, window)
-      ProjectNukeCoreGUIHandler.AddButton("ServicePageNumber", nil, ServiceSelectionPageNumber, colours.white, colours.lightGrey, 5, 17, 3, 1, nil, window)
-      ProjectNukeCoreGUIHandler.AddButton("ServicePageForward", nil, ">", colours.white, colours.grey, 8, 17, 3, 1, ServicePageForward, window)
-    end
+    ProjectNukeCoreGUIHandler.RefreshTextbox(ProjectNukeCoreGUIHandler.AddTextbox("PlantNameInput", 2, 12, 49, window))
 
     ProjectNukeCoreGUIHandler.StartEventListener()
   elseif (pageNumber == 3) then
@@ -106,15 +104,15 @@ function drawConfigurationMenu(pageNumber)
     window.setCursorPos(2,11)
     window.write("Shared Encryption Key (Alphanumeric Chars):")
 	  window.setCursorPos(2,14)
-    window.write("All applications in Project Nuke use REDNET to")
+    window.write("All applications in ProjectNuke use REDNET to")
 	  window.setCursorPos(2,15)
-    window.write("communicate. Project Nuke implements SHA256")
+    window.write("communicate. ProjectNuke implements SHA256")
 	  window.setCursorPos(2,16)
     window.write("encryption ensure system security.")
 
     -- Buttons
     ProjectNukeCoreGUIHandler.AddButton("Continue", nil, "Continue", colours.white, colours.blue, 41, 17, 10, 1, ConfigurationMenuContinue, window)
-    ProjectNukeCoreGUIHandler.RefreshTextbox(ProjectNukeCoreGUIHandler.AddTextbox("EncryptionKeyInput", 2, 12, 48, window))
+    ProjectNukeCoreGUIHandler.RefreshTextbox(ProjectNukeCoreGUIHandler.AddTextbox("EncryptionKeyInput", 2, 12, 49, window))
 
     ProjectNukeCoreGUIHandler.StartEventListener()
   elseif (pageNumber == 4) then
@@ -185,31 +183,6 @@ function DrawApplicationSelectionPage(pageNumber)
   end
 end
 
-function DrawServiceSelectionPage(pageNumber)
-  -- Index All Services
-  servicesDatabase = ProjectNukeCoreServiceHandler:getServicesDatabase()
-
-  -- Attempt to draw up to 5 Services depending on the pageNumber
-  baseIndex = (pageNumber - 1) * 5
-
-  for i = 1, 5, 1 do
-    service = servicesDatabase[i + baseIndex]
-
-    if (service ~= nil) then
-      -- Service entry is valid
-      window.setTextColor(colours.grey)
-      window.setBackgroundColor(colours.lightGrey)
-
-      -- Draw Label
-      window.setCursorPos(8, 10 + i)
-      window.write(_G[service]:getDisplayName())
-
-      -- Draw Toggle Button
-      ProjectNukeCoreGUIHandler.AddToggleButton(service, "NO", 2, 10 + i, 5, 1, window)
-    end
-  end
-end
-
 -- Advance the Application Page forward
 function ApplicationPageForward()
   if (ApplicationSelectionPageNumber < ApplicationSelectionPageNumberMaximum) then
@@ -223,27 +196,6 @@ end
 function ApplicationPageBack()
   if (ApplicationSelectionPageNumber > 1) then
     ApplicationSelectionPageNumber = ApplicationSelectionPageNumber - 1
-
-    drawConfigurationMenu(ConfigurationPageNumber)
-    return
-  end
-
-  ProjectNukeCoreGUIHandler.StartEventListener()
-end
-
--- Advance the Services Page forward
-function ServicePageForward()
-  if (ServiceSelectionPageNumber < ServiceSelectionPageNumberMaximum) then
-    ServiceSelectionPageNumber = ServiceSelectionPageNumber + 1
-  end
-
-  drawConfigurationMenu(ConfigurationPageNumber)
-end
-
--- Advance the Services Page backwards
-function ServicePageBack()
-  if (ServiceSelectionPageNumber > 1) then
-    ServiceSelectionPageNumber = ServiceSelectionPageNumber - 1
 
     drawConfigurationMenu(ConfigurationPageNumber)
     return
@@ -278,35 +230,21 @@ function ConfigurationMenuContinue()
 
     drawConfigurationMenu(2)
   elseif (ConfigurationPageNumber == 2) then
-    -- ===== Service Selection Page =====
-    -- Inventory the selected buttons
-    local toggleButtons = ProjectNukeCoreGUIHandler.GetToggleButtons();
-    local enabledServices = {}
+    -- ===== Plant Name =====
+    local plantNameTextbox = ProjectNukeCoreGUIHandler.GetClickableItemByID("PlantNameInput");
+    local plantName = plantNameTextbox:getValue()
 
-    for i, v in pairs(toggleButtons) do
-      if (v:getValue() == "YES") then
-        table.insert(enabledServices, v:getID())
-      end
-    end
-
-    if (#enabledServices > 1) then
-      -- Throw an error message on the screen, then throw back to the selection menu
-      -- If the GUI Handler is working, this should never actually happen... famous last words
-      ProjectNukeCoreGUIHandler.DrawPopupMessage({"Error: Please only select one service."}, colours.red, 3)
-	    ProjectNukeCoreGUIHandler.StartEventListener()
+    if (plantName == nil or plantName == "") then
+      ProjectNukeCoreGUIHandler.DrawPopupMessage({"Error: Please enter a valid Plant Name."}, colours.red, 3)
+      ProjectNukeCoreGUIHandler.StartEventListener()
       return nil
-    elseif (#enabledServices == 1) then
-      -- Save and continue
-      config.enabledService = enabledServices[1]
-    elseif (#enabledServices == 0) then
-      -- Save and continue
-      config.enabledService = nil
     end
+
+    config.plantName = plantName
 
     drawConfigurationMenu(3)
   elseif (ConfigurationPageNumber == 3) then
     -- ===== Encryption Key =====
-    -- Store value from EncryptionKey textbox
     local encryptionKeyTextbox = ProjectNukeCoreGUIHandler.GetClickableItemByID("EncryptionKeyInput");
     local encryptionKey = encryptionKeyTextbox:getValue()
 

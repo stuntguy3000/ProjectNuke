@@ -107,12 +107,12 @@ end
 Config = {}
 Config.__index = Config
 
-function Config.new(encryptionKey, enabledApplication, enabledService, monitorSupport)
+function Config.new(encryptionKey, enabledApplication, plantName, monitorSupport)
   local self = setmetatable({}, Config)
 
   self.encryptionKey = encryptionKey
   self.enabledApplication = enabledApplication
-  self.enabledService = enabledService
+  self.plantName = plantName
   self.monitorSupport = monitorSupport
 
   return self
@@ -132,7 +132,7 @@ function Packet.new(id, data)
   return self
 end
 
-function Packet.getId(self)
+function Packet.getID(self)
   return self.id
 end
 

@@ -19,7 +19,7 @@ function sendState(type, data)
   local emergencyStatePacket = ProjectNukeCorePackets.EmergencyStatePacket
 
   emergencyStatePacket:setData({type, data})
-  ProjectNukeCoreRednetHandler.BroadcastPacket(emergencyStatePacket)
+  ProjectNukeCoreRednetHandler.SendPacket(emergencyStatePacket)
 end
 
 function displayEmergencyMessage(message)
@@ -31,10 +31,10 @@ function run()
   local emergencyStatePacket = ProjectNukeCorePackets.EmergencyStatePacket
 
   -- Await Incoming Emergency Packet
-  packetData = ProjectNukeCoreRednetHandler.WaitForPacket(emergencyStatePacket:getId())
+  packetData = ProjectNukeCoreRednetHandler.WaitForPacket(emergencyStatePacket:getID())
 
   if (packetData ~= nil) then
-    incomingMessage = emergencyStatePacket.new(emergencyStatePacket:getId(), packetData['data']):getData()
+    incomingMessage = emergencyStatePacket.new(emergencyStatePacket:getID(), packetData['data']):getData()
   end
 
   if (incomingMessage ~= nil and incomingMessage ~= "") then

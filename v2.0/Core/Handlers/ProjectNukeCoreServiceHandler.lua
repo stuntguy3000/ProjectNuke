@@ -12,7 +12,7 @@
 --]]
 
 local servicesBasePath = "/ProjectNuke/Services/"
-local servicesDatabase = { "ProjectNukeServiceEMRG" }
+local servicesDatabase = { "ProjectNukeServiceINV" }
 local enabledService = nil
 
 -- Download Services to Disk

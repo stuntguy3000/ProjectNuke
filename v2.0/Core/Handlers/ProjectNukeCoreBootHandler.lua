@@ -24,25 +24,32 @@ function drawBootMenu()
   window.setTextColor(colours.black)
   window.setBackgroundColor(colours.lightGrey)
 
-  window.setCursorPos(2,11)
+  window.setCursorPos(3,12)
+  window.write("Power Plant:")
+  window.setCursorPos(3,13)
   window.write("Application:")
-  window.setCursorPos(2,12)
+  window.setCursorPos(3,14)
   window.write("Service:")
-  window.setCursorPos(2,13)
+  window.setCursorPos(3,15)
   window.write("Monitor Support:")
 
   -- Data
+  local plantName = ProjectNukeCoreConfigurationHandler.getConfig().plantName
   local enabledApplication = ProjectNukeCoreConfigurationHandler.getConfig().enabledApplication
   local enabledService = ProjectNukeCoreConfigurationHandler.getConfig().enabledService
   local monitorSupport = ProjectNukeCoreConfigurationHandler.getConfig().monitorSupport
 
-  -- Enabled Application
+  -- Power Plant
   window.setTextColor(colours.grey)
-  window.setCursorPos(19,11)
+  window.setCursorPos(20,12)
+  window.write(plantName)
+
+  -- Enabled Application
+  window.setCursorPos(20,13)
   window.write(_G[enabledApplication]:getDisplayName())
 
   -- Enabled Service
-  window.setCursorPos(19,12)
+  window.setCursorPos(20,14)
   if (enabledService ~= nil) then
     window.write(_G[enabledService]:getDisplayName())
   else
@@ -50,7 +57,7 @@ function drawBootMenu()
   end
 
   -- Monitor Support
-  window.setCursorPos(19,13)
+  window.setCursorPos(20,15)
   if (monitorSupport) then
     window.setTextColor(colours.blue)
     window.write("Yes")
