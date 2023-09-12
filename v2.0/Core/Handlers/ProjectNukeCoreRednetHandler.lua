@@ -24,7 +24,7 @@
 
 --]]
 
-REDNET_PROTOCOL_ID = "ProjectNuke"
+REDNET_PROTOCOL_ID = "ProjectNuke_"
 
 -- Initalize REDNET Communications
 function init()
@@ -36,6 +36,10 @@ function init()
   if (not rednet.isOpen()) then
     ProjectNukeCoreGUIHandler.DrawPopupMessage({"No Ender modem detected.", "","", "Please install one and click Reboot."}, colours.red, -1)
   end
+
+  -- Set Protocol ID
+  REDNET_PROTOCOL_ID = REDNET_PROTOCOL_ID .. ProjectNukeCoreConfigurationHandler.getConfig().plantName
+  print("Rednet Protocol ID is " .. REDNET_PROTOCOL_ID)
 end
 
 function WaitForPacket(PacketID, Timeout)
