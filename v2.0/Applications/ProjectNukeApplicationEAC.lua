@@ -66,28 +66,28 @@ function sleepGUI()
 end
 
 function sendAlert()
-  ProjectNukeServiceEMRG.sendState("STATUS", "ALRT")
+  sendEmergencyStatePacket.sendState("STATUS", "ALRT")
   ProjectNukeCoreGUIHandler.WriteStatus("ALRT message sent.")
 
   sleepGUI()
 end
 
 function sendEvac()
-  ProjectNukeServiceEMRG.sendState("STATUS", "EVAC")
+  sendEmergencyStatePacket.sendState("STATUS", "EVAC")
   ProjectNukeCoreGUIHandler.WriteStatus("EVAC message sent.")
 
   sleepGUI()
 end
 
 function sendOkay()
-  ProjectNukeServiceEMRG.sendState("STATUS", "OKAY")
+  sendEmergencyStatePacket.sendState("STATUS", "OKAY")
   ProjectNukeCoreGUIHandler.WriteStatus("OKAY message sent.")
 
   sleepGUI()
 end
 
 function sendTest()
-  ProjectNukeServiceEMRG.sendState("STATUS", "TEST")
+  sendEmergencyStatePacket.sendState("STATUS", "TEST")
   ProjectNukeCoreGUIHandler.WriteStatus("TEST message sent.")
 
   sleepGUI()
@@ -103,8 +103,15 @@ function sendCustomMessage()
     return
   end
 
-  ProjectNukeServiceEMRG.sendState("MSG", customMessage)
+  sendEmergencyStatePacket.sendState("MSG", customMessage)
   ProjectNukeCoreGUIHandler.WriteStatus("Custom message sent.")
 
   sleepGUI()
+end
+
+function sendEmergencyStatePacket(type, data)
+  local emergencyStatePacket = ProjectNukeCorePackets.EmergencyStatePacket
+
+  emergencyStatePacket:setData({type, data})
+  ProjectNukeCoreRednetHandler.SendPacket(emergencyStatePacket)
 end
