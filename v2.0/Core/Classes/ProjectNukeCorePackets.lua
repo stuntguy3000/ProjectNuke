@@ -22,13 +22,13 @@ EmergencyStatePacket = ProjectNukeCoreClasses.Packet.new(1, nil)
 -- AuthenticationRequestPacket
 --
 --    Data Stucture
---      Array([1] => username, [2] => password, [3] => Application Name)
+--      Array([1] => username, [2] => password)
 --      
 AuthenticationRequestPacket = ProjectNukeCoreClasses.Packet.new(2, nil)
 
 -- AuthenticationResponsePacket
 --
 --    Data Stucture
---      Boolean, True = Authentication Valid.
+--      Array([1] => True (if authenticated), [3] => checksum [sha256 of username .. password])
 --      
 AuthenticationResponsePacket = ProjectNukeCoreClasses.Packet.new(3, nil)

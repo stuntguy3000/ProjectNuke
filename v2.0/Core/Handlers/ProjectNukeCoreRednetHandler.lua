@@ -42,7 +42,7 @@ function init()
   print("Rednet Protocol ID is " .. REDNET_PROTOCOL_ID)
 end
 
-function WaitForPacket(PacketID, Timeout)
+function WaitForPacket(ExpectedPacket, Timeout)
   local senderId = nil
   local message = nil
   local protocol = nil
@@ -66,14 +66,18 @@ function WaitForPacket(PacketID, Timeout)
   end
 
   -- Attempt to unserialize the message
-  decodedObject = ProjectNukeFileUtil.Unserialize(decryptedMessage)
+  decryptedMessageTable = ProjectNukeFileUtil.Unserialize(decryptedMessage)
 
   -- Does it smell like a packet?
-  if (decodedObject == nil or decodedObject["id"] == nil or decodedObject["id"] ~= PacketID) then
+  local expectedPacketID = ExpectedPacket:getID()
+  if (decryptedMessageTable == nil or decryptedMessageTable["id"] == nil or decryptedMessageTable["data"] == nil or decryptedMessageTable["id"] ~= expectedPacketID) then
     return nil
   end
 
-  return decodedObject
+  -- Set ExpectedPacket's data
+  ExpectedPacket:setData(decryptedMessageTable["data"])
+
+  return ExpectedPacket
 end
 
 function SendPacket(Packet)

@@ -12,14 +12,39 @@
 --]]
 
 -- https://gist.github.com/walterlua/978150/2742d9479cd5bfb3d08d90cfcb014da94021e271
-function table.indexOf(t, object)
+function table.indexOfValue(t, object)
   if type(t) ~= "table" then error("table expected, got " .. type(t), 2) end
 
-  for i, v in pairs(t) do
-     if object == v then
+  for i, value in pairs(t) do
+    if object == value then
         return i
-     end
+    end
   end
+
+  return -1
+end
+
+function table.indexOfKey(t, object)
+    if type(t) ~= "table" then error("table expected, got " .. type(t), 2) end
+  
+    for key, value in pairs(t) do
+        error(key .. " - " .. value)
+        if object == key then
+          return i
+        end
+    end
+  
+    return -1
+  end
+
+function table.count(table)
+    local x = 0
+    
+    for k,v in pairs(table) do
+        x = x + 1
+    end
+
+    return x
 end
 
 -- https://stackoverflow.com/a/42062321
@@ -29,10 +54,7 @@ function table.dump(node)
   local output_str = "{\n"
 
   while true do
-      local size = 0
-      for k,v in pairs(node) do
-          size = size + 1
-      end
+      local size = table.count(node)
 
       local cur_index = 1
       for k,v in pairs(node) do

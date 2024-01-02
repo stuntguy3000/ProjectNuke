@@ -187,21 +187,20 @@ end
 function ApplicationPageForward()
   if (ApplicationSelectionPageNumber < ApplicationSelectionPageNumberMaximum) then
     ApplicationSelectionPageNumber = ApplicationSelectionPageNumber + 1
+    drawConfigurationMenu(ConfigurationPageNumber)
+  else
+    ProjectNukeCoreGUIHandler.StartEventListener()
   end
-
-  drawConfigurationMenu(ConfigurationPageNumber)
 end
 
 -- Advance the Application Page backwards
 function ApplicationPageBack()
   if (ApplicationSelectionPageNumber > 1) then
     ApplicationSelectionPageNumber = ApplicationSelectionPageNumber - 1
-
     drawConfigurationMenu(ConfigurationPageNumber)
-    return
+  else
+    ProjectNukeCoreGUIHandler.StartEventListener()
   end
-
-  ProjectNukeCoreGUIHandler.StartEventListener()
 end
 
 -- Configuration menu page continue

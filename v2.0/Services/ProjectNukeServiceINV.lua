@@ -18,6 +18,6 @@ function getDisplayName()
 end
 
 function run()
-  local packetData = ProjectNukeCoreRednetHandler.WaitForPacket(emergencyStatePacket:getID())
+  local packetData = ProjectNukeCoreRednetHandler.WaitForPacket(ProjectNukeCorePackets.EmergencyStatePacket)
 
 end

@@ -439,8 +439,11 @@ end
 
 -- Generic
 function RemoveClickableItem(clickableItem)
-   index = table.indexOf(clickableItems, clickableItem)
-   table.remove(clickableItems, index)
+   index = table.indexOfValue(clickableItems, clickableItem)
+
+   if (index > -1) then
+      table.remove(clickableItems, index)
+   end
 end
 
 function GetClickableItemByID(id)
