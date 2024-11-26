@@ -19,9 +19,6 @@ local monitors = { peripheral.find("monitor") }
 -- All Active clickableItems in the GUI
 local clickableItems = {}
 
-function items()
-   return clickableItems
-end
 --[[
 ================================================================================
    Handler Functions
@@ -185,8 +182,6 @@ function getVisibleWindow()
    return nil
 end
 
---endregion
-
 --[[
 ================================================================================
    Drawing Functions
@@ -327,7 +322,6 @@ end
 ]]--
 
 -- Button Specific
-
 function AddButton(buttonID, buttonValue, buttonText, buttonTextColour, buttonColour, xStart, yStart, width, height, actionFunction, window)
    -- Draw the button
    button = ProjectNukeCoreClasses.ClickableItem.new(buttonID, buttonValue, buttonText, buttonTextColour, buttonColour, xStart, yStart, width, height, actionFunction, window)
@@ -436,17 +430,17 @@ end
 
 function TextboxClickHandler(clickableItem)
    RefreshTextbox(clickableItem)
-
    StartEventListener()
 end
 
--- Generic
+-- Unregister a ClickableItem
 function RemoveClickableItem(clickableItem)
    index = table.indexOfValue(clickableItems, clickableItem)
 
    if (index > -1) then
       table.remove(clickableItems, index)
    else
+      -- Debug Message
       DrawPopupMessage({"ClickableItem " .. clickableItem.id .. " was not removed."}, colours.red, 5)
    end
 end
@@ -462,6 +456,7 @@ function RemoveClickableItemsByPrefix(prefixQuery)
    end
 end
 
+-- Return a ClickableItem based on it's exact ID, if present
 function GetClickableItemByID(id)
    for i, clickableItem in pairs(clickableItems) do
       if (clickableItem:getID() == id) then
@@ -472,6 +467,8 @@ function GetClickableItemByID(id)
    return nil
 end
 
+-- Return a ClickableItem based on a ID Prefix Search (e.g. A search for ID "Button" will find "ButtonNext")
+-- Will only return one object, even if multiple are present
 function GetClickableItemByIDSearch(id)
    for i, clickableItem in pairs(clickableItems) do
       if (string.starts(clickableItem:getID(), id)) then
@@ -482,6 +479,7 @@ function GetClickableItemByIDSearch(id)
    return nil
 end
 
+-- Returns a ClickableItem at a set of X Y Coordinates
 function GetClickableItemAtPos(x, y)
    for i,clickableItem in pairs(clickableItems) do
       if (clickableItem ~= nil and clickableItem:isEnabled() == true) then

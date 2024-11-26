@@ -185,14 +185,17 @@ function Menu.new(id, window, xStart, yStart, width, itemsPerPage)
   return self
 end
 
+-- Calculates the total page count of items
 function Menu.getTotalPageCount(self)
   return math.ceil(table.count(self.items) / self.itemsPerPage)
 end
 
+-- Calculates the GUI height of the Menu
 function Menu.getHeight(self)
   return self.itemsPerPage + 1
 end
 
+-- Add a Item to the Menu
 function Menu.addItem(self, itemText, buttonText, buttonColour, buttonValue, buttonActionFunction)
   -- Create a new MenuItem Object and Store in Item List
   menuItem = MenuItem.new(self, itemText, buttonText, buttonColour, buttonValue, buttonActionFunction)
@@ -244,19 +247,26 @@ function Menu.render(self)
 
   x,y = self.window.getCursorPos()
 
-  if (self.currentPage == 1) then
-    ProjectNukeCoreGUIHandler.AddButton("Menu" .. self.id .. "PageBackEmpty", nil, " ", colours.grey, colours.lightGrey, x, y, 3, 1, nil, self.window)
-  else
-    ProjectNukeCoreGUIHandler.AddButton("Menu" .. self.id .. "PageBack", self, "<", colours.white, colours.grey, x, y, 3, 1, self.actionPageBack, self.window)
+  -- If more than one page, introduce navigation controls
+  if (self:getTotalPageCount() > 1) then
+    -- Render the Back Button
+    if (self.currentPage == 1) then
+      ProjectNukeCoreGUIHandler.AddButton("Menu" .. self.id .. "PageBack", nil, " ", colours.grey, colours.lightGrey, x, y, 3, 1, nil, self.window)
+    else
+      ProjectNukeCoreGUIHandler.AddButton("Menu" .. self.id .. "PageBack", self, "<", colours.white, colours.grey, x, y, 3, 1, self.actionPageBack, self.window)
+    end
+
+    -- Render the Forward Button
+    if (self:getTotalPageCount() == self.currentPage) then
+      ProjectNukeCoreGUIHandler.AddButton("Menu" .. self.id .. "PageForward", self, " ", colours.grey, colours.lightGrey, x + 6, y, 3, 1, nil, self.window)
+    else
+      ProjectNukeCoreGUIHandler.AddButton("Menu" .. self.id .. "PageForward", self, ">", colours.white, colours.grey, x + 6, y, 3, 1, self.actionPageForward, self.window)
+    end
+  
+    -- Render the Page Number
+    ProjectNukeCoreGUIHandler.AddButton("Menu" .. self.id .. "PageNumber", self, self.currentPage, colours.white, colours.lightGrey, x + 3, y, 3, 1, nil, self.window)
   end
 
-  if (self:getTotalPageCount() == self.currentPage) then
-    ProjectNukeCoreGUIHandler.AddButton("Menu" .. self.id .. "PageForwardEmpty", self, " ", colours.grey, colours.lightGrey, x + 6, y, 3, 1, nil, self.window)
-  else
-    ProjectNukeCoreGUIHandler.AddButton("Menu" .. self.id .. "PageForward", self, ">", colours.white, colours.grey, x + 6, y, 3, 1, self.actionPageForward, self.window)
-  end
- 
-  ProjectNukeCoreGUIHandler.AddButton("Menu" .. self.id .. "PageNumber", self, self.currentPage, colours.white, colours.lightGrey, x + 3, y, 3, 1, nil, self.window)
   ProjectNukeCoreGUIHandler.AddButton("Menu" .. self.id .. "PageContinue", self, "Continue", colours.white, colours.blue, x + self.width - 9, y, 10, 1, nil, self.window)
 end
 
