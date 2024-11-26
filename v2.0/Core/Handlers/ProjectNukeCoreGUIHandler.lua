@@ -19,6 +19,9 @@ local monitors = { peripheral.find("monitor") }
 -- All Active clickableItems in the GUI
 local clickableItems = {}
 
+function items()
+   return clickableItems
+end
 --[[
 ================================================================================
    Handler Functions
@@ -443,13 +446,36 @@ function RemoveClickableItem(clickableItem)
 
    if (index > -1) then
       table.remove(clickableItems, index)
+   else
+      DrawPopupMessage({"ClickableItem " .. clickableItem.id .. " was not removed."}, colours.red, 5)
+   end
+end
+
+-- Unregister ClickableItems by a Prefix Search
+function RemoveClickableItemsByPrefix(prefixQuery)
+   clickableItem = GetClickableItemByIDSearch(prefixQuery)
+
+   while clickableItem ~= nil do
+      RemoveClickableItem(clickableItem)
+      
+      clickableItem = GetClickableItemByIDSearch(prefixQuery)
    end
 end
 
 function GetClickableItemByID(id)
-   for i, v in pairs(clickableItems) do
-      if (v:getID() == id) then
-         return v
+   for i, clickableItem in pairs(clickableItems) do
+      if (clickableItem:getID() == id) then
+         return clickableItem
+      end
+   end
+
+   return nil
+end
+
+function GetClickableItemByIDSearch(id)
+   for i, clickableItem in pairs(clickableItems) do
+      if (string.starts(clickableItem:getID(), id)) then
+         return clickableItem
       end
    end
 

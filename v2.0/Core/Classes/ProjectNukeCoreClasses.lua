@@ -144,3 +144,132 @@ function Packet.setData(self, data)
   self.data = data
 end
 -- Packet Object End
+
+-- MenuItem Object
+MenuItem = {}
+MenuItem.__index = MenuItem
+
+function MenuItem.new(menu, itemText, buttonText, buttonColour, buttonValue, buttonActionFunction)
+  local self = setmetatable({}, MenuItem)
+
+  -- Assign the required parameters
+  self.menu = menu
+  self.itemText = itemText
+  self.buttonText = buttonText
+  self.buttonColour = buttonColour
+  self.buttonValue = buttonValue;
+  self.buttonActionFunction = buttonActionFunction;
+  
+  return self
+end
+
+-- Menu Object
+Menu = {}
+Menu.__index = Menu
+
+function Menu.new(id, window, xStart, yStart, width, itemsPerPage)
+  local self = setmetatable({}, Menu)
+
+  -- Assign the required parameters
+  self.id = id
+  self.window = window
+  self.xStart = xStart;
+  self.yStart = yStart;
+  self.width = width;
+  self.itemsPerPage = itemsPerPage;
+
+  -- Initilize required variables
+  self.items = {}
+  self.currentPage = 1
+  
+  return self
+end
+
+function Menu.getTotalPageCount(self)
+  return math.ceil(table.count(self.items) / self.itemsPerPage)
+end
+
+function Menu.getHeight(self)
+  return self.itemsPerPage + 1
+end
+
+function Menu.addItem(self, itemText, buttonText, buttonColour, buttonValue, buttonActionFunction)
+  -- Create a new MenuItem Object and Store in Item List
+  menuItem = MenuItem.new(self, itemText, buttonText, buttonColour, buttonValue, buttonActionFunction)
+  self.items[#self.items + 1] = menuItem
+end
+
+function Menu.render(self)
+  -- Blank Menu
+  ProjectNukeCoreGUIHandler.DrawBox(colours.lightGrey, self.xStart, self.yStart, self.xStart + self.width, self.yStart + self:getHeight(), self.window)
+  ProjectNukeCoreGUIHandler.RemoveClickableItemsByPrefix("Menu" .. self.id)
+
+  -- Render Items
+  for menuItemIndexOffset = 1, self.itemsPerPage do
+    local baseIndex = (self.currentPage - 1) * self.itemsPerPage
+  
+    local menuItemListIndex = baseIndex + menuItemIndexOffset
+    local menuItem = self.items[menuItemListIndex]
+
+    if (menuItem ~= nil) then
+      local yLevel = self.yStart + (1 * (menuItemIndexOffset - 1))
+
+      -- Setup Cursor
+      self.window.setTextColour(colours.grey)
+      self.window.setBackgroundColour(colours.lightGrey)
+      self.window.setCursorPos(self.xStart, yLevel)
+
+      -- Render menuItem Label
+      self.window.write(menuItem.itemText)
+
+      -- Render menuItem Button
+      ProjectNukeCoreGUIHandler.AddButton(
+        "Menu"  .. self.id .. "Item" .. menuItemListIndex,                -- Button ID
+        menuItem.buttonValue,                                             -- Button Value
+        " " .. menuItem.buttonText .. " ",                                -- Button Label
+        colours.white, menuItem.buttonColour,                             -- Text and Button Colours
+        self.xStart + self.width - (string.len(menuItem.buttonText) + 1), -- X Pos (Start of Button, End of row)
+        yLevel,                                                           -- Y Pos
+        string.len(menuItem.buttonText) + 2,                              -- Button Length
+        1,                                                                -- Button Height
+        menuItem.buttonActionFunction,                                    -- Action Function
+        self.window                                                       -- Window
+      )
+    end
+  end
+
+  -- Render Pagination Controls
+  self.window.setTextColour(colours.white)
+  self.window.setCursorPos(self.xStart, self.yStart + self:getHeight())
+
+  x,y = self.window.getCursorPos()
+
+  if (self.currentPage == 1) then
+    ProjectNukeCoreGUIHandler.AddButton("Menu" .. self.id .. "PageBackEmpty", nil, " ", colours.grey, colours.lightGrey, x, y, 3, 1, nil, self.window)
+  else
+    ProjectNukeCoreGUIHandler.AddButton("Menu" .. self.id .. "PageBack", self, "<", colours.white, colours.grey, x, y, 3, 1, self.actionPageBack, self.window)
+  end
+
+  if (self:getTotalPageCount() == self.currentPage) then
+    ProjectNukeCoreGUIHandler.AddButton("Menu" .. self.id .. "PageForwardEmpty", self, " ", colours.grey, colours.lightGrey, x + 6, y, 3, 1, nil, self.window)
+  else
+    ProjectNukeCoreGUIHandler.AddButton("Menu" .. self.id .. "PageForward", self, ">", colours.white, colours.grey, x + 6, y, 3, 1, self.actionPageForward, self.window)
+  end
+ 
+  ProjectNukeCoreGUIHandler.AddButton("Menu" .. self.id .. "PageNumber", self, self.currentPage, colours.white, colours.lightGrey, x + 3, y, 3, 1, nil, self.window)
+  ProjectNukeCoreGUIHandler.AddButton("Menu" .. self.id .. "PageContinue", self, "Continue", colours.white, colours.blue, x + self.width - 9, y, 10, 1, nil, self.window)
+end
+
+function Menu.actionPageBack(clickableItem)
+  menu = clickableItem.value
+
+  menu.currentPage = menu.currentPage - 1
+  menu:render()
+end
+
+function Menu.actionPageForward(clickableItem)
+  menu = clickableItem.value
+
+  menu.currentPage = menu.currentPage + 1
+  menu:render()
+end

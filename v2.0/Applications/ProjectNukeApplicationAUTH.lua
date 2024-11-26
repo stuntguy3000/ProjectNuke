@@ -58,9 +58,7 @@ function updateGUI()
 
   ProjectNukeCoreGUIHandler.WriteStatus("User Count: " .. table.count(userDatabase))
 
-  window.setCursorPos(4, 17)
-  window.setBackgroundColour(colours.grey)
-  window.setTextColour(colours.green)
+
 
   -- Pagination Buttons
 

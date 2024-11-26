@@ -40,3 +40,8 @@ function string.trim(s)
 
   return s:match "^%s*(.-)%s*$"
 end
+
+-- Author: https://stackoverflow.com/a/22831842
+function string.starts(String,Start)
+  return string.sub(String,1,string.len(Start))==Start
+end
