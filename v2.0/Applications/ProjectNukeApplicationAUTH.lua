@@ -121,7 +121,7 @@ function getUserIndex(username)
 end
 
 function testUserCredentials(tryUsername, tryPassword)
-  if (dbUsername == nil or dbPassword == nil) then
+  if (tryUsername == nil or tryPassword == nil) then
     return false
   end
 
