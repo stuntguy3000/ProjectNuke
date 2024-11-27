@@ -125,15 +125,23 @@ Menu = {}
 Menu.__index = Menu
 
 function Menu.new(id, window, xStart, yStart, width, itemsPerPage)
+  return Menu.new(id, window, xStart, yStart, width, itemsPerPage, nil, nil, nil)
+end
+
+function Menu.new(id, window, xStart, yStart, width, itemsPerPage, actionButtonText, actionButtonColour, actionButtonFunction)
   local self = setmetatable({}, Menu)
 
   -- Assign the required parameters
   self.id = id
   self.window = window
-  self.xStart = xStart;
-  self.yStart = yStart;
-  self.width = width;
-  self.itemsPerPage = itemsPerPage;
+  self.xStart = xStart
+  self.yStart = yStart
+  self.width = width
+  self.itemsPerPage = itemsPerPage
+
+  self.actionButtonText = actionButtonText
+  self.actionButtonColour = actionButtonColour
+  self.actionButtonFunction = actionButtonFunction
 
   -- Initilize required variables
   self.items = {}
@@ -224,7 +232,11 @@ function Menu.render(self)
     ProjectNukeCoreGUIHandler.AddButton("Menu" .. self.id .. "PageNumber", self, self.currentPage, colours.white, colours.lightGrey, x + 3, y, 3, 1, nil, self.window)
   end
 
-  ProjectNukeCoreGUIHandler.AddButton("Menu" .. self.id .. "PageContinue", self, "Continue", colours.white, colours.blue, x + self.width - 9, y, 10, 1, nil, self.window)
+  -- Render the Action Button, If Present
+  if (self.actionButtonText ~= nil) then
+    local actionButtonLength = (string.len(self.actionButtonText) + 2)
+    ProjectNukeCoreGUIHandler.AddButton("Menu" .. self.id .. "PageActionButton", self, self.actionButtonText, colours.white, self.actionButtonColour, x + self.width - actionButtonLength + 1, y, actionButtonLength, 1, self.actionButtonFunction, self.window)
+  end
 end
 
 function Menu.actionPageBack(clickableItem)

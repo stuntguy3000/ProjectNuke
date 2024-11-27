@@ -112,7 +112,8 @@ function StartEventListener()
    local event, p1, p2, p3 = os.pullEvent() -- I can't get filtering to work :(
 
    if (event == "mouse_click" or event == "monitor_touch") then
-      local clickableItem = GetClickableItemAtPos(p2, p3)
+      local visibleWindow = getVisibleWindow()
+      local clickableItem = GetClickableItemAtPos(visibleWindow, p2, p3)
 
       if (clickableItem ~= nil) then
          actionFunction = clickableItem:getActionFunction()
@@ -125,7 +126,7 @@ function StartEventListener()
    elseif (event == "key" or event == "char") then
       local visibleWindow = getVisibleWindow()
       local cursorX, cursorY = visibleWindow.getCursorPos()
-      local textbox = GetClickableItemAtPos(cursorX, cursorY)
+      local textbox = GetClickableItemAtPos(visibleWindow, cursorX, cursorY)
       local pressedKey = p1
 
       if (textbox ~= nil) then
@@ -171,10 +172,10 @@ function StartEventListener()
 end
 
 function getVisibleWindow()
-   if (authenticationWindow ~= nil and authenticationWindow.isVisible()) then
-      return authenticationWindow
-   elseif (messageWindow ~= nil and messageWindow.isVisible()) then
+   if (messageWindow ~= nil and messageWindow.isVisible()) then
       return messageWindow
+   elseif (authenticationWindow ~= nil and authenticationWindow.isVisible()) then
+      return authenticationWindow
    elseif (mainWindow ~= nil and mainWindow.isVisible()) then
       return mainWindow
    end
@@ -456,10 +457,32 @@ function RemoveClickableItemsByPrefix(prefixQuery)
    end
 end
 
+-- Unregister ClickableItems belonging to a specific Window
+function RemoveClickableItemsForWindow(window)
+   clickableItem = GetClickableItemByWindow(window)
+
+   while clickableItem ~= nil do
+      RemoveClickableItem(clickableItem)
+      
+      clickableItem = GetClickableItemByWindow(window)
+   end
+end
+
 -- Return a ClickableItem based on it's exact ID, if present
 function GetClickableItemByID(id)
    for i, clickableItem in pairs(clickableItems) do
       if (clickableItem:getID() == id) then
+         return clickableItem
+      end
+   end
+
+   return nil
+end
+   
+   -- Return a ClickableItem based on it's window, if present
+function GetClickableItemByWindow(window)
+   for i, clickableItem in pairs(clickableItems) do
+      if (clickableItem:getWindow() == window) then
          return clickableItem
       end
    end
@@ -480,14 +503,16 @@ function GetClickableItemByIDSearch(id)
 end
 
 -- Returns a ClickableItem at a set of X Y Coordinates
-function GetClickableItemAtPos(x, y)
+function GetClickableItemAtPos(window, x, y)
    for i,clickableItem in pairs(clickableItems) do
       if (clickableItem ~= nil and clickableItem:isEnabled() == true) then
          xStart, yStart, width, height = clickableItem:getSize()
 
-         if (x >= xStart and x <= (xStart + width)) then
-            if (y >= yStart and y <= (yStart + height)) then
-               return clickableItem
+         if (clickableItem:getWindow() == window) then
+            if (x >= xStart and x <= (xStart + width)) then
+               if (y >= yStart and y <= (yStart + height)) then
+                  return clickableItem
+               end
             end
          end
       end

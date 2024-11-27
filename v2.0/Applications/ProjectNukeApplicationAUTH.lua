@@ -32,9 +32,6 @@ function run()
     userDatabase = ProjectNukeFileUtil.LoadTable(userDatabasePath)
   end
 
-  print(table.dump(userDatabase))
-  os.sleep(2)
-
   -- Run Server and GUI
   guiInit()
   userTableInit()
@@ -51,14 +48,27 @@ end
 ]]--
 
 function guiInit()
+  local window = ProjectNukeCoreGUIHandler.getMainWindow()
+
   -- Prepare Graphics
-  window = ProjectNukeCoreGUIHandler.getMainWindow()
   ProjectNukeCoreGUIHandler.DrawBaseGUI(getDisplayName(), nil, window)
+
+  ProjectNukeCoreGUIHandler.WriteStatus("Authentication Server Running...")
 end
 
 function userTableInit()
+  local window = ProjectNukeCoreGUIHandler.getMainWindow()
+
+  window.setCursorPos(2, 8)
+  window.setTextColor(colours.white)
+  window.setBackgroundColor(colours.lightGrey)
+  window.write("                                                  ")
+  
+  window.setCursorPos(2, 8)
+  window.write("User Count: " .. #userDatabase)
+
   -- Render Menu
-  local userListMenu = ProjectNukeCoreClassesGUI.Menu.new("UserList", window, 2, 10, 23, 8)
+  local userListMenu = ProjectNukeCoreClassesGUI.Menu.new("UserList", window, 2, 10, 23, 6, "Add User", colours.green, userAddButton)
   for _, user in ipairs(userDatabase) do
     userListMenu:addItem(user[1], "Remove", colours.red, user[1], userRemoveButton)
   end
@@ -67,12 +77,12 @@ function userTableInit()
 end
 
 function userAddButton(button)
-
+  username, password = ProjectNukeCoreAuthenticationHandler.drawLoginGUI(false)
+  userTableInit()
 end
 
 function userRemoveButton(button)
   removeUser(button:getValue())
-
   userTableInit()
 end
 
@@ -111,11 +121,15 @@ function getUserIndex(username)
 end
 
 function testUserCredentials(tryUsername, tryPassword)
+  if (dbUsername == nil or dbPassword == nil) then
+    return false
+  end
+
   for key, user in ipairs(userDatabase) do
     dbUsername = user[1]
     dbPassword = user[2]
 
-    if (dbUsername == tryUsername and dbPassword == tryPassword and tryUsername ~= nil and tryPassword ~= nil and dbUsername ~= nil and dbPassword ~= nil) then
+    if (dbUsername == tryUsername and dbPassword == tryPassword) then
       return true
     end
   end
@@ -135,9 +149,6 @@ function runAuthServer()
   if (packet ~= nil) then
     -- Process
     local packetData = packet:getData()
-
-    print(packetData)
-    print(table.dump(packetData))
 
     local username = packetData[1]
     local password = packetData[2]

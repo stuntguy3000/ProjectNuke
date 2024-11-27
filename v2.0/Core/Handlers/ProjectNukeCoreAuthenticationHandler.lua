@@ -75,8 +75,8 @@ function drawLoginGUI(doAuthenticate)
     ProjectNukeCoreGUIHandler.AddButton("clear", "Clear", "Clear", colors.white, colours.red, 16, 17, 7, 1, handleClear, authenticationWindow)
   else
     -- Add User Form
-    ProjectNukeCoreGUIHandler.AddButton("addUser", "Add", "Add", colors.white, colours.green, 43, 17, 5, 1, handleAdd, authenticationWindow)
-    ProjectNukeCoreGUIHandler.AddButton("close", "Close", "Close", colors.white, colours.red, 16, 17, 7, 1, handleClose, authenticationWindow)
+    ProjectNukeCoreGUIHandler.AddButton("addUser", "Create New User", "Create New User", colors.white, colours.green, 31, 17, 17, 1, handleAdd, authenticationWindow)
+    ProjectNukeCoreGUIHandler.AddButton("cancel", "Cancel", "Cancel", colors.white, colours.red, 16, 17, 8, 1, exit, authenticationWindow)
   end
   
   ProjectNukeCoreGUIHandler.RefreshTextbox(usernameTextbox)
@@ -93,21 +93,18 @@ function handleAdd()
 
   if (username == "" or password == "") then
     -- Validation error
-    ProjectNukeCoreGUIHandler.DrawPopupMessage({"Error: Please enter a username and password."}, colors.red, 3)
+    ProjectNukeCoreGUIHandler.DrawPopupMessage({"Error: Please enter a username and password."}, colors.red, 1)
     drawLoginGUI(false)
   elseif (ProjectNukeApplicationAUTH.getUserIndex(username) > 0) then
     -- Validation error
-    ProjectNukeCoreGUIHandler.DrawPopupMessage({"Error: This user already exists."}, colors.red, 3)
+    ProjectNukeCoreGUIHandler.DrawPopupMessage({"Error: This user already exists."}, colors.red, 1)
     drawLoginGUI(false)
   else
     -- Success
     ProjectNukeApplicationAUTH.addUser(username, password)
-    ProjectNukeCoreGUIHandler.DrawPopupMessage({"Success: User added to database."}, colors.green, 3)
+    ProjectNukeCoreGUIHandler.DrawPopupMessage({"Success: User added to database."}, colors.green, 1)
+    exit()
   end
-end
-
-function handleClose()
-  -- Nothing to do here!
 end
 
 function handleClear()
@@ -122,10 +119,11 @@ function handleLogin()
 
   local username = ProjectNukeCoreGUIHandler.GetClickableItemByID("username"):getValue() or ""
   local password = ProjectNukeCoreGUIHandler.GetClickableItemByID("password"):getValue() or ""
+  local checksum = ProjectNukeEncryptionUtil.SHA256(username .. password)
 
   if (username == "" or password == "") then
     -- Validation error
-    ProjectNukeCoreGUIHandler.DrawPopupMessage({"Error: Please enter a username and password."}, colors.red, 3)
+    ProjectNukeCoreGUIHandler.DrawPopupMessage({"Error: Please enter a username and password."}, colors.red, 1)
     drawLoginGUI(true)
     return
   end
@@ -135,20 +133,47 @@ function handleLogin()
   -- Send Authentication Request
   local requestPacket = ProjectNukeCorePackets.AuthenticationRequestPacket
   requestPacket:setData({username, password})
-  ProjectNukeCoreRednetHandler.SendPacket(requestPacket)
 
-  -- Todo:
-  --     Checksums, reliable packet transmission/receiving, robustness.
+  -- Authentication Retry Loop
+  retry = true
+  retryCounter = 1
 
-  -- Await Reply from Authentication Server
-  local packet = ProjectNukeCoreRednetHandler.WaitForPacket(ProjectNukeCorePackets.AuthenticationResponsePacket, 2)
+  while retry == true do
+    -- Increment Retry Counter
+    retryCounter = retryCounter + 1
+    if retryCounter > 6 then
+      retry = false
+    end
 
-  if (packet == nil) then
-    -- No reply from server
-    ProjectNukeCoreGUIHandler.DrawPopupMessage({"Error: No reply from server.", "", "Please try again shortly."}, colors.red, 3)
-    drawLoginGUI(true)
-  else
-    -- Process Response
-    ProjectNukeCoreGUIHandler.DrawPopupMessage({"Success", "", "Success."}, colors.green, 3)
+    -- Request Authentication
+    ProjectNukeCoreRednetHandler.SendPacket(requestPacket)
+    local authenticationResponsePacket = ProjectNukeCoreRednetHandler.WaitForPacket(ProjectNukeCorePackets.AuthenticationResponsePacket, 1)
+
+    -- Test Response Packet for Checksum and Auth
+    if (authenticationResponsePacket ~= nil and authenticationResponsePacket:getData() ~= nil) then
+      local packetData = authenticationResponsePacket:getData()
+
+      -- Process Successful Auth
+      if ((packetData[1] == true) and (packetData[2] == checksum)) then
+        ProjectNukeCoreGUIHandler.DrawPopupMessage({"Success", "", "Authenticated as " .. username}, colors.green, 1) 
+        authenticatedUser = packetData[1]
+        
+        retry = false
+        exit()
+        return
+      end
+    end
   end
+
+  -- No reply from server
+  ProjectNukeCoreGUIHandler.DrawPopupMessage({"Error: Invalid Credentials or Server Error.", "", "Please try again."}, colors.red, 3)
+  drawLoginGUI(true)
+end
+
+function exit()
+  ProjectNukeCoreGUIHandler.RemoveClickableItemsForWindow(authenticationWindow)
+  authenticationWindow.setCursorBlink(false)
+  authenticationWindow.setVisible(false)
+  
+  authenticationWindow.clear()
 end
