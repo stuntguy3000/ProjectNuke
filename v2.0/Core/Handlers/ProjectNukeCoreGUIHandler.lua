@@ -225,6 +225,33 @@ function DrawBaseGUI(title, subHeading, window)
    if (subHeading ~= "") then
       WriteCenteredText(subHeading, 8, colours.black, colours.orange, window)
    end
+
+   -- Authenticated User (If Present)
+   if (ProjectNukeCoreAuthenticationHandler ~= nil and ProjectNukeCoreAuthenticationHandler:isAuthenticated() == true) then
+      local authenticatedUser = ProjectNukeCoreAuthenticationHandler:getAuthenticatedUser()
+
+      ProjectNukeCoreGUIHandler.AddButton("GUICurrentUser", 
+      authenticatedUser, 
+      " " .. authenticatedUser .. " ", 
+      colours.black, 
+      colours.orange, 
+      windowSize[1] - string.len(authenticatedUser) - 3, 
+      1, 
+      string.len(authenticatedUser) + 1, 
+      1, 
+      nil, window)
+
+      ProjectNukeCoreGUIHandler.AddButton("GUICurrentUserLogout", 
+      authenticatedUser, 
+      " X ", 
+      colours.white, 
+      colours.red, 
+      windowSize[1] - 2, 
+      1, 
+      3, 
+      1, 
+      nil, window)
+   end
 end
 
 function DrawBox(colour, x1, y1, x2, y2, window)

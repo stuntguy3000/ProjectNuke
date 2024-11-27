@@ -13,7 +13,6 @@
 
 local authenticatedUser = nil
 
-
 --[[
 ================================================================================
   Authentication
@@ -29,13 +28,13 @@ end
 
 function requestAuthentication(force)
     -- Force reauthentication if a user is logged in
-    if (force) then
-        authenticatedUser = nil
+    if (force == true) then
+      authenticatedUser = nil
     end
 
     -- Is a user logged in?
-    if (authenticatedUser) then
-        return true
+    if (isAuthenticated()) then
+      return true
     end
 
     -- Request Authentication
@@ -156,7 +155,7 @@ function handleLogin()
       -- Process Successful Auth
       if ((packetData[1] == true) and (packetData[2] == checksum)) then
         ProjectNukeCoreGUIHandler.DrawPopupMessage({"Success", "", "Authenticated as " .. username}, colors.green, 1) 
-        authenticatedUser = packetData[1]
+        authenticatedUser = username
         
         retry = false
         exit()

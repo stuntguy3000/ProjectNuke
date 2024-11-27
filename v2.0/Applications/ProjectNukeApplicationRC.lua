@@ -12,15 +12,12 @@
 --]]
 function run()
   ProjectNukeCoreGUIHandler.initGUI(true)
-
   window = ProjectNukeCoreGUIHandler.getMainWindow()
-  ProjectNukeCoreGUIHandler.DrawBaseGUI(getDisplayName(), nil, window)
-  
-  sleep(1)
 
   -- Authentication Gateway
-  ProjectNukeCoreAuthenticationHandler.requestAuthentication(true)
+  ProjectNukeCoreAuthenticationHandler.requestAuthentication(false)
 
+  ProjectNukeCoreGUIHandler.DrawBaseGUI(getDisplayName(), nil, window)
   ProjectNukeCoreGUIHandler.StartEventListener()
 end
 
