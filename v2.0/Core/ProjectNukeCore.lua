@@ -20,6 +20,7 @@
 -- Maps classes to source locations
 local ClassMap = {
   "ProjectNukeCoreClasses.lua",
+  "ProjectNukeCoreClassesGUI.lua",
   "ProjectNukeCorePackets.lua",
 }
 
