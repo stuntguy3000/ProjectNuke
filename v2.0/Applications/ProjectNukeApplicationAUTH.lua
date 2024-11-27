@@ -15,7 +15,7 @@ local usersPageNumberMaximum = 1
 local usersPerPage = 4
 
 userDatabase = {
-  {"User1", "Password"}, {"User2", "Password"}
+  {"User1", "Password"}, {"User2", "Password"}, {"User3", "Password"}, {"User4", "Password"}, {"User5", "Password"}, {"User6", "Password"}, {"User7", "Password"}, {"User8", "Password"}, {"User9", "Password"}, {"User10", "Password"}, {"User11", "Password"}, {"User12", "Password"}
 }
 local userDatabasePath = "/ProjectNuke/users"
 
@@ -30,12 +30,17 @@ function run()
   -- Load User Database
   if (fs.exists(userDatabasePath) == true) then
     userDatabase = ProjectNukeFileUtil.LoadTable(userDatabasePath)
-    print(table.dump(userDatabase))
   end
 
+  print(table.dump(userDatabase))
+  os.sleep(2)
+
   -- Run Server and GUI
+  guiInit()
+  userTableInit()
+  
   while true do
-    parallel.waitForAny(runAuthServer, updateGUI)
+    parallel.waitForAny(runAuthServer, ProjectNukeCoreGUIHandler.StartEventListener)
   end
 end
 
@@ -45,88 +50,30 @@ end
 ================================================================================
 ]]--
 
-function updateGUI()
-  usersPageNumberMaximum = math.ceil(table.count(userDatabase) / usersPerPage)
-
-  if (usersPageNumber > usersPageNumberMaximum and usersPageNumberMaximum > 0) then
-    usersPageNumber = usersPageNumber - 1
-  end
-
-  -- Base GUI
+function guiInit()
+  -- Prepare Graphics
   window = ProjectNukeCoreGUIHandler.getMainWindow()
-  ProjectNukeCoreGUIHandler.DrawBaseGUI(getDisplayName(), "Users Database", window)
-
-  ProjectNukeCoreGUIHandler.WriteStatus("User Count: " .. table.count(userDatabase))
-
-
-
-  -- Pagination Buttons
-
-  if (usersPageNumberMaximum > 1) then
-    ProjectNukeCoreGUIHandler.AddButton("userPageBack", nil, "<", colours.white, colours.grey, 4, 17, 3, 1, userPageBackButton, window)
-    ProjectNukeCoreGUIHandler.AddButton("userPageNumber", nil, usersPageNumber, colours.white, colours.lightGrey, 7, 17, 3, 1, nil, window)
-    ProjectNukeCoreGUIHandler.AddButton("userPageForward", nil, ">", colours.white, colours.grey, 10, 17, 3, 1, userPageForwardButton, window)
-  end
-
-  -- Buttons
-  ProjectNukeCoreGUIHandler.AddButton("addUser", nil, "Add User", colours.white, colours.green, 39, 17, 10, 1, userAddButton, window)
-
-  -- Print User List
-  baseIndex = (usersPageNumber - 1) * usersPerPage
-  for i = 1, usersPerPage, 1 do
-    local userEntry = userDatabase[i + baseIndex]
-
-    if (userEntry ~= nil) then
-      local username = userEntry[1]
-
-      -- Draw Label
-      window.setTextColour(colours.black)
-      window.setBackgroundColour(colours.lightGrey)
-      window.setCursorPos(4, 11 + i)
-      window.write(username)
-
-      -- Draw Action Button
-      ProjectNukeCoreGUIHandler.AddButton(username, username, "Delete", colours.white, colours.red, 41, 11 + i, 8, 1, userDeleteButton, window)
-    end
-  end
-
-  ProjectNukeCoreGUIHandler.StartEventListener()
+  ProjectNukeCoreGUIHandler.DrawBaseGUI(getDisplayName(), nil, window)
 end
 
--- Button Handlers
-function userPageBackButton()
-  if (usersPageNumber > 1) then
-    usersPageNumber = usersPageNumber - 1
-    updateGUI()
-  else
-    ProjectNukeCoreGUIHandler.StartEventListener()
+function userTableInit()
+  -- Render Menu
+  local userListMenu = ProjectNukeCoreClassesGUI.Menu.new("UserList", window, 2, 10, 23, 8)
+  for _, user in ipairs(userDatabase) do
+    userListMenu:addItem(user[1], "Remove", colours.red, user[1], userRemoveButton)
   end
-end
 
-function userPageForwardButton()
-  if (usersPageNumber < usersPageNumberMaximum) then
-    usersPageNumber = usersPageNumber + 1
-    updateGUI()
-  else
-    ProjectNukeCoreGUIHandler.StartEventListener()
-  end
+  userListMenu:render()
 end
 
 function userAddButton(button)
-  ProjectNukeCoreAuthenticationHandler.drawLoginGUI(false)
 
-  -- Login GUI Exited, update GUI.
-  updateGUI()
 end
 
-function userDeleteButton(button)
-  window = ProjectNukeCoreGUIHandler.getMainWindow()
-  window.setCursorPos(1, 1)
-  window.write(button:getValue())
-
+function userRemoveButton(button)
   removeUser(button:getValue())
 
-  updateGUI()
+  userTableInit()
 end
 
 --[[
@@ -183,9 +130,7 @@ end
 ]]--
 function runAuthServer()
   -- Await Authentication Message
-  print(table.dump(ProjectNukeCorePackets.AuthenticationRequestPacket))
-
-  local packet = ProjectNukeCoreRednetHandler.WaitForPacket(ProjectNukeCorePackets.AuthenticationRequestPacket, 1)
+  local packet = ProjectNukeCoreRednetHandler.WaitForPacket(ProjectNukeCorePackets.AuthenticationRequestPacket)
 
   if (packet ~= nil) then
     -- Process
