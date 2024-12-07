@@ -19,11 +19,13 @@ function run()
   
   window = ProjectNukeCoreGUIHandler.getMainWindow()
   ProjectNukeCoreGUIHandler.DrawBaseGUI(getDisplayName(), nil, window)
-  ProjectNukeCoreGUIHandler.WriteStatus("Listening on channel " .. ProjectNukeCoreRednetHandler.REDNET_PROTOCOL_ID)
 
   -- Draw GUI Elements
   windowSize = {window.getSize()}
-  ProjectNukeCoreGUIHandler.DrawBox(colors.gray, 2, 8, windowSize[1] - 1, 17, window)
+  ProjectNukeCoreGUIHandler.DrawBox(colors.gray, 2, 8, windowSize[1] - 1, windowSize[2] - 2, window)
+
+  
+  ProjectNukeCoreGUIHandler.WriteStatus("Listening on channel " .. ProjectNukeCoreRednetHandler.REDNET_PROTOCOL_ID .. " - " .. windowSize[2])
 
   -- Await Message
   while true do
@@ -38,7 +40,7 @@ function printMessage(message)
   end
 
   -- Reset
-  ProjectNukeCoreGUIHandler.DrawBox(colors.gray, 2, 8, windowSize[1] - 1, 17, window)
+  ProjectNukeCoreGUIHandler.DrawBox(colors.gray, 2, 8, windowSize[1] - 1, windowSize[2] - 2, window)
   window.setBackgroundColour(colors.gray)
   window.setTextColour(colors.white)
 
@@ -48,7 +50,7 @@ function printMessage(message)
   -- Split into chunks & add to buffer
   messageSplit = string.split(message, windowSize[1] - 2)
 
-  table.insert(messageBuffer, textutils.formatTime(os.time(), false) .. " (World Time):")
+  --table.insert(messageBuffer, textutils.formatTime(os.time(), false) .. " (World Time):")
   for i, msg in ipairs(messageSplit) do
     table.insert(messageBuffer, msg)
   end

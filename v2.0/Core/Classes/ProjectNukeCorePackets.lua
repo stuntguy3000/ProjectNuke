@@ -32,3 +32,17 @@ AuthenticationRequestPacket = ProjectNukeCoreClasses.Packet.new(2, nil)
 --      Array([1] => True (if authenticated), [3] => checksum [sha256 of username .. password])
 --      
 AuthenticationResponsePacket = ProjectNukeCoreClasses.Packet.new(3, nil)
+
+-- InventoryRequestStatus
+--
+--    Data Stucture
+--      [None]
+--      
+InventoryRequestStatus = ProjectNukeCoreClasses.Packet.new(4, nil)
+
+-- InventoryResponseStatus
+--
+--    Data Stucture
+--      Array([1] => ID of Enabled Application)
+--      
+InventoryResponseStatus = ProjectNukeCoreClasses.Packet.new(5, nil)
