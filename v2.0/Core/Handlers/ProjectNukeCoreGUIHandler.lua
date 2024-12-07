@@ -11,9 +11,11 @@ Author: stuntguy3000
 
 --]]
 
-local mainWindow = window.create(term.current(), 1, 1, 51, 21) -- The main window for drawing graphic elements
-local messageWindow = window.create(term.current(), 1, 1, 51, 21) -- A window designed to overlay popup messages
-local authenticationWindow = window.create(term.current(), 1, 1, 51, 21) -- A window designed for Authentication requests
+local termWidth, termHeight = term.current().getSize()
+
+local mainWindow = window.create(term.current(), 1, 1, termWidth, termHeight) -- The main window for drawing graphic elements
+local messageWindow = window.create(term.current(), 1, 1, termWidth, termHeight) -- A window designed to overlay popup messages
+local authenticationWindow = window.create(term.current(), 1, 1, termWidth, termHeight) -- A window designed for Authentication requests
 local monitors = { peripheral.find("monitor") }
 
 -- All Active clickableItems in the GUI
@@ -33,25 +35,18 @@ function initGUI(tryConnectMonitor)
       
       if (monitors ~= nil and #monitors > 0) then
          local monitor = monitors[1]
-
-         -- Is it the right size?
          monitorSize = {monitor.getSize()} -- Width/Height Respectively
+         termSize = {term.current().getSize()} -- Width/Height Respectively
 
-         if (monitorSize[1] == 50 and monitorSize[2] == 19) then
-            -- Create a message window for the message
-            monitorWindow = window.create(term.current(), 1, 1, 51, 21)
+         -- Create a message window for the message
+         termWindow = window.create(term.current(), 1, 1, termSize[1], termSize[2])
 
-            -- Fill the computer terminal with a generic message.
-            Fill(colours.lightGrey, monitorWindow)
-            WriteCenteredText("See monitor for output.", 10, colours.grey, colours.lightGrey, monitorWindow)
+         -- Fill the computer terminal with a generic message.
+         Fill(colours.lightGrey, termWindow)
+         WriteCenteredText("See monitor for output.", 10, colours.grey, colours.lightGrey, termWindow)
 
-            -- Recreate the windows using the monitor
-            mainWindow = window.create(monitor, 1, 1, 50, 19)
-            --messageWindow = window.create(monitor, 1, 1, 50, 19)
-            return
-         else
-            DrawPopupMessage({"Attached monitors are not compatible.", "Only a monitor that is 5x3 in size can be used."}, colours.red, 5)
-         end
+         -- Recreate the windows using the monitor
+         mainWindow = window.create(monitor, 1, 1, monitorSize[1], monitorSize[2])
       end
    --else
    --   mainWindow = window.create(term.current(), 1, 1, 51, 21)
@@ -198,23 +193,23 @@ function DrawBaseGUI(title, subHeading, window)
    title = title or ""
    subHeading = subHeading or ""
 
+   w,h = mainWindow.getSize()
+
    -- Draw Title/Subheading Backgrounds
-   DrawBox(colours.yellow,    1, 1, 51, 3,   window)
-   DrawBox(colours.red,       1, 4, 51, 6,   window)
-   DrawBox(colours.lightGrey, 1, 7, 51, 19,  window)
+   DrawBox(colours.yellow,    1, 1, w, 3,   window)
+   DrawBox(colours.red,       1, 4, w, 6,   window)
+   DrawBox(colours.lightGrey, 1, 7, w, h,  window)
 
    if (subHeading ~= "") then
-      DrawBox(colours.orange, 1, 7, 51, 9, window)
+      DrawBox(colours.orange, 1, 7, w, 9, window)
    end
 
    -- Draw Black Checker Pattern
    -- Gives us three rows of alternating black checkers.
-   windowSize = {window.getSize()}
-
    for xStart = 0, 3, 1 do
       y = 3 - xStart
 
-      for x=0, windowSize[1], 4 do
+      for x=0, w, 4 do
          DrawBox(colours.black, (xStart + x), (y), (xStart + x + 1), (y), window)
       end
    end
@@ -235,7 +230,7 @@ function DrawBaseGUI(title, subHeading, window)
       " " .. authenticatedUser .. " ", 
       colours.black, 
       colours.orange, 
-      windowSize[1] - string.len(authenticatedUser) - 3, 
+      w - string.len(authenticatedUser) - 3, 
       1, 
       string.len(authenticatedUser) + 1, 
       1, 
@@ -246,7 +241,7 @@ function DrawBaseGUI(title, subHeading, window)
       " X ", 
       colours.white, 
       colours.red, 
-      windowSize[1] - 2, 
+      w - 2, 
       1, 
       3, 
       1, 
@@ -296,8 +291,10 @@ end
 
 -- Write a Status Message to a Window
 function WriteStatus(message)
-   WriteCenteredText("                                                   ", 19, colours.grey, colours.lightGrey, mainWindow)
-   WriteCenteredText(message, 19, colours.grey, colours.lightGrey, mainWindow)
+   w,h = mainWindow.getSize()
+
+   WriteCenteredText("                                                                 ", h, colours.grey, colours.lightGrey, mainWindow)
+   WriteCenteredText(message, h, colours.grey, colours.lightGrey, mainWindow)
 end
 
 -- Draw a Popup Message 
