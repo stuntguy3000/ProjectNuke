@@ -18,7 +18,8 @@ local applicationsDatabase = {
   "ProjectNukeApplicationRC",
   "ProjectNukeApplicationRM",
   "ProjectNukeApplicationALRT",
-  "ProjectNukeApplicationRNET"
+  "ProjectNukeApplicationRNET",
+  "ProjectNukeApplicationINV"
 }
 local enabledApplication = nil
 

@@ -59,14 +59,12 @@ function tryRunServices()
     -- Enable the service if specified in the configuration
     local configEnabledService = ProjectNukeCoreConfigurationHandler.getConfig().enabledService
 
-    if (configEnabledService ~= nil and configEnabledService == service) then
+    if (configEnabledService ~= nil and configEnabledService == service or true) then
       -- Store as our enabled service
       enabledService = service
       print("Service "..service.." enabled.")
 
-      runFunction = _G[enabledService]:run()
-      runFunction()
-      
+      _G[enabledService]:run()
       return
     end
   end
