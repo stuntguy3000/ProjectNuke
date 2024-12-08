@@ -93,7 +93,8 @@ function drawConfigurationMenu(pageNumber)
 
     -- Buttons
     ProjectNukeCoreGUIHandler.AddButton("Continue", nil, "Continue", colours.white, colours.blue, 41, 17, 10, 1, ConfigurationMenuContinue, window)
-    ProjectNukeCoreGUIHandler.RefreshTextbox(ProjectNukeCoreGUIHandler.AddTextbox("PlantNameInput", 2, 12, 49, window))
+    --ProjectNukeCoreGUIHandler.RedrawTextbox(ProjectNukeCoreGUIHandler.AddTextbox("PlantNameInput", 1, 2, 12, 49, window))
+    ProjectNukeCoreGUIHandler.AddTextbox("PlantNameInput", 1, 2, 12, 49, window)
 
     ProjectNukeCoreGUIHandler.StartEventListener()
   elseif (pageNumber == 3) then
@@ -112,7 +113,8 @@ function drawConfigurationMenu(pageNumber)
 
     -- Buttons
     ProjectNukeCoreGUIHandler.AddButton("Continue", nil, "Continue", colours.white, colours.blue, 41, 17, 10, 1, ConfigurationMenuContinue, window)
-    ProjectNukeCoreGUIHandler.RefreshTextbox(ProjectNukeCoreGUIHandler.AddTextbox("EncryptionKeyInput", 2, 12, 49, window))
+    --ProjectNukeCoreGUIHandler.RedrawTextbox(ProjectNukeCoreGUIHandler.AddTextbox("EncryptionKeyInput", 1, 2, 12, 49, window))
+    ProjectNukeCoreGUIHandler.AddTextbox("EncryptionKeyInput", 1, 2, 12, 49, window)
 
     ProjectNukeCoreGUIHandler.StartEventListener()
   elseif (pageNumber == 4) then
@@ -231,7 +233,7 @@ function ConfigurationMenuContinue()
   elseif (ConfigurationPageNumber == 2) then
     -- ===== Plant Name =====
     local plantNameTextbox = ProjectNukeCoreGUIHandler.GetClickableItemByID("PlantNameInput");
-    local plantName = plantNameTextbox:getValue()
+    local plantName = plantNameTextbox:getText()
 
     if (plantName == nil or plantName == "") then
       ProjectNukeCoreGUIHandler.DrawPopupMessage({"Error: Please enter a valid Plant Name."}, colours.red, 3)
@@ -245,7 +247,7 @@ function ConfigurationMenuContinue()
   elseif (ConfigurationPageNumber == 3) then
     -- ===== Encryption Key =====
     local encryptionKeyTextbox = ProjectNukeCoreGUIHandler.GetClickableItemByID("EncryptionKeyInput");
-    local encryptionKey = encryptionKeyTextbox:getValue()
+    local encryptionKey = encryptionKeyTextbox:getText()
 
 	  if (encryptionKey == nil or encryptionKey == "" or encryptionKey:match("%W")) then
 	    ProjectNukeCoreGUIHandler.DrawPopupMessage({"Error: Please enter a valid Encryption Key."}, colours.red, 3)

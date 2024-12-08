@@ -64,8 +64,8 @@ function drawLoginGUI(doAuthenticate)
   authenticationWindow.write("Password:")
 
   -- Textboxes
-  usernameTextbox = ProjectNukeCoreGUIHandler.AddTextbox("username", 16, 12, 32, authenticationWindow)
-  passwordTextbox = ProjectNukeCoreGUIHandler.AddTextbox("password", 16, 14, 32, authenticationWindow)
+  usernameTextbox = ProjectNukeCoreGUIHandler.AddTextbox("username", 1, 16, 12, 32, authenticationWindow)
+  passwordTextbox = ProjectNukeCoreGUIHandler.AddTextbox("password", 2, 16, 14, 32, authenticationWindow)
 
   -- Buttons
   if doAuthenticate then
@@ -78,7 +78,7 @@ function drawLoginGUI(doAuthenticate)
     ProjectNukeCoreGUIHandler.AddButton("cancel", "Cancel", "Cancel", colors.white, colours.red, 16, 17, 8, 1, exit, authenticationWindow)
   end
   
-  ProjectNukeCoreGUIHandler.RefreshTextbox(usernameTextbox)
+  ProjectNukeCoreGUIHandler.RedrawTextbox(usernameTextbox)
 
   -- Bring it together
   authenticationWindow.setVisible(true)
@@ -87,8 +87,8 @@ end
 
 -- Add the user to the user database
 function handleAdd()
-  local username = ProjectNukeCoreGUIHandler.GetClickableItemByID("username"):getValue() or ""
-  local password = ProjectNukeCoreGUIHandler.GetClickableItemByID("password"):getValue() or ""
+  local username = ProjectNukeCoreGUIHandler.GetClickableItemByID("username"):getText() or ""
+  local password = ProjectNukeCoreGUIHandler.GetClickableItemByID("password"):getText() or ""
 
   if (username == "" or password == "") then
     -- Validation error
@@ -116,8 +116,8 @@ function handleLogin()
   ProjectNukeCoreGUIHandler.AddButton("clear", "Clear", "Clear", colors.white, colours.grey, 16, 17, 7, 1, nil, authenticationWindow)
   authenticationWindow.setCursorBlink(false)
 
-  local username = ProjectNukeCoreGUIHandler.GetClickableItemByID("username"):getValue() or ""
-  local password = ProjectNukeCoreGUIHandler.GetClickableItemByID("password"):getValue() or ""
+  local username = ProjectNukeCoreGUIHandler.GetClickableItemByID("username"):getText() or ""
+  local password = ProjectNukeCoreGUIHandler.GetClickableItemByID("password"):getText() or ""
   local checksum = ProjectNukeEncryptionUtil.SHA256(username .. password)
 
   if (username == "" or password == "") then

@@ -127,35 +127,80 @@ function StartEventListener()
       if (textbox ~= nil) then
          actionFunction = textbox:getActionFunction()
 
+         -- Are we currently typing in a textbox?
          if (actionFunction == TextboxClickHandler) then
             if (event == "char") then
-               local textboxValue = textbox:getValue() or ""
+               -- Char: Fired when text is typed on the keyboard
+               local text = textbox:getText() or ""
 
                -- Maximum length check
-               if (#textboxValue <= textbox:getWidth()) then
-                  textboxValue = textboxValue .. pressedKey
-                  textbox:setValue(textboxValue)
+               if (#text <= textbox:getWidth()) then
+                  text = text .. pressedKey
+                  textbox:setText(text)
 
                   textboxX, textboxY, width, height = textbox:getSize()
-                  RefreshTextbox(textbox)
+
+                  RedrawTextbox(textbox)
+                  StartEventListener()
+                  return
                end
             elseif (event == "key") then
+               -- Key: Fired when a key is pressed on the keyboard
+
                if (pressedKey == keys.backspace) then
-                  textboxValue = textbox:getValue() or ""
+                  -- Backspace Handling
+                  local text = textbox:getText() or ""
 
-                  if (#textboxValue > 0) then
-                     textboxValue = textboxValue:sub(1, #textboxValue - 1)
-                     textbox:setValue(textboxValue)
+                  -- Is the textbox empty?
+                  if (#text > 0) then
+                     -- Remove the last character
+                     text = text:sub(1, #text - 1)
+                     textbox:setText(text)
 
-                     textboxX, textboxY, width, height = textbox:getSize()
+                     -- Redraw Textbox
+                     RedrawTextbox(textbox)
+                     StartEventListener()
+                     return
+                  end
+               elseif (pressedKey == keys.tab) then
+                  -- Tab Handling
+                  local currentIndex = textbox:getValue()
+                  local texboxTable = {}
 
-                     -- Blank over previous character or current one if last character
-                     if (cursorX == (textboxX+width)) then
-                        DrawBox(colours.white, cursorX, cursorY, cursorX, cursorY, textbox:getWindow())
+                  -- Generate a set containing texbox indexes
+                  for _, clickableItem in pairs(clickableItems) do
+                     if (clickableItem:getActionFunction() == TextboxClickHandler) then
+                        texboxTable[clickableItem:getValue()] = clickableItem:getID()
                      end
+                  end
 
-                     DrawBox(colours.white, cursorX-1, cursorY, cursorX-1, cursorY, textbox:getWindow())
-                     RefreshTextbox(textbox)
+                  -- Find next Highest Textbox
+                  for index, textboxID in pairs(texboxTable) do
+                     if (index == (currentIndex + 1)) then
+                        -- Focus this Textbox
+                        RedrawTextbox(GetClickableItemByID(textboxID))
+                        StartEventListener()
+                        return
+                     end
+                  end
+
+                  -- Try to find the LOWEST Index Textbox
+                  local lowestIndex = currentIndex
+                  local lowestIndexID = textbox:getValue()
+
+                  for index, textboxID in pairs(texboxTable) do
+                     if (index < lowestIndex) then
+                        lowestIndex = index
+                        lowestIndexID = textboxID
+                     end
+                  end
+
+                  -- Is this textbox already focused?
+                  if (lowestIndexID ~= textbox:getValue()) then
+                     -- Focus this Textbox
+                     RedrawTextbox(GetClickableItemByID(lowestIndexID))
+                     StartEventListener()
+                     return
                   end
                end
             end
@@ -303,7 +348,6 @@ function DrawPopupMessage(messageLines, backgroundColour, timeout)
    -- Setup Message Window 
    mainWindow.setVisible(false)
    messageWindow.setVisible(true)
-
    messageWindow.clear()
 
    Fill(backgroundColour, messageWindow)
@@ -405,9 +449,9 @@ function RebootButtonCommandHandler()
 end
 
 -- Textboxes
-function AddTextbox(textboxID, xStart, yStart, width, window)
+function AddTextbox(id, index, xStart, yStart, width, window)
    -- Draw the textbox
-   textbox = ProjectNukeCoreClassesGUI.ClickableItem.new(textboxID, "", "", colours.white, colours.white, xStart, yStart, width, 1, TextboxClickHandler, window)
+   textbox = ProjectNukeCoreClassesGUI.ClickableItem.new(id, index, "", colours.white, colours.white, xStart, yStart, width, 1, TextboxClickHandler, window)
    textbox:render()
 
    table.insert(clickableItems, textbox)
@@ -415,46 +459,45 @@ function AddTextbox(textboxID, xStart, yStart, width, window)
    return textbox
 end
 
-function RefreshTextbox(clickableItem)
+function RedrawTextbox(clickableItem)
    -- Determine where the cursor goes
    x,y = clickableItem:getPosition()
    width = clickableItem:getWidth()
    id = clickableItem:getID()
-   value = clickableItem:getValue()
-
+   text = clickableItem:getText() or ""
    window = clickableItem:getWindow()
 
-   -- Render it
+   -- Redraw Textbox
+   DrawBox(colours.white, x, y, x + width, y, textbox:getWindow())
+
    window.setBackgroundColour(colors.white)
    window.setTextColour(colors.black)
    window.setCursorPos(x,y)
 
    -- Super Simple Password Shielding!
    if (id == "password") then
-      value = ""
+      text = ""
 
-      for i = 1, string.len(clickableItem:getValue()), 1 do
-         value = value .. "*"
+      for i = 1, string.len(clickableItem:getText()), 1 do
+         text = text .. "*"
       end
-   else
-      value = clickableItem:getValue() or ""
    end
 
-   window.write(value)
+   -- Print Text to Window
+   window.write(text)
 
+   -- Blink the cursor (unless it is outside the Textbox)
    cursorPosX, cursorPosY = window.getCursorPos()
-
    if (cursorPosX > (x + width)) then
       window.setCursorPos(cursorPosX - 1, cursorPosY)
       window.setCursorBlink(false)
    else
       window.setCursorBlink(true)
    end
-
 end
 
 function TextboxClickHandler(clickableItem)
-   RefreshTextbox(clickableItem)
+   RedrawTextbox(clickableItem)
    StartEventListener()
 end
 
@@ -494,7 +537,7 @@ end
 
 -- Return a ClickableItem based on it's exact ID, if present
 function GetClickableItemByID(id)
-   for i, clickableItem in pairs(clickableItems) do
+   for _, clickableItem in pairs(clickableItems) do
       if (clickableItem:getID() == id) then
          return clickableItem
       end
@@ -505,7 +548,7 @@ end
 
    -- Return a ClickableItem based on it's window, if present
 function GetClickableItemByWindow(window)
-   for i, clickableItem in pairs(clickableItems) do
+   for _, clickableItem in pairs(clickableItems) do
       if (clickableItem:getWindow() == window) then
          return clickableItem
       end
@@ -517,7 +560,7 @@ end
 -- Return a ClickableItem based on a ID Prefix Search (e.g. A search for ID "Button" will find "ButtonNext")
 -- Will only return one object, even if multiple are present
 function GetClickableItemByIDSearch(id)
-   for i, clickableItem in pairs(clickableItems) do
+   for _, clickableItem in pairs(clickableItems) do
       if (string.starts(clickableItem:getID(), id)) then
          return clickableItem
       end
@@ -528,7 +571,7 @@ end
 
 -- Returns a ClickableItem at a set of X Y Coordinates
 function GetClickableItemAtPos(window, x, y)
-   for i,clickableItem in pairs(clickableItems) do
+   for _, clickableItem in pairs(clickableItems) do
       if (clickableItem ~= nil and clickableItem:isEnabled() == true) then
          xStart, yStart, width, height = clickableItem:getSize()
 

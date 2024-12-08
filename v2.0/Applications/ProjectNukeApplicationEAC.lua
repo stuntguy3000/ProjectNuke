@@ -39,7 +39,7 @@ function run()
   window.setBackgroundColor(colours.lightGrey)
 
   window.write("Custom Message:")
-  ProjectNukeCoreGUIHandler.RefreshTextbox(ProjectNukeCoreGUIHandler.AddTextbox("EmergencyMessageInput", 3, 17, 40, window))
+  ProjectNukeCoreGUIHandler.RedrawTextbox(ProjectNukeCoreGUIHandler.AddTextbox("EmergencyMessageInput", 1, 3, 17, 40, window))
 
   -- Status
   ProjectNukeCoreGUIHandler.WriteStatus("Ready to send an alert.")
@@ -95,7 +95,7 @@ end
 
 function sendCustomMessage()
   customMessageTextbox = ProjectNukeCoreGUIHandler.GetClickableItemByID("EmergencyMessageInput");
-  customMessage = string.trim(customMessageTextbox:getValue())
+  customMessage = string.trim(customMessageTextbox:getText())
 
   if (customMessage == nil or customMessage == "") then
     ProjectNukeCoreGUIHandler.DrawPopupMessage({"Error: Please enter a valid message."}, colors.red, 3)

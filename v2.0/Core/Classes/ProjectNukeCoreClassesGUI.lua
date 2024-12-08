@@ -77,12 +77,20 @@ function ClickableItem.getValue(self)
   return self.value
 end
 
+function ClickableItem.getText(self)
+  return self.text
+end
+
 function ClickableItem.getWindow(self)
   return self.window
 end
 
 function ClickableItem.setValue(self, value)
   self.value = value
+end
+
+function ClickableItem.setText(self, text)
+  self.text = text
 end
 
 function ClickableItem.getActionFunction(self)
