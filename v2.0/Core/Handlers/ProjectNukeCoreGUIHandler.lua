@@ -32,7 +32,7 @@ local clickableItems = {}
 function initGUI(tryConnectMonitor)
    if (tryConnectMonitor and ProjectNukeCoreConfigurationHandler.getConfig().monitorSupport) then
       -- Use an attached monitor if present
-      
+
       if (monitors ~= nil and #monitors > 0) then
          local monitor = monitors[1]
          monitorSize = {monitor.getSize()} -- Width/Height Respectively
@@ -225,26 +225,26 @@ function DrawBaseGUI(title, subHeading, window)
    if (ProjectNukeCoreAuthenticationHandler ~= nil and ProjectNukeCoreAuthenticationHandler:isAuthenticated() == true) then
       local authenticatedUser = ProjectNukeCoreAuthenticationHandler:getAuthenticatedUser()
 
-      ProjectNukeCoreGUIHandler.AddButton("GUICurrentUser", 
-      authenticatedUser, 
-      " " .. authenticatedUser .. " ", 
-      colours.black, 
-      colours.orange, 
-      w - string.len(authenticatedUser) - 3, 
-      1, 
-      string.len(authenticatedUser) + 1, 
-      1, 
+      ProjectNukeCoreGUIHandler.AddButton("GUICurrentUser",
+      authenticatedUser,
+      " " .. authenticatedUser .. " ",
+      colours.black,
+      colours.orange,
+      w - string.len(authenticatedUser) - 3,
+      1,
+      string.len(authenticatedUser) + 1,
+      1,
       nil, window)
 
-      ProjectNukeCoreGUIHandler.AddButton("GUICurrentUserLogout", 
-      authenticatedUser, 
-      " X ", 
-      colours.white, 
-      colours.red, 
-      w - 2, 
-      1, 
-      3, 
-      1, 
+      ProjectNukeCoreGUIHandler.AddButton("GUICurrentUserLogout",
+      authenticatedUser,
+      " X ",
+      colours.white,
+      colours.red,
+      w - 2,
+      1,
+      3,
+      1,
       nil, window)
    end
 end
@@ -476,7 +476,7 @@ function RemoveClickableItemsByPrefix(prefixQuery)
 
    while clickableItem ~= nil do
       RemoveClickableItem(clickableItem)
-      
+
       clickableItem = GetClickableItemByIDSearch(prefixQuery)
    end
 end
@@ -487,7 +487,7 @@ function RemoveClickableItemsForWindow(window)
 
    while clickableItem ~= nil do
       RemoveClickableItem(clickableItem)
-      
+
       clickableItem = GetClickableItemByWindow(window)
    end
 end
@@ -502,7 +502,7 @@ function GetClickableItemByID(id)
 
    return nil
 end
-   
+
    -- Return a ClickableItem based on it's window, if present
 function GetClickableItemByWindow(window)
    for i, clickableItem in pairs(clickableItems) do
