@@ -21,7 +21,7 @@ function run()
   local packetData = ProjectNukeCoreRednetHandler.WaitForPacket(ProjectNukeCorePackets.InventoryRequestStatus)
   local enabledApplication = ProjectNukeCoreConfigurationHandler.getConfig().enabledApplication
 
-  if (enabledApplication ~= nil) then
+  if (packetData ~= nil and enabledApplication ~= nil) then
     -- Send Response
     local responsePacket = ProjectNukeCorePackets.InventoryResponseStatus
     
