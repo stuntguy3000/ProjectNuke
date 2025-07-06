@@ -70,7 +70,11 @@ function userTableInit()
   -- Render Menu
   local userListMenu = ProjectNukeCoreClassesGUI.Menu.new("UserList", window, 2, 10, 23, 6, "Add User", colours.green, userAddButton)
   for _, user in ipairs(userDatabase) do
-    userListMenu:addItem(user[1], "Remove", colours.red, user[1], userRemoveButton)
+    local removeUserButton = ProjectNukeCoreClassesGUI.MenuItemButton.new("Delete", colours.red, user[1], userRemoveButton)
+    local changePasswordButton = ProjectNukeCoreClassesGUI.MenuItemButton.new("Set Pwd", colours.blue, user[1], userChangePasswordButton)
+    
+    -- Add User to Menu
+    userListMenu:addItem(user[1], {removeUserButton, changePasswordButton})
   end
 
   userListMenu:render()
@@ -83,6 +87,11 @@ end
 
 function userRemoveButton(button)
   removeUser(button:getValue())
+  userTableInit()
+end
+
+function userChangePasswordButton(button)
+  
   userTableInit()
 end
 

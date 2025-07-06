@@ -111,19 +111,31 @@ end
 -- End Clickable Item Object
 
 -- MenuItem Object
+MenuItemButton = {}
+MenuItemButton.__index = MenuItemButton
+
+function MenuItemButton.new(label, colour, value, actionFunction)
+  local self = setmetatable({}, MenuItemButton)
+  
+  self.label = label
+  self.colour = colour
+  self.value = value
+  self.actionFunction = actionFunction
+
+  return self
+end
+
+-- MenuItem Object
 MenuItem = {}
 MenuItem.__index = MenuItem
 
-function MenuItem.new(menu, itemText, buttonText, buttonColour, buttonValue, buttonActionFunction)
+function MenuItem.new(menu, text, buttons)
   local self = setmetatable({}, MenuItem)
 
   -- Assign the required parameters
-  self.menu = menu
-  self.itemText = itemText
-  self.buttonText = buttonText
-  self.buttonColour = buttonColour
-  self.buttonValue = buttonValue;
-  self.buttonActionFunction = buttonActionFunction;
+  self.menu = menu -- The Menu this item belongs to
+  self.text = text -- The text to display for the item
+  self.buttons = buttons or {} -- An array of MenuItemButton objects
   
   return self
 end
@@ -169,9 +181,10 @@ function Menu.getHeight(self)
 end
 
 -- Add a Item to the Menu
-function Menu.addItem(self, itemText, buttonText, buttonColour, buttonValue, buttonActionFunction)
+function Menu.addItem(self, text, buttons)
   -- Create a new MenuItem Object and Store in Item List
-  menuItem = MenuItem.new(self, itemText, buttonText, buttonColour, buttonValue, buttonActionFunction)
+  menuItem = MenuItem.new(self, text, buttons)
+  
   self.items[#self.items + 1] = menuItem
 end
 
@@ -195,22 +208,30 @@ function Menu.render(self)
       self.window.setBackgroundColour(colours.lightGrey)
       self.window.setCursorPos(self.xStart, yLevel)
 
-      -- Render menuItem Label
-      self.window.write(menuItem.itemText)
+      -- Print menuItem text
+      self.window.write(menuItem.text)
 
-      -- Render menuItem Button
-      ProjectNukeCoreGUIHandler.AddButton(
-        "Menu"  .. self.id .. "Item" .. menuItemListIndex,                -- Button ID
-        menuItem.buttonValue,                                             -- Button Value
-        " " .. menuItem.buttonText .. " ",                                -- Button Label
-        colours.white, menuItem.buttonColour,                             -- Text and Button Colours
-        self.xStart + self.width - (string.len(menuItem.buttonText) + 1), -- X Pos (Start of Button, End of row)
-        yLevel,                                                           -- Y Pos
-        string.len(menuItem.buttonText) + 2,                              -- Button Length
-        1,                                                                -- Button Height
-        menuItem.buttonActionFunction,                                    -- Action Function
-        self.window                                                       -- Window
-      )
+      -- Render menuItem Buttons (if present)
+      
+      if (menuItem.buttons ~= nil and #menuItem.buttons > 0) then
+        -- Process each menuItem Button
+        local buttonX = self.xStart + self.width
+        for buttonIndex, menuItemButton in ipairs(menuItem.buttons) do
+          buttonX = buttonX - (string.len(menuItemButton.label) + 3)
+          
+          ProjectNukeCoreGUIHandler.AddButton(
+            "Menu" .. self.id .. "Item" .. menuItemListIndex .. "Button" .. buttonIndex,  -- Button ID
+            menuItemButton.value,                                                         -- Button Value
+            " " .. menuItemButton.label .. " ",                                           -- Button Label
+            colours.white, menuItemButton.colour,                                         -- Text and Button Colours
+            buttonX, yLevel,                                                              -- X Pos, Y Pos
+            string.len(menuItemButton.label) + 2,                                         -- Button Length
+            1,                                                                            -- Button Height
+            menuItemButton.actionFunction,                                                -- Action Function
+            self.window                                                                   -- Window
+          )
+        end
+      end
     end
   end
 
